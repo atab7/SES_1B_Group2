@@ -124,6 +124,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATICFILESDIRS = [
+STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/build/static')
 ]
