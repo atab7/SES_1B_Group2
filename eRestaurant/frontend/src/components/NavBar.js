@@ -7,6 +7,7 @@ import { withStyles, makeStyles} from '@material-ui/core/styles';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { grey } from '@material-ui/core/colors';
 import Paper from '@material-ui/core/Paper';
+import {Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,11 +54,11 @@ const useStyles = makeStyles((theme) => ({
         
           <Toolbar style={{ paddingRight:0 }}>
             <Typography variant="h6" className={classes.title}>
-              Le Bistrot d'Andre
+            <Link to="/">Le Bistrot d'Andre</Link>
             </Typography>
             
-                <RegButton size="large">Login</RegButton>
-                <RegButton size="large">Register</RegButton>
+                <Link to="/login"><RegButton size="large">Login</RegButton></Link>
+                <Link to="/register"><RegButton size="large">Register</RegButton></Link>
             
           </Toolbar>
           
