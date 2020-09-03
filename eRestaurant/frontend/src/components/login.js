@@ -8,6 +8,9 @@ import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
+import Background from './images/defaultBackground.jpg';
+import {Link } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -21,54 +24,55 @@ const useStyles = makeStyles((theme) => ({
 
   const PaperForm = withStyles((theme) => ({
     root: {
-        background: 'gray',
+        background: '#FFFFFF',
     },
 
   }))(Paper);
 
 
-
+  var backgroundImg = {
+    width: "100%",
+    height: "900px",
+    backgroundImage: `url(${Background})`
+  };
 
 const Login = () => {
     const classes = useStyles();
     return(
-        <div className={classes.root}>
+        <div className={classes.root} style={ backgroundImg }>
             <NavBar/>
+            <section >
             <Container maxWidth="sm" style = {{marginTop: '100px'}}>
             <PaperForm variant="outlined">
                 <form>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                    <p>Le Bistrod d'Andre</p>
-                    <p>Sign In</p>
-                </Paper>
+                
+                    <p style={{textAlign: 'center'}}>Le Bistrod d'Andre</p>
+                    <p  style={{textAlign: 'center'}}>Sign In</p>
+                
                 </Grid>
 
-                <Grid item xs={12}>
-                <Paper className={classes.paper}>
+                <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
+                
                     <TextField
-                    id="email"
-                    label="Email Adress"
                     placeholder="Calvin@gmail.com"
                     fullWidth
-                    margin="normal"
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                    variant="filled"/>
-                </Paper>
+                    id="email" 
+                    label="Email Address" 
+                    variant="outlined" />
+                
                 </Grid>
-                <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                <TextField id="outlined-basic" label="Password" variant="outlined" fullWidth helperText="Forgot Password?"/>
-                </Paper>
+                <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
+                <TextField 
+                id="outlined-basic" 
+                label="Password" 
+                variant="outlined" 
+                fullWidth helperText="Forgot Password?"/>
                 </Grid>
-                <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                <Button variant="outlined" fullWidth>Sign in</Button>
-                <p>Dont Have an Account? Register Here</p>
-                </Paper>
+                <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
+                <Button variant="outlined" style ={{color:'#424242'}} fullWidth>Sign in</Button>
+                <p>Dont Have an Account? <Link to="/register">Register Here</Link></p>
                 </Grid>
 
                 
@@ -76,6 +80,7 @@ const Login = () => {
             </form>
             </PaperForm>
             </Container>
+            </section>
     </div>
     )
 

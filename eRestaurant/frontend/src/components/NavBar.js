@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     return (
       <div className={classes.root}>
           <Paper square>
-        <AppBar position="static" color="inherit">
+        <AppBar position="static" color="#808080" style={{marginBottom: '1px'}}>
         
           <Toolbar style={{ paddingRight:0 }}>
             <Typography variant="h6" className={classes.title}>

@@ -17,7 +17,9 @@ import Paper from '@material-ui/core/Paper';
 import { withStyles} from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
 
-const logo = require('./images/header13.jpg');
+
+import Header from './images/header7.jpg';
+import Background from './images/defaultBackground.jpg';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -35,6 +37,18 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: theme.palette.background.paper,
       },
   }));
+
+var headerImg = {
+  width: "100%",
+  height: "350px",
+  backgroundImage: `url(${Header})`,
+};
+
+var backgroundImg = {
+  width: "100%",
+  height: "750px",
+  backgroundImage: `url(${Background})`
+};
   
   
 function TabPanel(props) {
@@ -100,9 +114,9 @@ const HomePage = () => {
     return(
         <div>
             <NavBar/>
-            <Box>
-                <img src={logo} style={{width: '100%'}}/>
+            <Box style={ headerImg }>
             </Box>
+            <Box style={ backgroundImg }>
             <Container maxWidth="lg">
                 <Box display="flex" p={1}>
                     <Box p={1}>
@@ -154,6 +168,7 @@ const HomePage = () => {
                 </Box>
 
             </Container>
+            </Box>
         </div>
     )
 
