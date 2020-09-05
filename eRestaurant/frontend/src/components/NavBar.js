@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: grey[700],
       },
       height: "40px",
-      width: "150px"
+      width: "150px",
+      padding: "10px"
     },
   }))(Button);
 
@@ -54,9 +55,10 @@ const useStyles = makeStyles((theme) => ({
         
           <Toolbar style={{ paddingRight:0 }}>
             <Typography variant="h6" className={classes.title}>
-            <Link to="/">Le Bistrot d'Andre</Link>
+            <Link to="/" style={{ textDecoration: 'inherit', color: 'inherit'}}>Le Bistrot d'Andre </Link>
             </Typography>
-            
+            <Link to="/login" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Login</Button></Link>
+            <Link to="/register" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Register</Button></Link>
                 <Link to="/login"><RegButton size="large">Login</RegButton></Link>
                 <Link to="/register"><RegButton size="large">Register</RegButton></Link>
             
