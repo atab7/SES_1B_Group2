@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 # Register your models here.
 from .models import *
 #Not going to register all models yet, can do later
-admin.site.register(User)
 admin.site.register(Order)
 admin.site.register(Restaurant)
 admin.site.register(Staff)
