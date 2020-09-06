@@ -65,6 +65,8 @@ class Staff(models.Model):
     tax_file_number = models.IntegerField()
     #restaurant_ID
     #date_hired
+    def __str__(self):
+        return self.user_ID
 
 class Head_Chef(models.Model):
     user_ID = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
