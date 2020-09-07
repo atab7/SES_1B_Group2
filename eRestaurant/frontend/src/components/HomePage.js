@@ -262,20 +262,22 @@ const HomePage = () => {
                             valueLabelDisplay="auto"
                              />
                           </Grid>
-                          <Grid item xs={4}>
+                          <Grid item xs={6}>
                             <Button variant="contained" color="primary">
                               Today
                             </Button>
                           </Grid>
-                          <Grid item xs={4}>
-                            <Button variant="contained" color="primary">
-                              Tomorrow
-                            </Button>
-                          </Grid>
-                          <Grid item xs={4}>
-                            <Button variant="contained" color="primary">
-                              Select Date
-                            </Button>
+                          <Grid item xs={6}>
+                          <TextField
+                              id="date"
+                              label="Booking Date"
+                              type="date"
+                              defaultValue="values.someDate"
+                              className={classes.textField}
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                            />
                           </Grid>
                         </Grid>
                        </form>
