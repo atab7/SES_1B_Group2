@@ -9,7 +9,7 @@ import {Route, Switch } from 'react-router';
 import Home from "./components/HomePage";
 import Register from "./components/register";
 import Login from "./components/login";
-import Profile from "./components/ProfilePage";
+import Profile from "./components/profiles/ProfilePage";
 
 ReactDOM.render(
   <BrowserRouter>
