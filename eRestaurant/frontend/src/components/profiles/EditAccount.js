@@ -1,6 +1,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import { Container } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,91 +22,15 @@ export default function LayoutTextFields() {
 
   return (
     <div className={classes.root}>
+      <Container maxWidth="sm">
       <div>
-        <TextField
-          id="standard-full-width"
-          label="Label"
-          style={{ margin: 8 }}
-          placeholder="Placeholder"
-          helperText="Full width!"
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <TextField
-          label="None"
-          id="margin-none"
-          defaultValue="Default Value"
-          className={classes.textField}
-          helperText="Some important text"
-        />
-        <TextField
-          label="Dense"
-          id="margin-dense"
-          defaultValue="Default Value"
-          className={classes.textField}
-          helperText="Some important text"
-          margin="dense"
-        />
-        <TextField
-          label="Normal"
-          id="margin-normal"
-          defaultValue="Default Value"
-          className={classes.textField}
-          helperText="Some important text"
-          margin="normal"
-        />
-      </div>
-      <div>
-        <TextField
-          id="filled-full-width"
-          label="Label"
-          style={{ margin: 8 }}
-          placeholder="Placeholder"
-          helperText="Full width!"
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="filled"
-        />
-        <TextField
-          label="None"
-          id="filled-margin-none"
-          defaultValue="Default Value"
-          className={classes.textField}
-          helperText="Some important text"
-          variant="filled"
-        />
-        <TextField
-          label="Dense"
-          id="filled-margin-dense"
-          defaultValue="Default Value"
-          className={classes.textField}
-          helperText="Some important text"
-          margin="dense"
-          variant="filled"
-        />
-        <TextField
-          label="Normal"
-          id="filled-margin-normal"
-          defaultValue="Default Value"
-          className={classes.textField}
-          helperText="Some important text"
-          margin="normal"
-          variant="filled"
-        />
-      </div>
-      <div>
+        
+        
         <TextField
           id="outlined-full-width"
-          label="Label"
+          label="First Name"
           style={{ margin: 8 }}
-          placeholder="Placeholder"
-          helperText="Full width!"
+          placeholder="Current First Name"
           fullWidth
           margin="normal"
           InputLabelProps={{
@@ -112,32 +39,112 @@ export default function LayoutTextFields() {
           variant="outlined"
         />
         <TextField
-          label="None"
-          id="outlined-margin-none"
-          defaultValue="Default Value"
-          className={classes.textField}
-          helperText="Some important text"
-          variant="outlined"
-        />
-        <TextField
-          label="Dense"
-          id="outlined-margin-dense"
-          defaultValue="Default Value"
-          className={classes.textField}
-          helperText="Some important text"
-          margin="dense"
-          variant="outlined"
-        />
-        <TextField
-          label="Normal"
-          id="outlined-margin-normal"
-          defaultValue="Default Value"
-          className={classes.textField}
-          helperText="Some important text"
+          id="outlined-full-width"
+          label="Middle Name"
+          style={{ margin: 8 }}
+          placeholder="Current Middle Name"
+          fullWidth
           margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
           variant="outlined"
         />
+        <TextField
+          id="outlined-full-width"
+          label="Last Name"
+          style={{ margin: 8 }}
+          placeholder="Current Last Name"
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-full-width"
+          label="Email Address"
+          style={{ margin: 8 }}
+          placeholder="hugh.jass@gmail.com"
+          helperText="Confirmation Email Will Be Sent"
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-full-width"
+          label="Password"
+          style={{ margin: 8 }}
+          placeholder="*********"
+          helperText="Choose a secure password"
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-full-width"
+          label=" Re-Enter Password"
+          style={{ margin: 8 }}
+          placeholder="*********"
+          helperText=""
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+          
+        />
+       
+        <TextField
+          id="outlined-full-width"
+          label="Residential Address"
+          style={{ margin: 8 }}
+          placeholder="Where u live :-)"
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-full-width"
+          label="Phone Number"
+          style={{ margin: 8 }}
+          placeholder="+61 123 456 890"
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          variant="outlined"
+        />
+        <br></br>
+        <Button variant="contained"
+         margin="normal"
+         style={{ margin: 8 }}
+         
+        >Confirm</Button>
+
+        
       </div>
+      </Container>
     </div>
   );
 }
+
+/*
+<TextField
+label="Confirm Password"
+id="outlined-margin-none"
+defaultValue="Default Value"
+className={classes.textField}
+helperText="Some important text"
+variant="outlined"
+style = {{width: 260}}
+/> */

@@ -30,10 +30,13 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: grey[800],
       '&:hover': {
         backgroundColor: grey[700],
+        
       },
       height: "40px",
       width: "150px",
-      padding: "10px"
+      padding: "10px",
+      
+      
     },
   }))(Button);
 
@@ -59,6 +62,7 @@ const useStyles = makeStyles((theme) => ({
             </Typography>
             <Link to="/login" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Login</Button></Link>
             <Link to="/register" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Register</Button></Link>
+            <Link to="/profile" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Profile</Button></Link>
                 <Link to="/login"><RegButton size="large">Login</RegButton></Link>
                 <Link to="/register"><RegButton size="large">Register</RegButton></Link>
             
