@@ -22,7 +22,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Header from './images/header7.jpg';
+import Header from './images/frenchpic.jpeg';
 import Background from './images/defaultBackground.jpg';
 import Slider from '@material-ui/core/Slider';
 import axios from 'axios';
