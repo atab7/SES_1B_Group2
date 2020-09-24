@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, responsiveFontSizes } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button'
 import Tabs from '@material-ui/core/Tabs';
@@ -25,6 +25,7 @@ import TextField from '@material-ui/core/TextField';
 import Header from './images/header7.jpg';
 import Background from './images/defaultBackground.jpg';
 import Slider from '@material-ui/core/Slider';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -108,23 +109,13 @@ const RegButton = withStyles((theme) => ({
   }))(Button);
 
 /* These are just default branches link to database later  */
-const branches = [
-  {
-    value: 'branch1',
-    label: 'location1',
-  },
-  {
-    value: 'branch2',
-    label: 'location2',
-  },
-  {
-    value: 'branch3',
-    label: 'location3',
-  },
+const branches_url = 'http://127.0.0.1:8000/api/restaurants/';
+var branches = []; 
+axios.get(branches_url)
+  .then((response) => { branches = response.data } )
+  .then(err=>console.log(err));
 
-];
-
-const numOfPeople = [
+  const numOfPeople = [
   {
     value: '0',
     label: '0',
@@ -140,6 +131,13 @@ const numOfPeople = [
 
 ];
    
+const postBooking = (branch) => {
+    const branch_id = Object.keys(branches).find(key => branches[key] === branch);
+    console.log(branch_id);
+    //axios.post('http://127.0.0.1:8000/api/bookings/', {
+    //  "ID": b
+    //})
+};
 
 const HomePage = () => {
   const classes = useStyles();
@@ -172,6 +170,8 @@ const HomePage = () => {
   const handleChangePeople = (event, newValue) => {
     setNumPeople(newValue);
   };
+
+  
   
 
     return(
@@ -243,8 +243,8 @@ const HomePage = () => {
                             variant="outlined"
                           >
                             {branches.map((option) => (
-                              <MenuItem key={option.value} value={option.value}>
-                                {option.label}
+                              <MenuItem key={option.id} value={option.id}>
+                                {option.name}
                               </MenuItem>
                             ))}
                           </TextField>

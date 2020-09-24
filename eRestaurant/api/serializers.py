@@ -12,3 +12,13 @@ class staff_serializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = '__all__'
+
+class booking_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = '__all__'
+
+class restaurant_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Restaurant
+        fields = '__all__'
