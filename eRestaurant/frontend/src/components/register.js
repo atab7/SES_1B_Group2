@@ -14,12 +14,6 @@ import Background from './images/defaultBackground.jpg';
 import {Link } from "react-router-dom";
 
 import {axios_config} from '../config.js';
-axios.interceptors.request.use(req => {
-  console.log(`${req.method} ${req.url}`);
-  // Important: request interceptors **must** return the request.
-  return req;
-});
-
 
   var backgroundImg = {
     width: "100%",
@@ -33,41 +27,6 @@ axios.interceptors.request.use(req => {
     },
 
   }))(Paper);
-
-  
-
-const post_user = (Email, Password) => {
-  const user_exist = check_user(Email);
-  const password_valid = check_password(Password);
-  
-  if(!user_exist && password_valid) {
-    axios.post(`${axios_config["baseURL"]}/auth/users/`,
-    {
-      email: Email,
-      username: Email,
-      password: Password
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  } else if (user_exist){
-    console.log('User exists!');
-  } else if (!password_valid) {
-    console.log("Password not strong enough!")
-  }
-
-}
-
-const check_user = (email) => {
-  return false;
-}
-
-const check_password = (password) => {
-  return true;
-}
 
 
 //rigth way of exporting 
@@ -212,62 +171,4 @@ export default class Register extends React.Component {
     )
   }
 }
-/*
-const Register = () => {
-    const classes = useStyles();
-    return(
-        <div className={classes.root} style={ backgroundImg }>
-            <NavBar/>
-            <Container maxWidth="sm" style = {{marginTop: '100px'}}>Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons: 1. You might have mismatching versions of R
-            <PaperForm variant="outlined">
-                <form>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                <Paper className={classes.paper}>Register
-                </Paper>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField id="outlined-basic" label="Firstname" variant="outlined" />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-  
-                    <TextField id="outlined-basic" label="Lastname" variant="outlined" />
-                </Grid>
-                <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
-                    <TextField
-                    id="email"
-                    label="Email Adress"
-                    placeholder="Calvin@gmail.com"
-                    fullWidth
-                    variant="outlined"/>
-                </Grid>
-                <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
-                <TextField 
-                id="outlined-basic" 
-                label="Password" 
-                variant="outlined" 
-                fullWidth 
-                helperText="Do Not Share Your Password With Anyone"/>
-                </Grid>
-                <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
-                <TextField id="outlined-basic" label="Password Repeat" variant="outlined" fullWidth/>
-                </Grid>
-                <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
-                <Button variant="outlined" fullWidth>Register</Button>
-                <p>Already have an account? <Link to="/login">Sign-In Here</Link></p>
-                </Grid>
-
-                
-            </Grid>
-            </form>
-            </PaperForm>
-            </Container>
-    </div>
-    )
-
-}
-export default Register;
-*/
-
-
 
