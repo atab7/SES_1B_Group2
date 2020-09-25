@@ -11,6 +11,13 @@ import Button from '@material-ui/core/Button';
 import Background from './images/defaultBackground.jpg';
 import {Link } from "react-router-dom";
 
+import axios from 'axios';
+import {axios_config} from '../config.js';
+axios.interceptors.request.use(req => {
+  console.log(`${req.method} ${req.url}`);
+  // Important: request interceptors **must** return the request.
+  return req;
+});
 
 
 const PaperForm = withStyles((theme) => ({
@@ -30,7 +37,54 @@ var backgroundImg = {
 export default class Login extends React.Component {
   constructor(props){
     super();
+
+    this.state = {
+      username: '',
+      password:'',
+      token:''
+    }
+
+    this.setUsername = this.setUserName.bind(this);
+    this.setPassword = this.setPassword.bind(this);
+    this.setToken = this.setToken.bind(this);
   }
+
+  setUserName(evt){
+    this.setState({
+      username: evt.target.value
+    })
+  }
+
+  setPassword(evt){
+    this.setState({
+      password: evt.target.value
+    }
+    )
+  }
+
+  setToken(){
+    axios.post(`${axios_config["baseURL"]}auth/token/login/`,
+    {
+      username: this.state.username,
+      password: this.state.password
+    },
+    )
+    .then((response) => {
+      this.setState({
+        token: response.data.auth_token
+      })
+    })
+    .catch((error) => {
+      if(error.response.data.non_field_errors){
+        if(error.response.data.non_field_errors.length >= 1){
+          if(error.response.data.non_field_errors[0] === "Unable to log in with provided credentials."){
+            console.log("Username or password incorrect. Please try again.");
+          }
+        }
+      }
+    });
+  }
+
   render(){
     return (
       <div style={ backgroundImg }>
@@ -54,6 +108,7 @@ export default class Login extends React.Component {
                     fullWidth
                     id="email" 
                     label="Email Address" 
+                    onChange = {e => this.setUserName(e)}
                     variant="outlined" />
                 
                 </Grid>
@@ -62,10 +117,11 @@ export default class Login extends React.Component {
                 id="outlined-basic" 
                 label="Password" 
                 variant="outlined" 
+                onChange = {e => this.setPassword(e)}
                 fullWidth helperText="Forgot Password?"/>
                 </Grid>
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
-                <Button variant="outlined" style ={{color:'#424242'}} fullWidth>Sign in</Button>
+                <Button variant="outlined" style ={{color:'#424242'}} onClick={this.setToken} fullWidth>Sign in</Button>
                 <p>Dont Have an Account? <Link to="/register">Register Here</Link></p>
                 </Grid>
 

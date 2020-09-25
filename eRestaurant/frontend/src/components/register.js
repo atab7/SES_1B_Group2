@@ -13,9 +13,18 @@ import Background from './images/defaultBackground.jpg';
 import {Link } from "react-router-dom";
 
 import {axios_config} from '../config.js';
+axios.interceptors.request.use(req => {
+  console.log(`${req.method} ${req.url}`);
+  // Important: request interceptors **must** return the request.
+  return req;
+});
 
 
+<<<<<<< HEAD
 
+
+=======
+>>>>>>> 16a3a3743e081b4ac77a13223c32efe3a7704c75
   var backgroundImg = {
     width: "100%",
     height: "900px",
@@ -64,12 +73,15 @@ const check_password = (password) => {
   return true;
 }
 
+<<<<<<< HEAD
 
 axios.interceptors.request.use(req => {
   console.log(`${req.method} ${req.url}`);
   // Important: request interceptors **must** return the request.
   return req;
 });
+=======
+>>>>>>> 16a3a3743e081b4ac77a13223c32efe3a7704c75
 
 //rigth way of exporting 
 export default class Register extends React.Component { 
@@ -91,8 +103,6 @@ export default class Register extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.setUsername = this.setUsername.bind(this);
     this.setPassword = this.setPassword.bind(this);
-    this.setFirstName = this.setFirstName.bind(this);
-    this.setLastName = this.setUsername.bind(this);
     this.setRepeatPassword = this.setRepeatPassword.bind(this);
     this.setAlertPass= this.setAlertPass.bind(this);
     this.closeAlertPass = this.closeAlertPass.bind(this);
@@ -123,6 +133,7 @@ export default class Register extends React.Component {
     })
   }
 
+<<<<<<< HEAD
   setFirstName(evt){
     this.setState({
       firstname: evt.target.value
@@ -151,6 +162,8 @@ export default class Register extends React.Component {
     })
   }
 
+=======
+>>>>>>> 16a3a3743e081b4ac77a13223c32efe3a7704c75
   postUser(){
     axios.post(`${axios_config["baseURL"]}auth/users/`,
     {
@@ -163,31 +176,15 @@ export default class Register extends React.Component {
       console.log(response);
     })
     .catch(function (error) {
-      console.log(error);
+      if(error.response.data.username){
+        if(error.response.data.username.length >= 1){
+          if(error.response.data.username[0] === "A user with that username already exists."){
+            console.log("User Exists. Please try again with a different email or recover password.");
+          }
+        }
+      }
     });
 
-  }
-
-  checkLength(str){
-    if(str.length >= 8){
-      return true;
-    }
-  }
-
-  checkCapital(str){
-    for(let i = 0; i < str.lenght; i++){
-      if(str[i] !== str[i].toLowerCase()){
-        return true;
-      }
-    }
-  }
-
-  checkNumber(str){
-    for(let i = 0; i < str.lenght; i++){
-      if(Number(str[i]) !== NaN){
-        return true;
-      }
-    } 
   }
 
   checkEmail(email){
@@ -216,6 +213,7 @@ export default class Register extends React.Component {
     }
   }
 
+<<<<<<< HEAD
   closeAlertPass(evt){
     this.setState({
       alertPass: false
@@ -225,6 +223,8 @@ export default class Register extends React.Component {
     this.setState({
       alertEmail: false
     })
+=======
+>>>>>>> 16a3a3743e081b4ac77a13223c32efe3a7704c75
   }
   closeAlertMatch(evt){
     this.setState({
@@ -288,7 +288,7 @@ export default class Register extends React.Component {
                 onChange = {e => this.setRepeatPassword(e)}fullWidth/>
                 </Grid>
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
-                <Button variant="outlined" username={this.state.username} password={this.state.password} onClick={this.handleClick} fullWidth>Register</Button>
+                <Button variant="outlined" onClick={this.handleClick} fullWidth>Register</Button>
                 <p>Already have an account? <Link to="/login">Sign-In Here</Link></p>
                 <Snackbar open={this.state.alertPass} autoHideDuration={3000} onClose={this.closeAlertPass}>
                   <Alert severity="error" onClose={this.closeAlertPass}> 
