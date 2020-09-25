@@ -150,8 +150,91 @@ export default class Register extends React.Component {
 
   }
 
-  handleClick (evt) {
+  checkLength(str){
+    if(str.length >= 8){
+      return true;
+    }
+  }
+
+  checkCapital(str){
+    for(let i = 0; i < str.lenght; i++){
+      if(str[i] !== str[i].toLowerCase()){
+        return true;
+      }
+    }
+  }
+
+  checkNumber(str){
+    for(let i = 0; i < str.lenght; i++){
+      if(Number(str[i]) !== NaN){
+        return true;
+      }
+    } 
+  }
+
+  checkEmail(email){
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email); 
+  }
+
+  checkPassword(password){
+    var passFormat = new RegExp("^((?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.{8,}))");
+    //var passFormat = /^(?=.\d)(?=.[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+    return passFormat.test(password);
+    /*
+    var isNum = this.checkNumber(password);
+    var isCap = this.checkCapital(password);
+    var isLong = this.checkLength(password);
+    var same = password === this.state.repeat_password;
+    
+    if(isNum && isCap && isLong && same){
+      return 0;
+    }else if (!isNum){
+      return 1;
+    }else if(!isCap){
+      return 2;
+    }else if(!isLong){
+      return 3;
+    }else if(!same){
+      return 4;
+    }else if(password === ''){
+      return 5;
+    }
+    */
+  }
+
+   handleClick (evt) {
+    var isValidPass = this.checkPassword(this.state.password);
+    var isValidEmail = this.checkEmail(this.state.username);
+    var isSamePass = this.state.repeat_password === this.state.password;
+
+    if(isValidEmail && isValidPass && isSamePass){
+      this.postUser();
+    }else if(!isValidEmail){
+      console.log("Invalid Email address. Please try again.")
+    }else if(!isValidPass){
+      console.log("Invalid Password. Please make sure your password contains 1 upper case letter, 1 lower case letter, minimum 8 characters and contains at least one number!");
+    }else if(!isSamePass){
+      console.log("Passwords dont match, please try again!");
+    }
+
+    /*
+    if(isValidPass === 0 && isValidEmail){
     this.postUser();
+    }else if(isValidPass === 1){
+      console.log('Password does not include a number!');
+    }else if(isValidPass === 2){
+      console.log('Password does not include a capital letter!');
+    }else if(isValidPass === 3){
+      console.log('Password is shorter than 8 characters!');
+    }else if(isValidPass === 4){
+      console.log('Passwords do not match!');
+    }else if(!isValidEmail){
+      console.log('Please enter a valid email address!');
+    }else if(isValidPass === 6){
+      console.log('Please enter a password');
+    }
+    */
   }
 
   render(){
