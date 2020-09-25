@@ -14,7 +14,7 @@ import Profile from "./components/profiles/ProfilePage";
 ReactDOM.render(
   <BrowserRouter>
        <Switch>
-        <Route onEnter={printToken} exact path="/" component={Home} />
+        <Route exact path="/" component={Home} />
         <Route path="/register" component={Register} />
         <Route path="/login" component={Login} />
         <Route path="/profile" component={Profile} />
