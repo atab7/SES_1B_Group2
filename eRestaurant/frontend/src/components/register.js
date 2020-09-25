@@ -20,11 +20,8 @@ axios.interceptors.request.use(req => {
 });
 
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> 16a3a3743e081b4ac77a13223c32efe3a7704c75
   var backgroundImg = {
     width: "100%",
     height: "900px",
@@ -73,15 +70,12 @@ const check_password = (password) => {
   return true;
 }
 
-<<<<<<< HEAD
 
 axios.interceptors.request.use(req => {
   console.log(`${req.method} ${req.url}`);
   // Important: request interceptors **must** return the request.
   return req;
 });
-=======
->>>>>>> 16a3a3743e081b4ac77a13223c32efe3a7704c75
 
 //rigth way of exporting 
 export default class Register extends React.Component { 
@@ -98,6 +92,7 @@ export default class Register extends React.Component {
       alertPass:false,
       alertEmail:false,
       alertMatch:false,
+      emailExist:false,
     }
 
     this.handleClick = this.handleClick.bind(this);
@@ -110,7 +105,8 @@ export default class Register extends React.Component {
     this.closeAlertEmail = this.closeAlertEmail.bind(this);
     this.setAlertMatch= this.setAlertMatch.bind(this);
     this.closeAlertMatch = this.closeAlertMatch.bind(this);
-    
+    this.setEmailExist= this.setEmailExist.bind(this);
+    this.closeEmailExist = this.closeEmailExist.bind(this);
   }
 
   
@@ -133,7 +129,6 @@ export default class Register extends React.Component {
     })
   }
 
-<<<<<<< HEAD
   setFirstName(evt){
     this.setState({
       firstname: evt.target.value
@@ -162,9 +157,15 @@ export default class Register extends React.Component {
     })
   }
 
-=======
->>>>>>> 16a3a3743e081b4ac77a13223c32efe3a7704c75
+  setEmailExist(boolean){
+    this.setState({
+      emailExist: boolean
+    })
+  }
+
+
   postUser(){
+    var that = this;
     axios.post(`${axios_config["baseURL"]}auth/users/`,
     {
       email: this.state.username,
@@ -179,7 +180,9 @@ export default class Register extends React.Component {
       if(error.response.data.username){
         if(error.response.data.username.length >= 1){
           if(error.response.data.username[0] === "A user with that username already exists."){
-            console.log("User Exists. Please try again with a different email or recover password.");
+            console.log("test1");
+            that.setEmailExist(true);
+            console.log("test2");
           }
         }
       }
@@ -213,7 +216,6 @@ export default class Register extends React.Component {
     }
   }
 
-<<<<<<< HEAD
   closeAlertPass(evt){
     this.setState({
       alertPass: false
@@ -223,12 +225,15 @@ export default class Register extends React.Component {
     this.setState({
       alertEmail: false
     })
-=======
->>>>>>> 16a3a3743e081b4ac77a13223c32efe3a7704c75
   }
   closeAlertMatch(evt){
     this.setState({
       alertMatch: false
+    })
+  }
+  closeEmailExist(evt){
+    this.setState({
+      emailExist: false
     })
   }
 
@@ -309,6 +314,11 @@ export default class Register extends React.Component {
                 <Snackbar open={this.state.alertMatch} autoHideDuration={3000} onClose={this.closeAlertMatch}>
                   <Alert severity="error" onClose={this.closeAlertMatch}> 
                     Passwords dont match, please try again!
+                  </Alert>
+                </Snackbar>
+                <Snackbar open={this.state.emailExist} autoHideDuration={3000} onClose={this.closeEmailExist}>
+                  <Alert severity="error" onClose={this.closeEmailExist}> 
+                  User Exists. Please try again with a different email or recover password.
                   </Alert>
                 </Snackbar>
                 </Grid>
