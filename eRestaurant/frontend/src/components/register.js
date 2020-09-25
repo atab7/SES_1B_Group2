@@ -14,6 +14,12 @@ import Background from './images/defaultBackground.jpg';
 import {Link } from "react-router-dom";
 
 import {axios_config} from '../config.js';
+axios.interceptors.request.use(req => {
+  console.log(`${req.method} ${req.url}`);
+  // Important: request interceptors **must** return the request.
+  return req;
+});
+
 
   var backgroundImg = {
     width: "100%",
@@ -63,11 +69,6 @@ const check_password = (password) => {
   return true;
 }
 
-axios.interceptors.request.use(req => {
-  console.log(`${req.method} ${req.url}`);
-  // Important: request interceptors **must** return the request.
-  return req;
-});
 
 //rigth way of exporting 
 export default class Register extends React.Component { 
@@ -86,8 +87,6 @@ export default class Register extends React.Component {
     this.handleClick = this.handleClick.bind(this);
     this.setUsername = this.setUsername.bind(this);
     this.setPassword = this.setPassword.bind(this);
-    this.setFirstName = this.setFirstName.bind(this);
-    this.setLastName = this.setUsername.bind(this);
     this.setRepeatPassword = this.setRepeatPassword.bind(this);
   }
 
@@ -106,18 +105,6 @@ export default class Register extends React.Component {
   setRepeatPassword(evt){
     this.setState({
       repeat_password: evt.target.value
-    })
-  }
-
-  setFirstName(evt){
-    this.setState({
-      firstname: evt.target.value
-    })
-  }
-  
-  setLastName(evt){
-    this.setState({
-      lastname: evt.target.value
     })
   }
 
@@ -212,7 +199,7 @@ export default class Register extends React.Component {
                 <TextField id="outlined-basic" label="Password Repeat" variant="outlined" onChange = {e => this.setRepeatPassword(e)}fullWidth/>
                 </Grid>
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
-                <Button variant="outlined" username={this.state.username} password={this.state.password} onClick={this.handleClick} fullWidth>Register</Button>
+                <Button variant="outlined" onClick={this.handleClick} fullWidth>Register</Button>
                 <p>Already have an account? <Link to="/login">Sign-In Here</Link></p>
                 </Grid>
 

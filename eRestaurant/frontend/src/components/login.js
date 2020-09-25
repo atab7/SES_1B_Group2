@@ -13,6 +13,11 @@ import {Link } from "react-router-dom";
 
 import axios from 'axios';
 import {axios_config} from '../config.js';
+axios.interceptors.request.use(req => {
+  console.log(`${req.method} ${req.url}`);
+  // Important: request interceptors **must** return the request.
+  return req;
+});
 
 
 const PaperForm = withStyles((theme) => ({
@@ -39,7 +44,9 @@ export default class Login extends React.Component {
       token:''
     }
 
-
+    this.setUsername = this.setUserName.bind(this);
+    this.setPassword = this.setPassword.bind(this);
+    this.setToken = this.setToken.bind(this);
   }
 
   setUserName(evt){
@@ -55,22 +62,27 @@ export default class Login extends React.Component {
     )
   }
 
-  getToken(){
+  setToken(){
     axios.post(`${axios_config["baseURL"]}auth/token/login/`,
     {
       username: this.state.username,
       password: this.state.password
     },
     )
-    .then(function (response) {
+    .then((response) => {
       this.setState({
         token: response.data.auth_token
       })
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch((error) => {
+      if(error.response.data.non_field_errors){
+        if(error.response.data.non_field_errors.length >= 1){
+          if(error.response.data.non_field_errors[0] === "Unable to log in with provided credentials."){
+            console.log("Username or password incorrect. Please try again.");
+          }
+        }
+      }
     });
-
   }
 
   render(){
@@ -109,7 +121,7 @@ export default class Login extends React.Component {
                 fullWidth helperText="Forgot Password?"/>
                 </Grid>
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
-                <Button variant="outlined" style ={{color:'#424242'}} fullWidth>Sign in</Button>
+                <Button variant="outlined" style ={{color:'#424242'}} onClick={this.setToken} fullWidth>Sign in</Button>
                 <p>Dont Have an Account? <Link to="/register">Register Here</Link></p>
                 </Grid>
 

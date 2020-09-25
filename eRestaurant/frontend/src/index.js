@@ -11,6 +11,20 @@ import Register from "./components/register";
 import Login from "./components/login";
 import Profile from "./components/profiles/ProfilePage";
 
+import { createStore } from 'redux';
+
+const initialState = {
+  username:'',
+  password:'',
+  auth_token:''
+}
+
+function reducer(state = initialState, action){
+  return state;
+}
+
+const store = createStore(reducer);
+
 ReactDOM.render(
   <BrowserRouter>
        <Switch>
