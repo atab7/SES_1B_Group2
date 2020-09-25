@@ -15,18 +15,6 @@ import {Link } from "react-router-dom";
 
 import {axios_config} from '../config.js';
 
-/*
-const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-  }));
-*/
   var backgroundImg = {
     width: "100%",
     height: "900px",
@@ -145,31 +133,15 @@ export default class Register extends React.Component {
       console.log(response);
     })
     .catch(function (error) {
-      console.log(error);
+      if(error.response.data.username){
+        if(error.response.data.username.length >= 1){
+          if(error.response.data.username[0] === "A user with that username already exists."){
+            console.log("User Exists. Please try again with a different email or recover password.");
+          }
+        }
+      }
     });
 
-  }
-
-  checkLength(str){
-    if(str.length >= 8){
-      return true;
-    }
-  }
-
-  checkCapital(str){
-    for(let i = 0; i < str.lenght; i++){
-      if(str[i] !== str[i].toLowerCase()){
-        return true;
-      }
-    }
-  }
-
-  checkNumber(str){
-    for(let i = 0; i < str.lenght; i++){
-      if(Number(str[i]) !== NaN){
-        return true;
-      }
-    } 
   }
 
   checkEmail(email){
@@ -179,28 +151,7 @@ export default class Register extends React.Component {
 
   checkPassword(password){
     var passFormat = new RegExp("^((?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.{8,}))");
-    //var passFormat = /^(?=.\d)(?=.[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
     return passFormat.test(password);
-    /*
-    var isNum = this.checkNumber(password);
-    var isCap = this.checkCapital(password);
-    var isLong = this.checkLength(password);
-    var same = password === this.state.repeat_password;
-    
-    if(isNum && isCap && isLong && same){
-      return 0;
-    }else if (!isNum){
-      return 1;
-    }else if(!isCap){
-      return 2;
-    }else if(!isLong){
-      return 3;
-    }else if(!same){
-      return 4;
-    }else if(password === ''){
-      return 5;
-    }
-    */
   }
 
    handleClick (evt) {
@@ -218,23 +169,6 @@ export default class Register extends React.Component {
       console.log("Passwords dont match, please try again!");
     }
 
-    /*
-    if(isValidPass === 0 && isValidEmail){
-    this.postUser();
-    }else if(isValidPass === 1){
-      console.log('Password does not include a number!');
-    }else if(isValidPass === 2){
-      console.log('Password does not include a capital letter!');
-    }else if(isValidPass === 3){
-      console.log('Password is shorter than 8 characters!');
-    }else if(isValidPass === 4){
-      console.log('Passwords do not match!');
-    }else if(!isValidEmail){
-      console.log('Please enter a valid email address!');
-    }else if(isValidPass === 6){
-      console.log('Please enter a password');
-    }
-    */
   }
 
   render(){

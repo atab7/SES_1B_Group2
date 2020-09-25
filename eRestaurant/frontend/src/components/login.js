@@ -11,6 +11,8 @@ import Button from '@material-ui/core/Button';
 import Background from './images/defaultBackground.jpg';
 import {Link } from "react-router-dom";
 
+import axios from 'axios';
+import {axios_config} from '../config.js';
 
 
 const PaperForm = withStyles((theme) => ({
@@ -30,7 +32,47 @@ var backgroundImg = {
 export default class Login extends React.Component {
   constructor(props){
     super();
+
+    this.state = {
+      username: '',
+      password:'',
+      token:''
+    }
+
+
   }
+
+  setUserName(evt){
+    this.setState({
+      username: evt.target.value
+    })
+  }
+
+  setPassword(evt){
+    this.setState({
+      password: evt.target.value
+    }
+    )
+  }
+
+  getToken(){
+    axios.post(`${axios_config["baseURL"]}auth/token/login/`,
+    {
+      username: this.state.username,
+      password: this.state.password
+    },
+    )
+    .then(function (response) {
+      this.setState({
+        token: response.data.auth_token
+      })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+  }
+
   render(){
     return (
       <div style={ backgroundImg }>
@@ -54,6 +96,7 @@ export default class Login extends React.Component {
                     fullWidth
                     id="email" 
                     label="Email Address" 
+                    onChange = {e => this.setUserName(e)}
                     variant="outlined" />
                 
                 </Grid>
@@ -62,6 +105,7 @@ export default class Login extends React.Component {
                 id="outlined-basic" 
                 label="Password" 
                 variant="outlined" 
+                onChange = {e => this.setPassword(e)}
                 fullWidth helperText="Forgot Password?"/>
                 </Grid>
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
