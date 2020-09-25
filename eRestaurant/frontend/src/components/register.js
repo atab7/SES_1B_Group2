@@ -11,6 +11,7 @@ import axios from 'axios';
 import Alert from '@material-ui/lab/Alert';
 import Background from './images/defaultBackground.jpg';
 import {Link } from "react-router-dom";
+import { Redirect } from 'react-router'
 
 import {axios_config} from '../config.js';
 axios.interceptors.request.use(req => {
@@ -93,6 +94,7 @@ export default class Register extends React.Component {
       alertEmail:false,
       alertMatch:false,
       emailExist:false,
+      signedUp:false,
     }
 
     this.handleClick = this.handleClick.bind(this);
@@ -174,15 +176,16 @@ export default class Register extends React.Component {
     },
     )
     .then(function (response) {
+      if (response.status === 201) {
+        that.setState({ isSignedUp: true });
+      }
       console.log(response);
     })
     .catch(function (error) {
       if(error.response.data.username){
         if(error.response.data.username.length >= 1){
           if(error.response.data.username[0] === "A user with that username already exists."){
-            console.log("test1");
             that.setEmailExist(true);
-            console.log("test2");
           }
         }
       }
@@ -239,6 +242,9 @@ export default class Register extends React.Component {
 
 
   render(){
+    if (this.state.isSignedUp) {
+      return <Redirect to = {{ pathname: "/login" }} />;
+    }
     return (
       <div style={ this.backgroundImg }>
             <NavBar/>
