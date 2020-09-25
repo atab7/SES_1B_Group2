@@ -6,27 +6,16 @@ import Grid from '@material-ui/core/Grid';
 import Container from '@material-ui/core/Container';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-
+import Snackbar from '@material-ui/core/Snackbar';
 import axios from 'axios';
-
-
+import Alert from '@material-ui/lab/Alert';
 import Background from './images/defaultBackground.jpg';
 import {Link } from "react-router-dom";
 
 import {axios_config} from '../config.js';
 
-/*
-const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    paper: {
-      padding: theme.spacing(2),
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-    },
-  }));
-*/
+
+
   var backgroundImg = {
     width: "100%",
     height: "900px",
@@ -75,6 +64,7 @@ const check_password = (password) => {
   return true;
 }
 
+
 axios.interceptors.request.use(req => {
   console.log(`${req.method} ${req.url}`);
   // Important: request interceptors **must** return the request.
@@ -92,7 +82,10 @@ export default class Register extends React.Component {
       password:'',
       repeat_password:'',
       firstname:'',
-      lastname:''
+      lastname:'',
+      alertPass:false,
+      alertEmail:false,
+      alertMatch:false,
     }
 
     this.handleClick = this.handleClick.bind(this);
@@ -101,7 +94,16 @@ export default class Register extends React.Component {
     this.setFirstName = this.setFirstName.bind(this);
     this.setLastName = this.setUsername.bind(this);
     this.setRepeatPassword = this.setRepeatPassword.bind(this);
+    this.setAlertPass= this.setAlertPass.bind(this);
+    this.closeAlertPass = this.closeAlertPass.bind(this);
+    this.setAlertEmail= this.setAlertEmail.bind(this);
+    this.closeAlertEmail = this.closeAlertEmail.bind(this);
+    this.setAlertMatch= this.setAlertMatch.bind(this);
+    this.closeAlertMatch = this.closeAlertMatch.bind(this);
+    
   }
+
+  
 
   setUsername(evt) {
     this.setState({
@@ -130,6 +132,22 @@ export default class Register extends React.Component {
   setLastName(evt){
     this.setState({
       lastname: evt.target.value
+    })
+  }
+
+  setAlertPass(boolean){
+    this.setState({
+      alertPass: boolean
+    })
+  }
+  setAlertEmail(boolean){
+    this.setState({
+      alertEmail: boolean
+    })
+  }
+  setAlertMatch(boolean){
+    this.setState({
+      alertMatch: boolean
     })
   }
 
@@ -179,28 +197,7 @@ export default class Register extends React.Component {
 
   checkPassword(password){
     var passFormat = new RegExp("^((?=.*[a-z])(?=.*[0-9])(?=.*[A-Z])(?=.{8,}))");
-    //var passFormat = /^(?=.\d)(?=.[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
     return passFormat.test(password);
-    /*
-    var isNum = this.checkNumber(password);
-    var isCap = this.checkCapital(password);
-    var isLong = this.checkLength(password);
-    var same = password === this.state.repeat_password;
-    
-    if(isNum && isCap && isLong && same){
-      return 0;
-    }else if (!isNum){
-      return 1;
-    }else if(!isCap){
-      return 2;
-    }else if(!isLong){
-      return 3;
-    }else if(!same){
-      return 4;
-    }else if(password === ''){
-      return 5;
-    }
-    */
   }
 
    handleClick (evt) {
@@ -211,31 +208,30 @@ export default class Register extends React.Component {
     if(isValidEmail && isValidPass && isSamePass){
       this.postUser();
     }else if(!isValidEmail){
-      console.log("Invalid Email address. Please try again.")
+      this.setAlertEmail(true);
     }else if(!isValidPass){
-      console.log("Invalid Password. Please make sure your password contains 1 upper case letter, 1 lower case letter, minimum 8 characters and contains at least one number!");
+      this.setAlertPass(true);
     }else if(!isSamePass){
-      console.log("Passwords dont match, please try again!");
+      this.setAlertMatch(true);
     }
-
-    /*
-    if(isValidPass === 0 && isValidEmail){
-    this.postUser();
-    }else if(isValidPass === 1){
-      console.log('Password does not include a number!');
-    }else if(isValidPass === 2){
-      console.log('Password does not include a capital letter!');
-    }else if(isValidPass === 3){
-      console.log('Password is shorter than 8 characters!');
-    }else if(isValidPass === 4){
-      console.log('Passwords do not match!');
-    }else if(!isValidEmail){
-      console.log('Please enter a valid email address!');
-    }else if(isValidPass === 6){
-      console.log('Please enter a password');
-    }
-    */
   }
+
+  closeAlertPass(evt){
+    this.setState({
+      alertPass: false
+    })
+  }
+  closeAlertEmail(evt){
+    this.setState({
+      alertEmail: false
+    })
+  }
+  closeAlertMatch(evt){
+    this.setState({
+      alertMatch: false
+    })
+  }
+
 
   render(){
     return (
@@ -245,16 +241,24 @@ export default class Register extends React.Component {
             <PaperForm variant="outlined">
                 <form>
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                <Paper>Register
-                </Paper>
+                <Grid item xs={12} style={{height:80}}>
+                  <b><p style={{textAlign: 'center', height: 5, fontSize:'24px'}}>Le Bistrod d'Andre</p></b>
+                  <b><p  style={{textAlign: 'center'}}>Register</p></b>
+                </Grid>
+                <Grid item xs={12} sm={6} style={{paddingLeft: '24px'}}>
+                    <TextField 
+                    id="Firstname" 
+                    label="Firstname" 
+                    variant="outlined" 
+                    style = {{width: 252}}
+                    onChange = {e => this.setFirstName(e)} />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <TextField id="Firstname"  label="Firstname" variant="outlined" onChange = {e => this.setFirstName(e)} />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-  
-                    <TextField id="Lastname" label="Lastname" variant="outlined" onChange = {e => this.setLastName(e)}/>
+                    <TextField id="Lastname" 
+                    label="Lastname" 
+                    variant="outlined" 
+                    style = {{width: 252}}
+                    onChange = {e => this.setLastName(e)}/>
                 </Grid>
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
                     <TextField
@@ -271,18 +275,43 @@ export default class Register extends React.Component {
                 label="Password" 
                 variant="outlined"
                 onChange = {e => this.setPassword(e)} 
+                type="password"
                 fullWidth 
                 helperText="Do Not Share Your Password With Anyone"/>
                 </Grid>
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
-                <TextField id="outlined-basic" label="Password Repeat" variant="outlined" onChange = {e => this.setRepeatPassword(e)}fullWidth/>
+                <TextField 
+                id="outlined-basic" 
+                label="Password Repeat" 
+                variant="outlined" 
+                type="password"
+                onChange = {e => this.setRepeatPassword(e)}fullWidth/>
                 </Grid>
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
                 <Button variant="outlined" username={this.state.username} password={this.state.password} onClick={this.handleClick} fullWidth>Register</Button>
                 <p>Already have an account? <Link to="/login">Sign-In Here</Link></p>
+                <Snackbar open={this.state.alertPass} autoHideDuration={3000} onClose={this.closeAlertPass}>
+                  <Alert severity="error" onClose={this.closeAlertPass}> 
+                  Invalid Password. Please make sure your password contains 
+                  <ul>
+                    <li>1 upper case letter</li>
+                    <li>1 lower case letter</li>
+                    <li>1 number</li>
+                    <li>Minimum 8 characters</li>
+                  </ul>
+                  </Alert>
+                </Snackbar>
+                <Snackbar open={this.state.alertEmail} autoHideDuration={3000} onClose={this.closeAlertEmail}>
+                  <Alert severity="error" onClose={this.closeAlertEmail}> 
+                    Invalid Email address. Please try again.
+                  </Alert>
+                </Snackbar>
+                <Snackbar open={this.state.alertMatch} autoHideDuration={3000} onClose={this.closeAlertMatch}>
+                  <Alert severity="error" onClose={this.closeAlertMatch}> 
+                    Passwords dont match, please try again!
+                  </Alert>
+                </Snackbar>
                 </Grid>
-
-                
             </Grid>
             </form>
             </PaperForm>
