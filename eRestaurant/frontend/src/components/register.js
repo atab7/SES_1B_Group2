@@ -176,6 +176,7 @@ export default class Register extends React.Component {
     }else if(!isSamePass){
       this.setAlertMatch(true);
     }
+
   }
 
   closeAlertPass(evt){
@@ -234,7 +235,7 @@ export default class Register extends React.Component {
                     <TextField
                     id="username"
                     label="Email Adress"
-                    placeholder="Calvin@gmail.com"
+                    placeholder="Please enter you email address."
                     onChange = {e => this.setUsername(e)}
                     fullWidth
                     variant="outlined"/>

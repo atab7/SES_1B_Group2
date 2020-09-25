@@ -35,6 +35,9 @@ var backgroundImg = {
 export default class Login extends React.Component {
   constructor(props){
     super();
+    if(props.isIllegal){
+      this.isIllegal = true;
+    }
 
     this.state = {
       username: '',
