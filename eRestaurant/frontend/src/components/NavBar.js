@@ -40,7 +40,10 @@ const useStyles = makeStyles((theme) => ({
     },
   }))(Button);
 
- 
+ const LogOut = () => {
+    sessionStorage.removeItem('auth_token');
+    console.log(sessionStorage.getItem('auth_token'));
+ }
 
   const lrButtonGroup = withStyles((theme) => ({
       color: grey[500],
@@ -65,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
             <Link to="/profile" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Profile</Button></Link>
                 <Link to="/login"><RegButton size="large">Login</RegButton></Link>
                 <Link to="/register"><RegButton size="large">Register</RegButton></Link>
+                <Link to="/"><RegButton onClick={LogOut} size="large">Log Out</RegButton></Link>
             
           </Toolbar>
           
