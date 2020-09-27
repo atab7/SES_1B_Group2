@@ -10,16 +10,11 @@ import HomePage from "./components/HomePage";
 import Register from "./components/register";
 import Login from "./components/login";
 import Profile from "./components/profiles/ProfilePage";
-import PrivateRoute from "./components/PrivateRoute";
 
 // component={Home} 
 
 
-<<<<<<< HEAD
 const isAuth = (token) => { 
-=======
-const isAuth = () => { 
->>>>>>> ata
   return sessionStorage.getItem('auth_token') !== null;
 }
 
@@ -34,12 +29,9 @@ const ProtectRoute = ({children}) => {
   return children;
 }
 
-<<<<<<< HEAD
 var state = {
   legal:false
 } 
-=======
->>>>>>> ata
 
 ReactDOM.render(
   <BrowserRouter>
