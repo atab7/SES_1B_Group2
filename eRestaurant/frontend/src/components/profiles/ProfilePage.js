@@ -18,7 +18,8 @@ import {BrowserRouter as Router, Switch, Route, Link, BrowserRouter} from "react
 import About from './About';
 import EditAccount from './EditAccount';
 import Homepage from '../HomePage';
-
+import Rewards from './Rewards';
+import ManagerBooking from './ManagerBooking';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -102,6 +103,14 @@ function ClippedDrawer() {
               <ListItemText primary={"Rewards"}/>
             </ListItem>  
             </Link>
+            <Link to="/profile/ManagerBooking" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Booking"}/>
+            </ListItem>  
+            </Link>
           </List>
         </div>
       </Drawer>
@@ -146,6 +155,18 @@ function ClippedDrawer() {
         <main className={classes.content}>
           <Toolbar/>
                 <EditAccount/>
+        </main>
+        </Route>
+        <Route exact path="/profile/rewards">
+        <main className={classes.content}>
+          <Toolbar/>
+                <Rewards/>
+        </main>
+        </Route>
+        <Route exact path="/profile/ManagerBooking">
+        <main className={classes.content}>
+          <Toolbar/>
+                <ManagerBooking/>
         </main>
         </Route>
       </Switch>
