@@ -35,10 +35,8 @@ var backgroundImg = {
 export default class Login extends React.Component {
   constructor(props){
     super();
-    if(props.isIllegal){
-      this.isIllegal = true;
-    }
 
+    
     this.state = {
       username: '',
       password:'',
@@ -46,13 +44,22 @@ export default class Login extends React.Component {
       validLogin:false,
       login:false,
     }
-
     this.setUsername = this.setUserName.bind(this);
     this.setPassword = this.setPassword.bind(this);
     this.setToken = this.setToken.bind(this);
     this.setValidLogin = this.setValidLogin.bind(this);
     this.closeValidLogin = this.closeValidLogin.bind(this);
     this.setLogin = this.setLogin.bind(this);
+    this.closeIllegal = this.closeIllegal.bind(this);
+
+  }
+
+  checkLegal(){
+    try{
+      return this.props.location.state.illegal;
+    }catch(e){
+      return this.props.illegal;
+    }
   }
 
   setUserName(evt){
@@ -84,6 +91,13 @@ export default class Login extends React.Component {
       validLogin: false
     })
   }
+  closeIllegal(evt){
+    var checkWhichLegal = this.checkLegal();
+    this.setState({
+      checkWhichLegal:false
+    })
+
+  }
 
   setToken(){
     var that = this
@@ -102,7 +116,6 @@ export default class Login extends React.Component {
       if(error.response.data.non_field_errors){
         if(error.response.data.non_field_errors.length >= 1){
           if(error.response.data.non_field_errors[0] === "Unable to log in with provided credentials."){
-            console.log("Username or password incorrect. Please try again.");
             that.setValidLogin();
           }
         }
@@ -154,6 +167,11 @@ export default class Login extends React.Component {
                 <Snackbar open={this.state.validLogin} autoHideDuration={3000} onClose={this.closeValidLogin}>
                   <Alert severity="error" onClose={this.closeValidLogin}> 
                   Username or password incorrect. Please try again.
+                  </Alert>
+                </Snackbar>
+                <Snackbar open={this.checkLegal()} autoHideDuration={3000} onClose={this.closeIllegal}>
+                  <Alert severity="error" onClose={this.closeIllegal}> 
+                  Please login before you enter that page.
                   </Alert>
                 </Snackbar>
                 
