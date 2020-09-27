@@ -12,7 +12,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 //import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import NavBar from '../NavBar';
+import CustomerNavBar from '../CustomerNavBar';
 import { withRouter } from 'react-router';
 import {BrowserRouter as Router, Switch, Route, Link, BrowserRouter} from "react-router-dom";
 import About from './About';
@@ -57,7 +57,7 @@ function ClippedDrawer() {
       
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
-        <NavBar/>
+      <CustomerNavBar/>
       </AppBar>
       <Drawer
         className={classes.drawer}

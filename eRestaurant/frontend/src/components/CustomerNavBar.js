@@ -40,13 +40,17 @@ const useStyles = makeStyles((theme) => ({
     },
   }))(Button);
 
+ const LogOut = () => {
+    sessionStorage.removeItem('auth_token');
+ }
+
   const lrButtonGroup = withStyles((theme) => ({
       color: grey[500],
       marginLeft: "auto",
     marginRight: -12,
     }))(ButtonGroup);
 
-  export default function NavBar() {
+  export default function CustomerNavBar() {
     const classes = useStyles();
   
     return (
@@ -58,8 +62,8 @@ const useStyles = makeStyles((theme) => ({
             <Typography variant="h6" className={classes.title}>
             <Link to="/" style={{ textDecoration: 'inherit', color: 'inherit'}}>Le Bistrot d'Andre </Link>
             </Typography>
-            <Link to="/login" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Login</Button></Link>
-            <Link to="/register" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Register</Button></Link>
+            <Link to="/profile" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Profile</Button></Link>
+            <Link to="/" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit" onClick={LogOut()}>Log Out</Button></Link>
           </Toolbar>
           
         </AppBar>

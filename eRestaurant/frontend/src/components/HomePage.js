@@ -1,5 +1,6 @@
 import React from 'react';
-import NavBar from './NavBar'
+import NavBar from './NavBar';
+import CustomerNavBar from './CustomerNavBar';
 import { Box } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -139,7 +140,15 @@ const postBooking = (branch) => {
     //})
 };
 
-const HomePage = () => {
+const setNavBar = (isAuth) => {
+  if(isAuth){
+    return <CustomerNavBar/>;
+  }else{
+    return <NavBar/>;
+  }
+}
+
+const HomePage = (props) => {
   const classes = useStyles();
 
   /* Branch select on homepage */
@@ -171,12 +180,9 @@ const HomePage = () => {
     setNumPeople(newValue);
   };
 
-  
-  
-
     return(
         <div>
-            <NavBar/>
+            {setNavBar(props.is_auth)}
             <Box style={ headerImg }>
             </Box>
             <Box style={ backgroundImg }>
