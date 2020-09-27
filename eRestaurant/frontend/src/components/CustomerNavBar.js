@@ -1,13 +1,14 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { withStyles, makeStyles} from '@material-ui/core/styles';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { grey } from '@material-ui/core/colors';
 import Paper from '@material-ui/core/Paper';
 import {Link } from "react-router-dom";
+import LogOut from './LogOut';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -40,10 +41,6 @@ const useStyles = makeStyles((theme) => ({
     },
   }))(Button);
 
- const LogOut = () => {
-    sessionStorage.removeItem('auth_token');
- }
-
   const lrButtonGroup = withStyles((theme) => ({
       color: grey[500],
       marginLeft: "auto",
@@ -63,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
             <Link to="/" style={{ textDecoration: 'inherit', color: 'inherit'}}>Le Bistrot d'Andre </Link>
             </Typography>
             <Link to="/profile" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Profile</Button></Link>
-            <Link to="/" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit" onClick={LogOut()}>Log Out</Button></Link>
+            <LogOut/>
           </Toolbar>
           
         </AppBar>

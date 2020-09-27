@@ -140,15 +140,19 @@ const postBooking = (branch) => {
     //})
 };
 
-const setNavBar = (isAuth) => {
-  if(isAuth){
+const isAuth = (token) => { 
+  return localStorage.getItem('auth_token') !== null;
+}
+
+const setNavBar = (is_auth) => {
+  if(isAuth()){
     return <CustomerNavBar/>;
   }else{
     return <NavBar/>;
   }
 }
 
-const HomePage = (props) => {
+const HomePage = () => {
   const classes = useStyles();
 
   /* Branch select on homepage */
@@ -179,10 +183,11 @@ const HomePage = (props) => {
   const handleChangePeople = (event, newValue) => {
     setNumPeople(newValue);
   };
+  var nav_bar = setNavBar(isAuth());
 
     return(
         <div>
-            {setNavBar(props.is_auth)}
+            {nav_bar}
             <Box style={ headerImg }>
             </Box>
             <Box style={ backgroundImg }>

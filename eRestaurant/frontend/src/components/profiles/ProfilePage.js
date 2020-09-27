@@ -94,6 +94,14 @@ function ClippedDrawer() {
               <ListItemText primary={"Edit Account"}/>
             </ListItem>  
             </Link>
+            <Link to="/profile/Rewards" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Rewards"}/>
+            </ListItem>  
+            </Link>
           </List>
         </div>
       </Drawer>

@@ -6,7 +6,7 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import { Route, Switch, Redirect } from 'react-router';
 
-import HomePage from "./components/HomePage";
+import Home from "./components/HomePage";
 import Register from "./components/register";
 import Login from "./components/login";
 import Profile from "./components/profiles/ProfilePage";
@@ -15,7 +15,7 @@ import Profile from "./components/profiles/ProfilePage";
 
 
 const isAuth = (token) => { 
-  return sessionStorage.getItem('auth_token') !== null;
+  return localStorage.getItem('auth_token') !== null;
 }
 
 const LOGIN_URL = '/login';
@@ -23,7 +23,7 @@ const ProtectRoute = ({children}) => {
   if(!isAuth()){
     return <Redirect to={{
       pathname:LOGIN_URL,
-      state: {legal:true}
+      state: {illegal:true}
     }} /> //If you can pass a prop here (see how to pass props to Redirect components cause it is possible to pass props to Route component with render={...}), you can later on find out if user is directed here normally or with this illegal access.
   }
   return children;
@@ -39,19 +39,19 @@ ReactDOM.render(
         <Route 
           exact path="/" 
           render={(props) => (
-            <HomePage {...props} is_auth={isAuth()}/>
+            <Home {...props} />
           )
           }
         />
         <Route path="/register" component={Register} />
         <Route path="/login" render={(props) => (
-            <Login {...props} legal={false} />
+            <Login {...props} illegal={false} />
           )}/>
         
         <ProtectRoute>
           <Route path="/profile" component={Profile}/>
         </ProtectRoute>
-      
+
       </Switch>
       </BrowserRouter>,
   document.getElementById('root')

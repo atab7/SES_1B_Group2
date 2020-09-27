@@ -24,8 +24,6 @@ export default function LayoutTextFields() {
     <div className={classes.root}>
       <Container maxWidth="sm">
       <div>
-        
-        
         <TextField
           id="outlined-full-width"
           label="First Name"
