@@ -6,15 +6,20 @@ import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import { Route, Switch, Redirect } from 'react-router';
 
-import Home from "./components/HomePage";
+import HomePage from "./components/HomePage";
 import Register from "./components/register";
 import Login from "./components/login";
 import Profile from "./components/profiles/ProfilePage";
+import PrivateRoute from "./components/PrivateRoute";
 
 // component={Home} 
 
 
+<<<<<<< HEAD
 const isAuth = (token) => { 
+=======
+const isAuth = () => { 
+>>>>>>> ata
   return sessionStorage.getItem('auth_token') !== null;
 }
 
@@ -29,9 +34,12 @@ const ProtectRoute = ({children}) => {
   return children;
 }
 
+<<<<<<< HEAD
 var state = {
   legal:false
 } 
+=======
+>>>>>>> ata
 
 ReactDOM.render(
   <BrowserRouter>
@@ -39,7 +47,7 @@ ReactDOM.render(
         <Route 
           exact path="/" 
           render={(props) => (
-            <Home {...props} />
+            <HomePage {...props} is_auth={isAuth()}/>
           )
           }
         />
@@ -51,7 +59,7 @@ ReactDOM.render(
         <ProtectRoute>
           <Route path="/profile" component={Profile}/>
         </ProtectRoute>
-
+      
       </Switch>
       </BrowserRouter>,
   document.getElementById('root')

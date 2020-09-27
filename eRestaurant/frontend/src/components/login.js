@@ -109,6 +109,7 @@ export default class Login extends React.Component {
     )
     .then((response) => {
       sessionStorage.setItem('auth_token', response.data.auth_token);
+      sessionStorage.setItem('is_auth', true);
       that.setLogin();
 
     })
