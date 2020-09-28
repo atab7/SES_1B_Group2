@@ -70,8 +70,8 @@ class Reward(models.Model):
 
 class Customer_Rewards(models.Model):
     ID         = models.AutoField(primary_key=True)
-    user       = models.ForeignKey(User, related_name='rewards', on_delete=models.PROTECT, null=False)
-    reward     = models.ForeignKey(Reward, related_name='customers', on_delete=models.PROTECT, null=False)
+    user       = models.ForeignKey(User, related_name='rewards', on_delete=models.PROTECT, null=True)
+    reward     = models.ForeignKey(Reward, related_name='customers', on_delete=models.PROTECT, null=True)
     def __str__(self):
         return str(self.ID)
 
