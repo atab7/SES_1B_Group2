@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 # Need to create serializers for some (maybe all) of these models
+#discord API integration
 
 
 class Menu(models.Model):
