@@ -108,3 +108,5 @@ class Menu_Item(models.Model):
     menu = models.ForeignKey(Menu, related_name='meals', on_delete=models.SET_NULL, null=True)
     def __str__(self):
         return str(self.ID)
+
+#Comment
