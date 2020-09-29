@@ -15,12 +15,14 @@ import MailIcon from '@material-ui/icons/Mail';
 import CustomerNavBar from '../CustomerNavBar';
 import { withRouter } from 'react-router';
 import {BrowserRouter as Router, Switch, Route, Link, BrowserRouter} from "react-router-dom";
-import About from './About';
+//import About from './About';
 import EditAccount from './EditAccount';
 import Homepage from '../HomePage';
 import Rewards from './Rewards';
 import ManagerBooking from './ManagerBooking';
 import AddStaff from './AddStaff';
+import { isManager } from '../../actions/AuthCheck.js';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +51,42 @@ const useStyles = makeStyles((theme) => ({
     color: 'inherit'},
 }));
 
+const setRewards = (classes) => {
+  const user_type = localStorage.getItem('user_type');
+  if(user_type === 'manager'){
+    return (<Link to="/profile/Rewards" className={classes.link}>
+              <ListItem button>
+                <ListItemIcon>
+                  <MailIcon/>
+                </ListItemIcon>
+                <ListItemText primary={"Rewards"}/>
+              </ListItem>  
+            </Link>);
+  }else if (user_type === 'customer'){
+    return null;
+  }else{
+    return null;
+  }
+} 
+
+const setBookings = (classes) => {
+  const user_type = localStorage.getItem('user_type');
+  if(user_type === 'manager'){
+    return (<Link to="/profile/ManageBookings" className={classes.link}>
+              <ListItem button>
+                <ListItemIcon>
+                  <MailIcon/>
+                </ListItemIcon>
+              <ListItemText primary={"Bookings"}/>
+              </ListItem>  
+            </Link>)
+  }else if (user_type === 'customer'){
+    return null;
+  }else{
+    return null;
+  }
+}
+
 function ClippedDrawer() {
 
   const classes = useStyles();
@@ -72,22 +110,8 @@ function ClippedDrawer() {
         <div className={classes.drawerContainer}>
          
           <List>
-            <Link to="/profile/banana" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Home"}/>
-            </ListItem>  
-            </Link>
-            <Link to="/profile/about" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"About"}/>
-            </ListItem>  
-            </Link>
+            {setBookings(classes)}
+            {setRewards(classes)}
             <Link to="/profile/editAccount" className={classes.link}>
             <ListItem button>
               <ListItemIcon>
@@ -96,70 +120,11 @@ function ClippedDrawer() {
               <ListItemText primary={"Edit Account"}/>
             </ListItem>  
             </Link>
-            <Link to="/profile/Rewards" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Rewards"}/>
-            </ListItem>  
-            </Link>
-            <Link to="/profile/ManagerBooking" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Booking"}/>
-            </ListItem>  
-            </Link>
-            <Link to="/profile/AddStaff" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Staff Management"}/>
-            </ListItem>  
-            </Link>
           </List>
         </div>
       </Drawer>
       
       <Switch>
-        <Route exact path="/profile/banana">
-        <main className={classes.content}>
-          <Toolbar/>
-                <About/>
-                <Homepage/>
-        </main>
-        </Route>
-        <Route exact path="/profile/about">
-          <main className={classes.content}>
-          <Toolbar />
-            <Typography paragraph>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-              ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-              facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-              gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-              donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-              adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-              Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-              imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-              arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-              donec massa sapien faucibus et molestie ac.
-            </Typography>
-            <Typography paragraph>
-              Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-              facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-              tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-              consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-              vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-              hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-              tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-              nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-              accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-            </Typography>
-          </main>
-        </Route>
         <Route exact path="/profile/editAccount">
         <main className={classes.content}>
           <Toolbar/>
@@ -172,7 +137,7 @@ function ClippedDrawer() {
                 <Rewards/>
         </main>
         </Route>
-        <Route exact path="/profile/ManagerBooking">
+        <Route exact path="/profile/ManageBookings">
         <main className={classes.content}>
           <Toolbar/>
                 <ManagerBooking/>
@@ -191,3 +156,39 @@ function ClippedDrawer() {
   );
 };
 export default ClippedDrawer;
+
+/*
+Unusused Parts:
+<Link to="/profile/banana" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Home"}/>
+            </ListItem>  
+            </Link>
+            <Link to="/profile/about" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"About"}/>
+            </ListItem>  
+            </Link>
+
+
+            <Route exact path="/profile/banana">
+        <main className={classes.content}>
+          <Toolbar/>
+                <About/>
+                <Homepage/>
+        </main>
+        </Route>
+
+
+  <Route exact path="/profile/about">
+          
+        </Route>
+
+
+*/

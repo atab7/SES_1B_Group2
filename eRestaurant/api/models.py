@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 # Need to create serializers for some (maybe all) of these models
+#discord API integration
 
 
 class Menu(models.Model):
@@ -36,7 +37,7 @@ class Meal(models.Model):
 #    stock_amount = models.IntegerField(null=True)
 
 class Staff(models.Model):
-    user            = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, default=0) 
+    user            = models.ForeignKey(User, related_name='staff', on_delete=models.CASCADE, primary_key=True, default=0) 
     address         = models.CharField(max_length=200, null=True)
     phone_number    = models.IntegerField(null=True)
     tax_file_number = models.IntegerField(null=False)
@@ -51,7 +52,7 @@ class Staff(models.Model):
     #access = 
 
 class Customer(models.Model):
-    user            = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, default=0) 
+    user            = models.ForeignKey(User, on_delete=models.CASCADE, default=0, primary_key=True, unique=True) 
     address         = models.CharField(max_length=200, null=True)
     phone_number    = models.IntegerField(null=True)
     payment_details = models.CharField(max_length=200, null=True) #Might need to double check 'null=True' --Aryan
@@ -70,8 +71,8 @@ class Reward(models.Model):
 
 class Customer_Rewards(models.Model):
     ID         = models.AutoField(primary_key=True)
-    user       = models.ForeignKey(User, related_name='rewards', on_delete=models.PROTECT, null=False)
-    reward     = models.ForeignKey(Reward, related_name='customers', on_delete=models.PROTECT, null=False)
+    user       = models.ForeignKey(User, related_name='rewards', on_delete=models.PROTECT, null=True)
+    reward     = models.ForeignKey(Reward, related_name='customers', on_delete=models.PROTECT, null=True)
     def __str__(self):
         return str(self.ID)
 
@@ -108,3 +109,5 @@ class Menu_Item(models.Model):
     menu = models.ForeignKey(Menu, related_name='meals', on_delete=models.SET_NULL, null=True)
     def __str__(self):
         return str(self.ID)
+
+#Comment

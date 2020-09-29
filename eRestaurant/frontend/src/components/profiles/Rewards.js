@@ -15,7 +15,16 @@ import Container from '@material-ui/core/Container';
 export default class Rewards extends React.Component {
     constructor(props){
       super();
+
+      this.state = {
+          rewards: []
+      }
     }
+
+    getRewards(){
+
+    }
+
     render(){
         return(
             <div>
