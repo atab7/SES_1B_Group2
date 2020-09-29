@@ -58,6 +58,7 @@ const useStyles = makeStyles((theme) => ({
             <Typography variant="h6" className={classes.title}>
             <Link to="/" style={{ textDecoration: 'inherit', color: 'inherit'}}>Le Bistrot d'Andre </Link>
             </Typography>
+            <Link to="/about" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">About</Button></Link>
             <Link to="/login" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Login</Button></Link>
             <Link to="/register" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Register</Button></Link>
           </Toolbar>

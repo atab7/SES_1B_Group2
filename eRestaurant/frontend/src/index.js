@@ -10,9 +10,13 @@ import Home from "./components/HomePage";
 import Register from "./components/register";
 import Login from "./components/login";
 import Profile from "./components/profiles/ProfilePage";
+import About from './components/About.js'
 
 // component={Home} 
 
+const isManager = () => {
+  return localStorage.getItem('user_type') === 'manager';
+}
 
 const isAuth = (token) => { 
   return localStorage.getItem('auth_token') !== null;
@@ -44,6 +48,7 @@ ReactDOM.render(
           }
         />
         <Route path="/register" component={Register} />
+        <Route path="/about" component={About} />
         <Route path="/login" render={(props) => (
             <Login {...props} illegal={false} />
           )}/>

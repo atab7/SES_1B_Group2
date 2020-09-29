@@ -15,7 +15,16 @@ import Paper from '@material-ui/core/Paper';
 export default class Rewards extends React.Component {
     constructor(props){
       super();
+
+      this.state = {
+          rewards: []
+      }
     }
+
+    getRewards(){
+
+    }
+
     render(){
         return(
             <div>
