@@ -120,6 +120,30 @@ function ClippedDrawer() {
               <ListItemText primary={"Edit Account"}/>
             </ListItem>  
             </Link>
+            <Link to="/profile/Rewards" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Rewards"}/>
+            </ListItem>  
+            </Link>
+            <Link to="/profile/ManagerBooking" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Booking"}/>
+            </ListItem>  
+            </Link>
+            <Link to="/profile/AddStaff" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Staff Management"}/>
+            </ListItem>  
+            </Link>
           </List>
         </div>
       </Drawer>
@@ -137,7 +161,7 @@ function ClippedDrawer() {
                 <Rewards/>
         </main>
         </Route>
-        <Route exact path="/profile/ManageBookings">
+        <Route exact path="/profile/ManagerBooking">
         <main className={classes.content}>
           <Toolbar/>
                 <ManagerBooking/>

@@ -87,7 +87,7 @@ export default class AddStaff extends React.Component {
                         variant="outlined" 
                         style ={{color:'#424242'}}
                         fullWidth>
-                        Add Promocode</Button>
+                        Add Staff Member</Button>
                         </Grid>
                 </Grid>
                 </Container>
