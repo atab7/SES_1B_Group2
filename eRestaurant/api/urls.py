@@ -9,6 +9,7 @@ from .api import *
 router = routers.DefaultRouter()
 router.register('bookings', booking_viewset, 'bookings')
 router.register('restaurants', restaurant_viewset, 'restaurants')
+router.register('staff', staff_viewset, 'staff')
 urlpatterns = router.urls
 
 #urlpatterns = [

@@ -28,6 +28,9 @@ Temporary Items
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*.pyc
+/__pycache__/
+*.cpython-38.pyc
 
 # C extensions
 *.so

@@ -49,7 +49,7 @@ export default class Login extends React.Component {
     this.setToken = this.setToken.bind(this);
     this.setValidLogin = this.setValidLogin.bind(this);
     this.closeValidLogin = this.closeValidLogin.bind(this);
-    this.setLogin = this.setLogin.bind(this);
+    //this.setLogin = this.setLogin.bind(this);
     this.closeIllegal = this.closeIllegal.bind(this);
 
   }
@@ -80,7 +80,8 @@ export default class Login extends React.Component {
     }
     )
   }
-  setLogin(evt){
+  setLogin(token){
+    this.setUserType(token);
     this.setState({
       login:true
     })
@@ -99,8 +100,37 @@ export default class Login extends React.Component {
 
   }
 
+  setUserType(token){
+    var that = this;
+    axios.get(`${axios_config["baseURL"]}api/staff/`,
+    {
+      headers:{
+        'Authorization': `Token ${token}`
+      }
+    }
+    )
+    .then((response) => {
+      try{
+        const is_manager = response.data[0].is_manager;
+        if(!is_manager){
+          localStorage.setItem('user_type', 'staff');
+        }else{
+          localStorage.setItem('user_type', 'manager');
+        }
+      }
+      catch {
+        localStorage.setItem('user_type', 'customer');
+      }
+
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
+  }
+
   setToken(){
-    var that = this
+    var that = this;
     axios.post(`${axios_config["baseURL"]}auth/token/login/`,
     {
       username: this.state.username,
@@ -110,7 +140,7 @@ export default class Login extends React.Component {
     .then((response) => {
       localStorage.setItem('auth_token', response.data.auth_token);
       localStorage.setItem('is_auth', true);
-      that.setLogin();
+      that.setLogin(localStorage.getItem('auth_token'));
 
     })
     .catch((error) => {
