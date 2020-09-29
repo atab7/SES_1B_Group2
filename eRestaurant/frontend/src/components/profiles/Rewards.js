@@ -10,7 +10,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
+import Container from '@material-ui/core/Container';
 
 export default class Rewards extends React.Component {
     constructor(props){
@@ -19,6 +19,7 @@ export default class Rewards extends React.Component {
     render(){
         return(
             <div>
+                <Container maxWidth="md">
                 <Paper>
                 <b><p   style={{textAlign: 'center', fontSize:'24px', paddingTop:'12px'}}>On Going Rewards</p></b>
                 <TableContainer >
@@ -77,6 +78,8 @@ export default class Rewards extends React.Component {
                     </Table>
                     </TableContainer>
                     </Paper>
+                    </Container>
+                    <Container maxWidth="sm">
                 <Grid container spacing={2}>
                     <Grid item xs={12} style={{height:80}}>
                      <b><p  style={{textAlign: 'center', fontSize:'24px'}}>Add Rewards</p></b>
@@ -107,7 +110,7 @@ export default class Rewards extends React.Component {
 
 
                 </Grid>
-                
+            </Container>
             </div>
         )
     }

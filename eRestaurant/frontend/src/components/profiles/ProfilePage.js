@@ -20,6 +20,7 @@ import EditAccount from './EditAccount';
 import Homepage from '../HomePage';
 import Rewards from './Rewards';
 import ManagerBooking from './ManagerBooking';
+import AddStaff from './AddStaff';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -111,6 +112,14 @@ function ClippedDrawer() {
               <ListItemText primary={"Booking"}/>
             </ListItem>  
             </Link>
+            <Link to="/profile/AddStaff" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Staff Management"}/>
+            </ListItem>  
+            </Link>
           </List>
         </div>
       </Drawer>
@@ -167,6 +176,12 @@ function ClippedDrawer() {
         <main className={classes.content}>
           <Toolbar/>
                 <ManagerBooking/>
+        </main>
+        </Route>
+        <Route exact path="/profile/AddStaff">
+        <main className={classes.content}>
+          <Toolbar/>
+                <AddStaff/>
         </main>
         </Route>
       </Switch>
