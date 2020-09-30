@@ -174,7 +174,7 @@ export default class Login extends React.Component {
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
                 
                     <TextField
-                    placeholder="Calvin@gmail.com"
+                    placeholder="examle@email.com"
                     fullWidth
                     id="email" 
                     label="Email Address" 

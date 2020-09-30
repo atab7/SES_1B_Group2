@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+import datetime
 
 # Create your models here.
 # Need to create serializers for some (maybe all) of these models
@@ -64,10 +65,13 @@ class Customer(models.Model):
 #    #access = 
 
 class Reward(models.Model):
-    title          = models.CharField(null=False, max_length=60)
-    points_percent = models.IntegerField()
+    code           = models.CharField(null=True, max_length=60)
+    date_created   = models.DateField(default=datetime.date.today())
+    valid_until    = models.DateField(null=True) 
+    points_percent = models.IntegerField(null=True)
+    is_valid       = models.BooleanField(default=True)
     def __str__(self):
-        return self.title
+        return self.code
 
 class Customer_Rewards(models.Model):
     ID         = models.AutoField(primary_key=True)

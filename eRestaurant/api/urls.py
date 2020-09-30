@@ -7,6 +7,7 @@ from rest_framework import routers
 from .api import *
 
 router = routers.DefaultRouter()
+router.register('manageRewards', manager_reward_viewset, 'manageRewards')
 router.register('bookings', booking_viewset, 'bookings')
 router.register('restaurants', restaurant_viewset, 'restaurants')
 router.register('staff', staff_viewset, 'staff')
