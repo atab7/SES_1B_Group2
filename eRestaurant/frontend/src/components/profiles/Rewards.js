@@ -10,7 +10,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import Container from '@material-ui/core/Container';
 
 import axios from 'axios';
 import {axios_config} from '../../config.js';
@@ -78,6 +79,7 @@ export default class Rewards extends React.Component {
     render(){
         return(
             <div>
+                <Container maxWidth="md">
                 <Paper>
                 <b><p   style={{textAlign: 'center', fontSize:'24px', paddingTop:'12px'}}>On Going Rewards</p></b>
                 <TableContainer >
@@ -97,7 +99,7 @@ export default class Rewards extends React.Component {
                     </TableContainer>
                     </Paper>
                <AddReward updateParentState={this.updateState}/>
-                
+               </Container>
             </div>
         )
     }

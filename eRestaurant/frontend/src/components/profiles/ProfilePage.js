@@ -20,6 +20,7 @@ import EditAccount from './EditAccount';
 import Homepage from '../HomePage';
 import Rewards from './Rewards';
 import ManagerBooking from './ManagerBooking';
+import AddStaff from './AddStaff';
 import { isManager } from '../../actions/AuthCheck.js';
 
 const drawerWidth = 240;
@@ -119,6 +120,30 @@ function ClippedDrawer() {
               <ListItemText primary={"Edit Account"}/>
             </ListItem>  
             </Link>
+            <Link to="/profile/Rewards" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Rewards"}/>
+            </ListItem>  
+            </Link>
+            <Link to="/profile/ManagerBooking" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Booking"}/>
+            </ListItem>  
+            </Link>
+            <Link to="/profile/AddStaff" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Staff Management"}/>
+            </ListItem>  
+            </Link>
           </List>
         </div>
       </Drawer>
@@ -136,10 +161,16 @@ function ClippedDrawer() {
                 <Rewards/>
         </main>
         </Route>
-        <Route exact path="/profile/ManageBookings">
+        <Route exact path="/profile/ManagerBooking">
         <main className={classes.content}>
           <Toolbar/>
                 <ManagerBooking/>
+        </main>
+        </Route>
+        <Route exact path="/profile/AddStaff">
+        <main className={classes.content}>
+          <Toolbar/>
+                <AddStaff/>
         </main>
         </Route>
       </Switch>
