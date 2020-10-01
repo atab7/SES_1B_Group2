@@ -54,6 +54,22 @@ class booking_viewset(viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
+        date = self.request.query_params.get('date', None)
+        try:
+            return Booking.objects.filter(date=date)
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+class customer_booking_viewset(viewsets.ModelViewSet):
+    serializer_class = booking_serializer
+    
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
+    def get_queryset(self):
         return self.request.user.bookings.all()
 
     

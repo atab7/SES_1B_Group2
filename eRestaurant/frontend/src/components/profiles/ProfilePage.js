@@ -59,12 +59,10 @@ const setRewards = (classes) => {
                 <ListItemIcon>
                   <MailIcon/>
                 </ListItemIcon>
-                <ListItemText primary={"Rewards"}/>
+                <ListItemText primary={"Manage Rewards"}/>
               </ListItem>  
             </Link>);
   }else if (user_type === 'customer'){
-    return null;
-  }else{
     return null;
   }
 } 
@@ -82,8 +80,22 @@ const setBookings = (classes) => {
             </Link>)
   }else if (user_type === 'customer'){
     return null;
-  }else{
-    return null;
+  }
+}
+
+const setStaffManagement = (classes) => {
+  const user_type = localStorage.getItem('user_type');
+  if(user_type === 'manager'){
+    return(
+      <Link to="/profile/ManageStaff" className={classes.link}>
+      <ListItem button>
+        <ListItemIcon>
+          <MailIcon/>
+        </ListItemIcon>
+        <ListItemText primary={"Manage Staff"}/>
+      </ListItem>  
+      </Link>
+    )
   }
 }
 
@@ -104,15 +116,15 @@ function ClippedDrawer() {
         variant="permanent"
         classes={{
           paper: classes.drawerPaper,
-        }}
-      >
+        }}>
         <Toolbar />
         <div className={classes.drawerContainer}>
          
           <List>
             {setBookings(classes)}
             {setRewards(classes)}
-            <Link to="/profile/editAccount" className={classes.link}>
+            {setStaffManagement(classes)}
+            <Link to="/profile/EditAccount" className={classes.link}>
             <ListItem button>
               <ListItemIcon>
                 <MailIcon/>
@@ -120,54 +132,31 @@ function ClippedDrawer() {
               <ListItemText primary={"Edit Account"}/>
             </ListItem>  
             </Link>
-            <Link to="/profile/Rewards" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Rewards"}/>
-            </ListItem>  
-            </Link>
-            <Link to="/profile/ManagerBooking" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Booking"}/>
-            </ListItem>  
-            </Link>
-            <Link to="/profile/AddStaff" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Staff Management"}/>
-            </ListItem>  
-            </Link>
           </List>
+
         </div>
       </Drawer>
       
       <Switch>
-        <Route exact path="/profile/editAccount">
+        <Route exact path="/profile/EditAccount">
         <main className={classes.content}>
           <Toolbar/>
                 <EditAccount/>
         </main>
         </Route>
-        <Route exact path="/profile/rewards">
+        <Route exact path="/profile/Rewards">
         <main className={classes.content}>
           <Toolbar/>
                 <Rewards/>
         </main>
         </Route>
-        <Route exact path="/profile/ManagerBooking">
+        <Route exact path="/profile/ManageBookings">
         <main className={classes.content}>
           <Toolbar/>
                 <ManagerBooking/>
         </main>
         </Route>
-        <Route exact path="/profile/AddStaff">
+        <Route exact path="/profile/ManageStaff">
         <main className={classes.content}>
           <Toolbar/>
                 <AddStaff/>

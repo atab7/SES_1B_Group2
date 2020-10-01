@@ -186,6 +186,7 @@ class AddReward extends React.Component {
             alert("Please enter a number between 1 and 100 as discount percentage.");
             return false;
         }
+        return true;
     }
 
     postReward(){
@@ -194,7 +195,7 @@ class AddReward extends React.Component {
         if(this.checkReward()){
             axios.post(`${axios_config["baseURL"]}api/manageRewards/`, {
                 code:this.state.promo_code,
-                points_percent: Number(this.props.points_percent)
+                points_percent: Number(this.state.discount_percentage)
             },
             {
                 headers:{ 
@@ -252,49 +253,3 @@ class AddReward extends React.Component {
     }
 }
 
-
-/*
-<TableBody>
-                        <TableRow>
-                            <TableCell>100000</TableCell>
-                            <TableCell align="center">SAVE5</TableCell>
-                            <TableCell align="center">5</TableCell>
-                            <TableCell align="center">
-                            <Button 
-                                variant="outlined" 
-                                style ={{color:'#424242'}}
-                                fullWidth>
-                                Remove</Button>
-                            </TableCell>
-                        </TableRow>
-                        </TableBody>
-                        <TableBody>
-                        <TableRow>
-                            <TableCell>100001</TableCell>
-                            <TableCell align="center">SAVE10</TableCell>
-                            <TableCell align="center">10</TableCell>
-                            <TableCell align="center">
-                            <Button 
-                                variant="outlined" 
-                                style ={{color:'#424242'}}
-                                fullWidth>
-                                Remove</Button>
-                            </TableCell>
-                        </TableRow>
-                        </TableBody>
-                        <TableBody>
-                        <TableRow>
-                            <TableCell>100002</TableCell>
-                            <TableCell align="center">SAVE20</TableCell>
-                            <TableCell align="center">20</TableCell>
-                            <TableCell align="center">
-                            <Button 
-                                variant="outlined" 
-                                style ={{color:'#424242'}}
-                                fullWidth>
-                                Remove</Button>
-                            </TableCell>
-                        </TableRow>
-                        </TableBody>
-
-*/
