@@ -1,13 +1,14 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import { withStyles, makeStyles} from '@material-ui/core/styles';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { grey } from '@material-ui/core/colors';
 import Paper from '@material-ui/core/Paper';
 import {Link } from "react-router-dom";
+import LogOut from './LogOut';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: -12,
     }))(ButtonGroup);
 
-  export default function NavBar() {
+  export default function CustomerNavBar() {
     const classes = useStyles();
   
     return (
@@ -58,9 +59,8 @@ const useStyles = makeStyles((theme) => ({
             <Typography variant="h6" className={classes.title}>
             <Link to="/" style={{ textDecoration: 'inherit', color: 'inherit'}}>Le Bistrot d'Andre </Link>
             </Typography>
-            <Link to="/about" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">About</Button></Link>
-            <Link to="/login" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Login</Button></Link>
-            <Link to="/register" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Register</Button></Link>
+            <Link to="/profile" style={{ textDecoration: 'inherit', color: 'inherit'}}><Button color="inherit">Profile</Button></Link>
+            <LogOut/>
           </Toolbar>
           
         </AppBar>

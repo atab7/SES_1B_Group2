@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api.apps.ApiConfig',
     'rest_framework',
+    'djoser',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +129,30 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'frontend/build/static')
 ]
+
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated', 
+    )
+}
+
+
+#from corsheaders.defaults import default_headers
+
+#CORS_ALLOW_HEADERS = list(default_headers) + [
+#    'X-CSRFTOKEN',
+#]
+
+#EMAIL CONFIG
+
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'lebistrotdeandre@gmail.com'
+# EMAIL_HOST_PASSWORD = '' 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

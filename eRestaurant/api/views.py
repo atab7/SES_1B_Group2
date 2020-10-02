@@ -6,6 +6,8 @@ from rest_framework import generics
 from rest_framework.response import Response
 from .models import User
 from .serializers import user_serializer
+from django.http import HttpResponse
+
 # Create your views here.
 
 @api_view(['GET'])
@@ -43,3 +45,4 @@ class user_list(generics.ListAPIView):
 class user_create(generics.CreateAPIView):
    serializer_class = user_serializer
    queryset = User.objects.all()
+
