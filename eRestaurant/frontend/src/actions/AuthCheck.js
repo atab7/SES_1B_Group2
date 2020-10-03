@@ -1,11 +1,15 @@
 
-function isAuth(){
-    console.log('test');
-    var token = sessionStorage.getItem('auth_token');
-    if(token === undefined || token === NaN ){
-        return false;
-    }
-    return true;
+const isAuth = () => {
+    return localStorage.getItem('auth_token') !== null;
 }
 
-export default isAuth;
+const isManager = () => {
+    try{
+    return localStorage.getItem('user_type') === 'manager';
+    }
+    catch {
+        return false;
+    }
+}
+
+export { isAuth, isManager};

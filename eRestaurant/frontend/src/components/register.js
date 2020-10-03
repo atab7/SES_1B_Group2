@@ -12,8 +12,11 @@ import Alert from '@material-ui/lab/Alert';
 import Background from './images/defaultBackground.jpg';
 import {Link } from "react-router-dom";
 import { Redirect } from 'react-router'
+import Cookies from 'js-cookie';
+
 
 import {axios_config} from '../config.js';
+
 
 
 
@@ -127,12 +130,17 @@ export default class Register extends React.Component {
 
   postUser(){
     var that = this;
+    var csrftoken = Cookies.get('csrftoken');
     axios.post(`${axios_config["baseURL"]}auth/users/`,
     {
       email: this.state.username,
       username: this.state.username,
       password: this.state.password
-    },
+    },{
+      headers: {
+        'X-CSRFToken': csrftoken
+      }
+    }
     )
     .then(function (response) {
       if (response.status === 201) {

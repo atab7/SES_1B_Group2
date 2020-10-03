@@ -28,6 +28,9 @@ Temporary Items
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*.pyc
+/__pycache__/
+*.cpython-38.pyc
 
 # C extensions
 *.so
@@ -73,6 +76,7 @@ coverage.xml
 
 # Django stuff:
 *.log
+db.sqlite3
 
 # Sphinx documentation
 docs/_build/
