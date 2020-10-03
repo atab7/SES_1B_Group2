@@ -148,7 +148,7 @@ function ClippedDrawer() {
               <ListItemText primary={"Booking"}/>
             </ListItem>  
             </Link>
-            <Link to="/profile/ManagerStaff" className={classes.link}>
+            <Link to="/profile/AddStaff" className={classes.link}>
             <ListItem button>
               <ListItemIcon>
                 <MailIcon/>
@@ -174,13 +174,13 @@ function ClippedDrawer() {
                 <Rewards/>
         </main>
         </Route>
-        <Route exact path="/profile/ManageBookings">
+        <Route exact path="/profile/ManagerBooking">
         <main className={classes.content}>
           <Toolbar/>
                 <ManagerBooking/>
         </main>
         </Route>
-        <Route exact path="/profile/ManageStaff">
+        <Route exact path="/profile/AddStaff">
         <main className={classes.content}>
           <Toolbar/>
                 <AddStaff/>
