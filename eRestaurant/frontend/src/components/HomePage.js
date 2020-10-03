@@ -26,6 +26,8 @@ import TextField from '@material-ui/core/TextField';
 import Header from './images/frenchpic.jpeg';
 import Background from './images/defaultBackground.jpg';
 import Slider from '@material-ui/core/Slider';
+import Menu from './Menu';
+//import EditAccount from './EditAccount';
 import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -173,16 +175,14 @@ const HomePage = () => {
   const handleCloseBooking = () => {
     setOpenBooking(false);
   };
+  /* Booking */
+
+
+
   /*Branch select on booking form */
-  const [bookingBranch, setBookingBranch] = React.useState('branch1');
-  const handleChangeBB = (event) => {
-    setBookingBranch(event.target.value);
-  };
+
   /*Number of people select slider on branch*/
-  const [numpeople, setNumPeople] = React.useState(30);
-  const handleChangePeople = (event, newValue) => {
-    setNumPeople(newValue);
-  };
+
   var nav_bar = setNavBar(isAuth());
 
     return(
@@ -239,68 +239,14 @@ const HomePage = () => {
                     <RegButton size="large" onClick={handleOpenBooking}>Book Now</RegButton>
                     <Dialog open={open} onClose={handleCloseBooking} aria-labelledby="form-dialog-title">
                       <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>I'd Like To Book</DialogTitle>
-                      <DialogContent>
-                       <form>
-                       <Grid container spacing={3}>
-                          <Grid item xs={12}>
-                          <TextField
-                            id="outlined-select-branch"
-                            select
-                            label="Select"
-                            value={branches}
-                            onChange={handleChangeBB}
-                            fullWidth 
-                            helperText="Please select your branch"
-                            variant="outlined"
-                          >
-                            {branches.map((option) => (
-                              <MenuItem key={option.id} value={option.id}>
-                                {option.name}
-                              </MenuItem>
-                            ))}
-                          </TextField>
-                          </Grid>
-                          <Grid item xs={12}>
-                            <Slider 
-                            min={0}
-                            max={10}
-                            step={1}
-                            value={numpeople} 
-                            onChange={handleChangePeople} 
-                            getAriaValueText={valuetext}
-                            aria-labelledby="continuous-slider"
-                            marks={numOfPeople}
-                            valueLabelDisplay="auto"
-                             />
-                          </Grid>
-                          <Grid item xs={6}>
-                            <Button variant="contained" color="primary">
-                              Today
-                            </Button>
-                          </Grid>
-                          <Grid item xs={6}>
-                          <TextField
-                              id="date"
-                              label="Booking Date"
-                              type="date"
-                              defaultValue="values.someDate"
-                              className={classes.textField}
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                            />
-                          </Grid>
-                        </Grid>
-                       </form>
-                      </DialogContent>
+                      <Menu/>
                       <DialogActions>
                         <Button onClick={handleCloseBooking} color="primary">
                           Cancel
                         </Button>
-                        <Button onClick={handleCloseBooking} color="primary">
-                          Proceed to Menu
-                        </Button>
+                          
                       </DialogActions>
+
                     </Dialog> 
                     </Box>
 
