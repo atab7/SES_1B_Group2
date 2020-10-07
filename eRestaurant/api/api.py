@@ -30,13 +30,45 @@ class manager_reward_viewset(viewsets.ModelViewSet):
         serializer.save()
 
 
-class staff_viewset(viewsets.ModelViewSet):
-    serializer_class = staff_serializer
+class user_viewset(viewsets.ModelViewSet):
+    serializer_class = user_serializer
 
     permission_classes = [
         permissions.IsAuthenticated,
     ]
+    
+    def update_firstname(instance, firstname):
+        instance.firstname = firstname
+        instance.save()
 
+    def update_lastname(instance, lastname):
+        instance.lastname = lastname
+        instance.save()
+
+    def get_field_dict(instance):
+        field_dict = {
+            "first_name": update_firstname,
+            "last_name": update_lastname,
+        }
+        return field_dict
+    
+    @action(detail=True, methods=['patch'], permission_classes=[permissions.IsAuthenticated],
+            url_path='edit-user', url_name='edit_user')
+    def edit_user(self, request, pk=None):
+        user = User.objects.filter(username=pk)[0]
+        if not user:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            data = request.data
+            field_dict = get_field_dict()
+            for key in data:
+                if(request.data[key] != "None"):
+                    field_dict[key](user, request.data[key])
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    
     def get_queryset(self):
         queryset = ''
         try:
@@ -61,7 +93,6 @@ class booking_viewset(viewsets.ModelViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
 class customer_booking_viewset(viewsets.ModelViewSet):
     serializer_class = booking_serializer
     
@@ -72,8 +103,6 @@ class customer_booking_viewset(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.user.bookings.all()
 
-    
-
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
@@ -83,3 +112,13 @@ class restaurant_viewset(viewsets.ModelViewSet):
         permissions.AllowAny,
     ]
     serializer_class = restaurant_serializer
+
+class staff_viewset(viewsets.ModelViewSet):
+    serializer_class = staff_serializer
+    
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
+    def get_queryset(self):
+        return self.request.user.staff.all()

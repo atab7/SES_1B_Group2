@@ -80,8 +80,7 @@ export default class Login extends React.Component {
     }
     )
   }
-  setLogin(token){
-    this.setUserType(token);
+  setLogin(){
     this.setState({
       login:true
     })
@@ -138,9 +137,11 @@ export default class Login extends React.Component {
     },
     )
     .then((response) => {
+      localStorage.setItem('username', this.state.username);
       localStorage.setItem('auth_token', response.data.auth_token);
       localStorage.setItem('is_auth', true);
-      that.setLogin(localStorage.getItem('auth_token'));
+      this.setUserType(localStorage.getItem('auth_token'));
+      this.setLogin();
 
     })
     .catch((error) => {
