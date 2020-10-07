@@ -5,7 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from 'react-router-dom';
 import { Route, Switch, Redirect } from 'react-router';
-
+import Menu2 from "./components/Menu2"
 import Home from "./components/HomePage";
 import Register from "./components/register";
 import Login from "./components/login";
@@ -47,6 +47,7 @@ ReactDOM.render(
           )
           }
         />
+        <Route path="/menu2" component={Menu2} />
         <Route path="/register" component={Register} />
         <Route path="/about" component={About} />
         <Route path="/login" render={(props) => (
