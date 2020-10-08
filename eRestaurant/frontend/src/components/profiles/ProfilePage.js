@@ -70,7 +70,7 @@ const setRewards = (classes) => {
 const setBookings = (classes) => {
   const user_type = localStorage.getItem('user_type');
   if(user_type === 'manager'){
-    return (<Link to="/profile/ManageBookings" className={classes.link}>
+    return (<Link to="/profile/ManagerBooking" className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
                   <MailIcon/>
@@ -87,7 +87,7 @@ const setStaffManagement = (classes) => {
   const user_type = localStorage.getItem('user_type');
   if(user_type === 'manager'){
     return(
-      <Link to="/profile/ManageStaff" className={classes.link}>
+      <Link to="/profile/AddStaff" className={classes.link}>
       <ListItem button>
         <ListItemIcon>
           <MailIcon/>
@@ -132,30 +132,7 @@ function ClippedDrawer() {
               <ListItemText primary={"Edit Account"}/>
             </ListItem>  
             </Link>
-            <Link to="/profile/Rewards" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Rewards"}/>
-            </ListItem>  
-            </Link>
-            <Link to="/profile/ManagerBooking" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Booking"}/>
-            </ListItem>  
-            </Link>
-            <Link to="/profile/AddStaff" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Staff"}/>
-            </ListItem>  
-            </Link>
+            
           </List>
 
         </div>

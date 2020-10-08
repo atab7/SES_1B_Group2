@@ -38,7 +38,7 @@ class Meal(models.Model):
 #    stock_amount = models.IntegerField(null=True)
 
 class Staff(models.Model):
-    user            = models.ForeignKey(User, related_name='staff', on_delete=models.CASCADE, primary_key=True, default=0) 
+    user            = models.ForeignKey(User, related_name='staff', on_delete=models.CASCADE, unique=True, default=0) 
     address         = models.CharField(max_length=200, null=True)
     phone_number    = models.IntegerField(null=True)
     tax_file_number = models.IntegerField(null=False)
@@ -53,7 +53,7 @@ class Staff(models.Model):
     #access = 
 
 class Customer(models.Model):
-    user            = models.ForeignKey(User, on_delete=models.CASCADE, default=0, primary_key=True, unique=True) 
+    user            = models.ForeignKey(User, related_name='customer', on_delete=models.CASCADE, default=0, unique=True) 
     address         = models.CharField(max_length=200, null=True)
     phone_number    = models.IntegerField(null=True)
     payment_details = models.CharField(max_length=200, null=True) #Might need to double check 'null=True' --Aryan

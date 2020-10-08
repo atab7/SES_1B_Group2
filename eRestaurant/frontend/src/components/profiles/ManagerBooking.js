@@ -22,6 +22,7 @@ export default class ManagerBooking extends React.Component {
       super();
       
       this.setDate = this.setDate.bind(this);
+      this.getBookings = this.getBookings.bind(this);
       this.toReadableDateString = this.toReadableDateString.bind(this);
       this.state = {
           bookings: [],
@@ -87,7 +88,6 @@ export default class ManagerBooking extends React.Component {
         this.setState({
             date: evt
         });
-        this.getBookings();
     }
 
     componentDidMount(){
@@ -100,6 +100,7 @@ export default class ManagerBooking extends React.Component {
                 <Paper>
                 <b><p   style={{textAlign: 'center', fontSize:'24px', paddingTop:'12px'}}>Current Bookings</p></b>
                 <DatePicker selected={this.state.date} onSelect={date => this.setDate(date)} />
+                <Button variant="outlined" style ={{color:'#424242'}} onClick={this.getBookings} fullWidth>Get Bookings</Button>
                 <TableContainer >
                     <Table aria-label="simple table">
                         <TableHead>
