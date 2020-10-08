@@ -18,6 +18,11 @@ class staff_serializer(serializers.ModelSerializer):
         model = Staff
         fields = '__all__'
 
+class customer_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+
 class booking_serializer(serializers.ModelSerializer):
     class Meta:
         model = Booking

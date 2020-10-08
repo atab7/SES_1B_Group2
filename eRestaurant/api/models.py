@@ -53,7 +53,7 @@ class Staff(models.Model):
     #access = 
 
 class Customer(models.Model):
-    user            = models.ForeignKey(User, on_delete=models.CASCADE, default=0, unique=True) 
+    user            = models.ForeignKey(User, related_name='customer', on_delete=models.CASCADE, default=0, unique=True) 
     address         = models.CharField(max_length=200, null=True)
     phone_number    = models.IntegerField(null=True)
     payment_details = models.CharField(max_length=200, null=True) #Might need to double check 'null=True' --Aryan

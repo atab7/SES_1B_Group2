@@ -3,6 +3,7 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Container } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 import {axios_config} from '../../config.js';
 
@@ -28,6 +29,7 @@ class EditAccount extends React.Component {
     this.setPhone = this.setPhone.bind(this);
     this.setAddress = this.setAddress.bind(this);
     this.setEmail = this.setEmail.bind(this);
+    this.sendChanges = this.sendChanges.bind(this);
 
     this.state = {
       first_name: '',
@@ -69,17 +71,53 @@ class EditAccount extends React.Component {
     });
   }
   
+  createJSONData(endpoint){
+    
+    var include = {};
+    if(endpoint === 'user'){
+      include = {first_name:true, last_name:true, email:true, address: false, phone: false};
+    }else if(endpoint === 'account'){
+      include = {first_name:false, last_name:false, email:false, address: true, phone: true};
+    }
+
+    var data = {};
+    for(const property in this.state){
+      let include_state = false;
+      try{
+        include_state = include[property];
+      }catch{};
+
+      if(this.state[property] !== '' && include_state){
+        data[property] = this.state[property];
+      }
+    }
+    return data;
+
+  }
+
+  patchAccountChanges(){
+    var user_type = localStorage.getItem('user_type');
+    var data = this.createJSONData('account');
+    if(Object.keys(data).length !== 0){
+      if(user_type === 'manager' || user_type === 'staff'){
+        this.patchChanges(data, 'edit-staff');
+      }else if(user_type === 'customer'){
+        this.patchChanges(data, 'edit-customer');
+      }
+    }
+
+  }
+
   patchUserChanges(){
-
+    var data = this.createJSONData('user');
+    if(Object.keys(data).length !== 0){
+      this.patchChanges(data, 'edit-user')
+    }
   }
 
-  pathAccountChanges(){
-
-  }
-
-  patchChanges(data){
+  patchChanges(data, api_url){
     const csrftoken = Cookies.get('csrftoken');
-    axios.patch(`${axios_config["baseURL"]}api/manageRewards/${localStorage.getItem('username')}/remove-reward/`, 
+    axios.post(`${axios_config["baseURL"]}api/${api_url}/`, 
     data,
     {
         headers:{ 
@@ -91,12 +129,16 @@ class EditAccount extends React.Component {
         console.log(response);
     })
     .catch((error) => {
-        console.log(error);
+      if(error.response.status === 406){
+        alert('Email already exists!');
+      }
     });
   }
   
-
-
+  sendChanges(){
+    this.patchUserChanges();
+    this.patchAccountChanges();
+  }
 
   render(){
     const { classes } = this.props;
@@ -200,7 +242,7 @@ class EditAccount extends React.Component {
         <Button variant="contained"
          margin="normal"
          style={{ margin: 8 }}
-         
+         onClick={this.sendChanges}
         >Confirm</Button>
 
         

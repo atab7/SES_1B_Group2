@@ -18,7 +18,7 @@ class manager_reward_viewset(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['patch'], permission_classes=[permissions.IsAuthenticated],
             url_path='remove-reward', url_name='remove_reward')
-    def set_inactive(self, requestm, pk=None):
+    def set_inactive(self, request, pk=None):
         instance = Reward.objects.filter(pk=pk)[0]
         if not instance:
               return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -30,45 +30,109 @@ class manager_reward_viewset(viewsets.ModelViewSet):
         serializer.save()
 
 
+class edit_user_viewset(viewsets.ModelViewSet):
+    serializer_class = user_serializer
+
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
+    def create(self, request):
+        user = User.objects.filter(username=self.request.user.username)[0]
+        if not user:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            data = request.data
+            for key in data:
+                if key == 'first_name':
+                    user.first_name = data[key]
+                    user.save()
+                elif key == 'last_name':
+                    user.last_name = data[key]
+                    user.save()
+                elif key == 'email':
+                    if User.objects.filter(username=data[key]).exists():
+                        return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+                    else:
+                        user.email = data[key]
+                        user.save()
+                        user.username = data[key]
+                        user.save()
+                else:
+                    pass
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class edit_staff_viewset(viewsets.ModelViewSet):
+    serializer_class = staff_serializer
+
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
+    def create(self, request):
+        account = None
+        try:
+            account = Staff.objects.filter(user=self.request.user)[0]
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            data = request.data
+            for key in data:
+                print(key)
+                if key == 'address':
+                    account.address = data[key]
+                    account.save()
+                elif key == 'phone':
+                    account.phone_number = data[key]
+                    account.save()
+                else:
+                    pass
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+class edit_customer_viewset(viewsets.ModelViewSet):
+    serializer_class = customer_serializer
+
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
+    def create(self, request):
+        account = None
+        try:
+            account = Customer.objects.filter(user=self.request.user)[0]
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            data = request.data
+            for key in data:
+                if key == 'address':
+                    account.address = data[key]
+                    account.save()
+                elif key == 'phone':
+                    account.phone_number = data[key]
+                    account.save()
+                else:
+                    pass
+            return Response(status=status.HTTP_200_OK)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+
+
 class user_viewset(viewsets.ModelViewSet):
     serializer_class = user_serializer
 
     permission_classes = [
         permissions.IsAuthenticated,
     ]
-    
-    def update_firstname(instance, firstname):
-        instance.firstname = firstname
-        instance.save()
 
-    def update_lastname(instance, lastname):
-        instance.lastname = lastname
-        instance.save()
-
-    def get_field_dict(instance):
-        field_dict = {
-            "first_name": update_firstname,
-            "last_name": update_lastname,
-        }
-        return field_dict
-    
-    @action(detail=True, methods=['patch'], permission_classes=[permissions.IsAuthenticated],
-            url_path='edit-user', url_name='edit_user')
-    def edit_user(self, request, pk=None):
-        user = User.objects.filter(username=pk)[0]
-        if not user:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        
-        try:
-            data = request.data
-            field_dict = get_field_dict()
-            for key in data:
-                if(request.data[key] != "None"):
-                    field_dict[key](user, request.data[key])
-            return Response(status=status.HTTP_200_OK)
-        except:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-    
     def get_queryset(self):
         queryset = ''
         try:
