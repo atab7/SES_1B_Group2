@@ -552,7 +552,6 @@ export default function BasicTable() {
                                     </Typography>
                                         {row.ingredients}
                                   </React.Fragment>
-                                    {row.name}
                                   </TableCell>
                                   <TableCell align="right">{row.price}</TableCell>
                                   <TableCell align="right">

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'rest_framework.authtoken',
+
 ]
 
 MIDDLEWARE = [
@@ -156,3 +157,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'lebistrotdeandre@gmail.com'
 # EMAIL_HOST_PASSWORD = '' 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+REST_EMAIL_AUTH = {
+    "EMAIL_VERIFICATION_URL": "https://example.com/verify/{key}",
+    "PASSWORD_RESET_URL": "https://example.com/reset/{key}",
+}

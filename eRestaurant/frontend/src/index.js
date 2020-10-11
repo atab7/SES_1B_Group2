@@ -10,8 +10,8 @@ import Home from "./components/HomePage";
 import Register from "./components/register";
 import Login from "./components/login";
 import Profile from "./components/profiles/ProfilePage";
-import About from './components/About.js'
-
+import About from './components/About.js';
+import emailForm from './components/emailForm.js';
 // component={Home} 
 
 const isManager = () => {
@@ -50,6 +50,7 @@ ReactDOM.render(
         <Route path="/menu2" component={Menu2} />
         <Route path="/register" component={Register} />
         <Route path="/about" component={About} />
+        <Route path="/emailForm" component={emailForm} />
         <Route path="/login" render={(props) => (
             <Login {...props} illegal={false} />
           )}/>
