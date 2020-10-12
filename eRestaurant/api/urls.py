@@ -18,6 +18,7 @@ router.register('staff', staff_viewset, 'staff')
 router.register('customer', staff_viewset, 'customer')
 urlpatterns = router.urls
 
+
 #urlpatterns = [
 #    #path('', views.api_overview, name="api_overview"),
 #    path('user-list/', views.user_list.as_view()),

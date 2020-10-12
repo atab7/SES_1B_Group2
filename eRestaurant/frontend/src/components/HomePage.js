@@ -1,5 +1,6 @@
 import React from 'react';
 import NavBar from './NavBar';
+import HomepageTabs from './HomepageTabs';
 import CustomerNavBar from './CustomerNavBar';
 import { Box } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -10,25 +11,17 @@ import Select from '@material-ui/core/Select';
 import { makeStyles, responsiveFontSizes } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button'
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import PropTypes from 'prop-types';
-import Paper from '@material-ui/core/Paper';
 import { withStyles} from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import Header from './images/frenchpic.jpeg';
 import Background from './images/defaultBackground.jpg';
-import Slider from '@material-ui/core/Slider';
 import Menu from './Menu';
 //import EditAccount from './EditAccount';
 import axios from 'axios';
+import { set } from 'js-cookie';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -61,38 +54,7 @@ var backgroundImg = {
   
 
 
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
 
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
-};
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
 
 /*value of booking slider shows above*/
 function valuetext(value) {
@@ -142,32 +104,46 @@ const postBooking = (branch) => {
     //})
 };
 
-const isAuth = (token) => { 
-  return localStorage.getItem('auth_token') !== null;
-}
 
-const setNavBar = (is_auth) => {
-  if(isAuth()){
-    return <CustomerNavBar/>;
-  }else{
-    return <NavBar/>;
+
+export default class HomePage extends React.Component { 
+  
+  constructor(props){
+    super();
+  
+    this.state = {
+      branch:'',
+      booking:false,
+    }
+
+    //Binds
+    this.setBranch = this.setBranch.bind(this);
+    this.setBookingOpen = this.setBookingOpen.bind(this);
+    this.setBookingClose = this.setBookingClose.bind(this);
   }
-}
+  setBranch(evt) {
+    this.setState({
+      branch: evt.target.value
+    })
+  }
+  setBookingOpen(evt){
+    this.setState({
+      booking: true
+    })
+  }
+  setBookingClose(evt){
+    this.setState({
+      booking: false
+    })
+  }
 
-const HomePage = () => {
-  const classes = useStyles();
-
-  /* Branch select on homepage */
-  const [branch, setBranch] = React.useState('');
-  const handleChange = (event) => {
-      setBranch(event.target.value);
-    };
-  /* Tab Change on homepage */  
+  /*const classes = useStyles();
+  //Tab Change on homepage   
   const [value, setValue] = React.useState(0);
   const handleChangetab = (event, newValue) => {
     setValue(newValue);
   };
-  /* Booking */
+  // Booking 
   const [open, setOpenBooking] = React.useState(false);
   const handleOpenBooking = () => {
     setOpenBooking(true);
@@ -175,87 +151,73 @@ const HomePage = () => {
   const handleCloseBooking = () => {
     setOpenBooking(false);
   };
-  /* Booking */
-
-
-
+  //Booking 
   /*Branch select on booking form */
 
   /*Number of people select slider on branch*/
 
-  var nav_bar = setNavBar(isAuth());
+  isAuth = (token) => { 
+    return localStorage.getItem('auth_token') !== null;
+  }
+  
+  setNavBar = (is_auth) => {
+    if(this.isAuth()){
+      return <CustomerNavBar/>;
+    }else{
+      return <NavBar/>;
+    }
+  }
 
-    return(
-        <div>
-            {nav_bar}
-            <Box style={ headerImg }>
-            </Box>
-            <Box style={ backgroundImg }>
-            <Container maxWidth="lg">
-                <Box display="flex" p={1}>
-                    <Box p={1}>
-                    <FormControl>
-                        <InputLabel id="demo-simple-select-autowidth-label">Branch</InputLabel>
-                        <Select
-                        labelId="demo-simple-select-autowidth-label"
-                        id="demo-simple-select-autowidth"
-                        value={branch}
-                        onChange={handleChange}
-                        autoWidth
-                        >
-                        <MenuItem value={10}>Branch</MenuItem>
-                        <MenuItem value={20}>Branch 2</MenuItem>
-                        <MenuItem value={30}>Branch 3</MenuItem>
-                        </Select>
-                        <FormHelperText>Select Branch</FormHelperText>
-                    </FormControl>
-                    </Box> 
-                    <Box p={1} flexGrow={1}>
-                    <Paper square>
-                    <Tabs value={value} onChange={handleChangetab} aria-label="simple tabs example">
-                        <Tab label="Menu" {...a11yProps(0)} />
-                        <Tab label="Rewards" {...a11yProps(1)} />
-                        <Tab label="Locations" {...a11yProps(2)} />
-                        <Tab label="Contact Us" {...a11yProps(3)} />
-                    </Tabs>
-                    </Paper>
+  render(){
+      
+      return(
+          <div>
+              {this.setNavBar(this.isAuth())}
+              <Box style={ headerImg }>
+              </Box>
+              <Box style={ backgroundImg }>
+              <Container maxWidth="lg">
+                  <Box display="flex" p={1}>
+                      <Box p={1}>
+                      <FormControl>
+                          <InputLabel id="demo-simple-select-autowidth-label">Branch</InputLabel>
+                          <Select
+                          labelId="demo-simple-select-autowidth-label"
+                          id="demo-simple-select-autowidth"
+                          value={this.state.branch}
+                          onChange = {e => this.setBranch(e)}
+                          autoWidth
+                          >
+                          <MenuItem value={10}>Branch</MenuItem>
+                          <MenuItem value={20}>Branch 2</MenuItem>
+                          <MenuItem value={30}>Branch 3</MenuItem>
+                          </Select>
+                          <FormHelperText>Select Branch</FormHelperText>
+                      </FormControl>
+                      </Box> 
+                      <HomepageTabs/>
 
-                    <TabPanel value={value} index={0}>
-                        Menu
-                    </TabPanel>
-                    <TabPanel value={value} index={1}>
-                        Rewards
-                    </TabPanel>
-                    <TabPanel value={value} index={2}>
-                        Locations
-                    </TabPanel>
-                    <TabPanel value={value} index={3}>
-                        Contact Us
-                    </TabPanel>
+                      <Box p={1}>
+                      <RegButton size="large" onClick={this.setBookingOpen}>Book Now</RegButton>
+                      <Dialog open={this.state.booking} onClose={this.setBookingClose} aria-labelledby="form-dialog-title">
+                        <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>I'd Like To Book</DialogTitle>
+                        <Menu/>
+                        <DialogActions>
+                          <Button onClick={this.setBookingClose} color="primary">
+                            Cancel
+                          </Button>
+                            
+                        </DialogActions>
 
-                    </Box>
+                      </Dialog> 
+                      </Box>
 
-                    <Box p={1}>
-                    <RegButton size="large" onClick={handleOpenBooking}>Book Now</RegButton>
-                    <Dialog open={open} onClose={handleCloseBooking} aria-labelledby="form-dialog-title">
-                      <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>I'd Like To Book</DialogTitle>
-                      <Menu/>
-                      <DialogActions>
-                        <Button onClick={handleCloseBooking} color="primary">
-                          Cancel
-                        </Button>
-                          
-                      </DialogActions>
+                      
+                  </Box>
 
-                    </Dialog> 
-                    </Box>
-
-                    
-                </Box>
-
-            </Container>
-            </Box>
-        </div>
-    )
+              </Container>
+              </Box>
+          </div>
+      )
+  }
 }
-export default HomePage;

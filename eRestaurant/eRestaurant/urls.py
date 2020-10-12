@@ -25,6 +25,7 @@ urlpatterns = [
     #re_path('.*', TemplateView.as_view(template_name='index.html')),
     url(r'^auth/', include('djoser.urls')),
     url(r'^auth/', include('djoser.urls.authtoken')),
+
 ]
 
 urlpatterns += [
