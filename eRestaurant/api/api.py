@@ -5,6 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+
 
 class manager_reward_viewset(viewsets.ModelViewSet):
     serializer_class = reward_serializer
@@ -213,7 +215,6 @@ class confirm_email_viewset(viewsets.ViewSet):
             customer = Customer.objects.filter(user=user)[0]
             customer.is_confirmed = True
             customer.save()
-            data = '<html><body><h1>Your Email is confirmed.</h1></body></html>'
-            return Response(data)
+            return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/emailconfirmed')
         except:
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/bademail')

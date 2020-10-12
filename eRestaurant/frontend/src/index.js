@@ -12,6 +12,7 @@ import Login from "./components/login";
 import Profile from "./components/profiles/ProfilePage";
 import About from './components/About.js';
 import emailForm from './components/emailForm.js';
+import {EmailConfirmed, EmailNotExists} from './components/EmailConfirmed.js';
 // component={Home} 
 
 const isManager = () => {
@@ -54,7 +55,8 @@ ReactDOM.render(
         <Route path="/login" render={(props) => (
             <Login {...props} illegal={false} />
           )}/>
-        
+        <Route path="/emailconfirmed" component={EmailConfirmed}/>
+        <Route path="/bademail" component={EmailNotExists}/>
         <ProtectRoute>
           <Route path="/profile" component={Profile}/>
         </ProtectRoute>
