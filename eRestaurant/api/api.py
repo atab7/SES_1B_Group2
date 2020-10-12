@@ -197,3 +197,23 @@ class customer_viewset(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class confirm_email_viewset(viewsets.ViewSet):
+    serializer_class = customer_serializer
+    
+    permission_classes = [
+        permissions.AllowAny,
+    ]
+    queryset = Customer.objects.all()
+
+    def list(self, request):
+        email = self.request.query_params.get('email', None)
+        try:
+            user = User.objects.filter(username=email)[0]
+            customer = Customer.objects.filter(user=user)[0]
+            customer.is_confirmed = True
+            customer.save()
+            data = '<html><body><h1>Your Email is confirmed.</h1></body></html>'
+            return Response(data)
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)

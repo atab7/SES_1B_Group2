@@ -42,7 +42,7 @@ class Staff(models.Model):
     address         = models.CharField(max_length=200, null=True)
     phone_number    = models.IntegerField(null=True)
     tax_file_number = models.IntegerField(null=False)
-    restaurant      = models.ForeignKey(Restaurant, related_name='restaurant', null=False, on_delete=models.PROTECT)
+    restaurant      = models.ForeignKey(Restaurant, related_name='staff', null=False, on_delete=models.PROTECT)
     date_hired      = models.DateField(null=True)
     is_manager      = models.BooleanField(null=False)
     def __str__(self):
@@ -53,12 +53,14 @@ class Staff(models.Model):
     #access = 
 
 class Customer(models.Model):
+    ID              = models.AutoField(primary_key=True)
     user            = models.ForeignKey(User, related_name='customer', on_delete=models.CASCADE, default=0, unique=True) 
     address         = models.CharField(max_length=200, null=True)
     phone_number    = models.IntegerField(null=True)
     payment_details = models.CharField(max_length=200, null=True) #Might need to double check 'null=True' --Aryan
+    is_confirmed    = models.BooleanField(null=False, default=False)
     def __str__(self):
-        return str(self.phone_number)
+        return str(self.ID)
 
 #class Admin(models.Model):
 #    user_ID = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
