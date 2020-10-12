@@ -118,44 +118,9 @@ export default class ManagerBooking extends React.Component {
                         
                     </Table>
                     </TableContainer>
-                    </Paper>
+                </Paper>
+            
             </div>)
     }
 }
 
-
-/*
-<TableBody>
-                        <TableRow>
-                        <TableCell>1002</TableCell>
-                            <TableCell align="center">Main</TableCell>
-                            <TableCell align="center">2</TableCell>
-                            <TableCell align="center">28 October 2020</TableCell>
-                            <TableCell align="center">6:00pm</TableCell>
-                            <TableCell align="center">$60</TableCell>
-                            <TableCell align="center">
-                                <Button 
-                                variant="outlined" 
-                                style ={{color:'#424242'}}
-                                fullWidth>
-                                View</Button></TableCell>
-                        </TableRow>
-                        </TableBody>
-                        <TableBody>
-                        <TableRow>
-                        <TableCell>1003</TableCell>
-                            <TableCell align="center">Main</TableCell>
-                            <TableCell align="center">3</TableCell>
-                            <TableCell align="center">21 September 2020</TableCell>
-                            <TableCell align="center">8:00pm</TableCell>
-                            <TableCell align="center">$100</TableCell>
-                            <TableCell align="center">
-                            <Button 
-                                variant="outlined" 
-                                style ={{color:'#424242'}}
-                                fullWidth>
-                                View</Button>
-                            </TableCell>
-                        </TableRow>
-                        </TableBody>
-*/
