@@ -17,11 +17,14 @@ import { withRouter } from 'react-router';
 import {BrowserRouter as Router, Switch, Route, Link, BrowserRouter} from "react-router-dom";
 //import About from './About';
 import EditAccount from './EditAccount';
+import ChangePassword from './ChangePassword';
 import Homepage from '../HomePage';
 import Rewards from './Rewards';
 import ManagerBooking from './ManagerBooking';
 import AddStaff from './AddStaff';
 import { isManager } from '../../actions/AuthCheck.js';
+import CustomerBooking from './CustomerBooking';
+import EditMenu from './EditMenu.js';
 
 const drawerWidth = 240;
 
@@ -99,6 +102,37 @@ const setStaffManagement = (classes) => {
   }
 }
 
+const setCustomerBookings = (classes) => {
+  const user_type = localStorage.getItem('user_type');
+  if(user_type === 'customer'){
+    return (<Link to="/profile/CustomerBooking" className={classes.link}>
+              <ListItem button>
+                <ListItemIcon>
+                  <MailIcon/>
+                </ListItemIcon>
+              <ListItemText primary={"View Bookings"}/>
+              </ListItem>  
+            </Link>)
+  }else if (user_type === 'manager'){
+    return null;
+  }
+}
+const setEditMenu = (classes) => {
+  const user_type = localStorage.getItem('user_type');
+  if(user_type === 'manager'){
+    return (<Link to="/profile/EditMenu" className={classes.link}>
+              <ListItem button>
+                <ListItemIcon>
+                  <MailIcon/>
+                </ListItemIcon>
+              <ListItemText primary={"Edit Menu"}/>
+              </ListItem>  
+            </Link>)
+  }else if (user_type === 'customer'){
+    return null;
+  }
+}
+
 function ClippedDrawer() {
 
   const classes = useStyles();
@@ -124,12 +158,22 @@ function ClippedDrawer() {
             {setBookings(classes)}
             {setRewards(classes)}
             {setStaffManagement(classes)}
+            {setCustomerBookings(classes)}
+            {setEditMenu(classes)}
             <Link to="/profile/EditAccount" className={classes.link}>
             <ListItem button>
               <ListItemIcon>
                 <MailIcon/>
               </ListItemIcon>
               <ListItemText primary={"Edit Account"}/>
+            </ListItem>  
+            </Link>
+            <Link to="/profile/ChangePassword" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <MailIcon/>
+              </ListItemIcon>
+              <ListItemText primary={"Change Password"}/>
             </ListItem>  
             </Link>
             
@@ -139,10 +183,28 @@ function ClippedDrawer() {
       </Drawer>
       
       <Switch>
+        <Route exact path="/profile/EditMenu">
+        <main className={classes.content}>
+          <Toolbar/>
+                <EditMenu/>
+        </main>
+        </Route>
+        <Route exact path="/profile/CustomerBooking">
+        <main className={classes.content}>
+          <Toolbar/>
+                <CustomerBooking/>
+        </main>
+        </Route>
         <Route exact path="/profile/EditAccount">
         <main className={classes.content}>
           <Toolbar/>
                 <EditAccount/>
+        </main>
+        </Route>
+        <Route exact path="/profile/ChangePassword">
+        <main className={classes.content}>
+          <Toolbar/>
+                <ChangePassword/>
         </main>
         </Route>
         <Route exact path="/profile/Rewards">

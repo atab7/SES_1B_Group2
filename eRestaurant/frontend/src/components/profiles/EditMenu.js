@@ -1,6 +1,4 @@
 import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,13 +7,14 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import DatePicker from "react-datepicker";
 import { Container } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
+import {Box} from '@material-ui/core';
 
-export default class CustomerBooking extends React.Component {
+export default class EditMenu extends React.Component {
     constructor(props){
         super();
 
@@ -42,24 +41,22 @@ export default class CustomerBooking extends React.Component {
         <div>
             <Container maxWidth="lg">
                 <Paper>
-                <b><p   style={{textAlign: 'center', fontSize:'24px', paddingTop:'12px'}}>Current Bookings</p></b>
+                <b><p   style={{textAlign: 'center', fontSize:'24px', paddingTop:'12px'}}>Active Menus</p></b>
                 <TableContainer >
                     <Table aria-label="simple table">
                         <TableHead>
                         <TableRow>
-                            <TableCell align="center">People</TableCell>
-                            <TableCell align="center">Date</TableCell>
-                            <TableCell align="center">Time</TableCell>
-                            <TableCell align="center">Selected Menu Items</TableCell>
-                            <TableCell align="center">Cancel Booking</TableCell>
+                            <TableCell align="center">Menu ID</TableCell>
+                            <TableCell align="center">Menu Name</TableCell>
+                            <TableCell align="center">Menu Items</TableCell>
+                            <TableCell align="center">Delete Menu</TableCell>
                         </TableRow>
                         </TableHead>
 
                         <TableBody>
                         <TableRow>
-                            <TableCell align="center">2</TableCell>
-                            <TableCell align="center">12 October 2020</TableCell>
-                            <TableCell align="center">6 PM</TableCell>
+                            <TableCell align="center">1</TableCell>
+                            <TableCell align="center">Breakfast</TableCell>
                             <TableCell align="center">
                                 <Button 
                                 variant="outlined" 
@@ -90,18 +87,44 @@ export default class CustomerBooking extends React.Component {
                         <TableRow>
                             <TableCell align="center">Menu Item(s)</TableCell>
                             <TableCell align="center">Cost</TableCell>
-                            <TableCell align="center">Quantity</TableCell>
+                            <TableCell align="center">Remove Item</TableCell>
                         </TableRow>
                         </TableHead>
                         <TableBody>
                         <TableRow>
                             <TableCell align="center">Cake</TableCell>
                             <TableCell align="center">$12</TableCell>
-                            <TableCell align="center">1</TableCell>
+                            <TableCell align="center">
+                            <Button 
+                                variant="outlined" 
+                                style ={{color:'#424242'}}
+                                fullWidth>
+                                Confirm</Button>
+                            </TableCell>
                         </TableRow>
                         </TableBody>
                     </Table>
                     </TableContainer>
+                    <p>Add A Menu Item</p>
+                    <Box>
+                        <TextField
+                        id="outlined-full-width"
+                        label="Menu Name"
+                        placeholder="Cake"
+                        margin="normal"
+                        variant="outlined"
+                        />
+                        <TextField
+                        id="outlined-full-width"
+                        label="Cost"
+                        placeholder="12"
+                        margin="normal"
+                        variant="outlined"
+                        />
+                        <Button variant="contained"
+                        margin="normal"
+                        >Confirm</Button>
+                    </Box>
                     <DialogActions>
                         <Button onClick={this.setMenuClose} color="primary">
                             Close
