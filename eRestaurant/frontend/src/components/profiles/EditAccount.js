@@ -37,6 +37,13 @@ class EditAccount extends React.Component {
       email:'',
       address:'',
       phone:'',
+      curr_address: '',
+      curr_phone: '',
+      current_user_data: {
+        first_name: '',
+        last_name:'',
+        email:''
+      },
     }
 
   }
@@ -71,6 +78,61 @@ class EditAccount extends React.Component {
     });
   }
   
+  getCurrentAccountData(user_type){
+    var endpoint = '';
+    if(user_type === 'customer'){
+      endpoint = 'customer';
+    }else if (user_type === 'manager' || user_type === 'manager'){
+      endpoint = 'staff';
+    }
+    
+    if(endpoint !== ''){
+      axios.get(`${axios_config["baseURL"]}api/${endpoint}/`, 
+      {
+        headers:{ 
+            'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+        }
+      })
+      .then((response) => {
+        this.setState({
+          curr_address: response.data[0].address,
+          curr_phone: response.data[0].phone_number
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }
+  }
+
+  getCurrentUserData(){
+    axios.get(`${axios_config["baseURL"]}api/user/`, {
+      headers:{ 
+          'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+      }
+    })
+    .then((response) => {
+      console.log(response);
+      this.setState({
+        current_user_data:{
+          first_name: response.data.first_name,
+          last_name: response.data.last_name,
+          email: response.data.email
+        }
+      })
+        
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  }
+
+  componentDidMount(){
+    this.getCurrentAccountData(localStorage.getItem('user_type'));
+    this.getCurrentUserData();
+    console.log(this.state.current_account_data);
+  }
+
   createJSONData(endpoint){
     
     var include = {};
@@ -140,6 +202,7 @@ class EditAccount extends React.Component {
     this.patchAccountChanges();
   }
 
+
   render(){
     const { classes } = this.props;
     return (
@@ -150,7 +213,7 @@ class EditAccount extends React.Component {
           id="outlined-full-width"
           label="First Name"
           style={{ margin: 8 }}
-          placeholder="Current First Name"
+          placeholder={this.state.current_user_data.first_name}
           onChange={this.setFirstName}
           fullWidth
           margin="normal"
@@ -164,7 +227,7 @@ class EditAccount extends React.Component {
           id="outlined-full-width"
           label="Last Name"
           style={{ margin: 8 }}
-          placeholder="Current Last Name"
+          placeholder={this.state.current_user_data.last_name}
           onChange={this.setLastName}
           fullWidth
           margin="normal"
@@ -177,7 +240,7 @@ class EditAccount extends React.Component {
           id="outlined-full-width"
           label="Email Address"
           style={{ margin: 8 }}
-          placeholder="hugh.jass@gmail.com"
+          placeholder={this.state.current_user_data.email}
           helperText="Confirmation Email Will Be Sent"
           onChange={this.setEmail}
           fullWidth
@@ -187,37 +250,12 @@ class EditAccount extends React.Component {
           }}
           variant="outlined"
         />
-        <TextField
-          id="outlined-full-width"
-          label="Password"
-          style={{ margin: 8 }}
-          placeholder="*********"
-          helperText="Choose a secure password"
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-        />
-        <TextField
-          id="outlined-full-width"
-          label=" Re-Enter Password"
-          style={{ margin: 8 }}
-          placeholder="*********"
-          helperText=""
-          margin="normal"
-          InputLabelProps={{
-            shrink: true,
-          }}
-          variant="outlined"
-          
-        />
        
         <TextField
           id="outlined-full-width"
           label="Residential Address"
           style={{ margin: 8 }}
-          placeholder="Where u live :-)"
+          placeholder={this.state.curr_address}
           onChange={this.setAddress}
           fullWidth
           margin="normal"
@@ -230,7 +268,7 @@ class EditAccount extends React.Component {
           id="outlined-full-width"
           label="Phone Number"
           style={{ margin: 8 }}
-          placeholder="+61 123 456 890"
+          placeholder={this.state.curr_phone}
           margin="normal"
           onChange={this.setPhone}
           InputLabelProps={{

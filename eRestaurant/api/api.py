@@ -4,6 +4,7 @@ from .serializers import *
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.models import User
 
 class manager_reward_viewset(viewsets.ModelViewSet):
     serializer_class = reward_serializer
@@ -127,20 +128,17 @@ class edit_customer_viewset(viewsets.ModelViewSet):
 
 
 class user_viewset(viewsets.ModelViewSet):
-    serializer_class = user_serializer
-
     permission_classes = [
         permissions.IsAuthenticated,
     ]
-
-    def get_queryset(self):
-        queryset = ''
-        try:
-            queryset = self.request.user.staff.all()
-            return queryset
-        except AttributeError as error:
-            return Staff.objects.none()
-
+    serializer_class = user_serializer
+    queryset = User.objects.all()
+    
+    def list(self, request):
+        user = User.objects.filter(username=self.request.user.username)[0]
+        serializer = user_serializer(user, many=False)
+        return Response(serializer.data)
+ 
 
 class booking_viewset(viewsets.ModelViewSet):
     serializer_class = booking_serializer
@@ -186,3 +184,16 @@ class staff_viewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.user.staff.all()
+
+class customer_viewset(viewsets.ModelViewSet):
+    serializer_class = customer_serializer
+    
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
+    def get_queryset(self):
+        return self.request.user.customer.all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

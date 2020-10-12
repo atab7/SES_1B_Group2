@@ -73,8 +73,6 @@ export default class Register extends React.Component {
     this.closeEmailExist = this.closeEmailExist.bind(this);
   }
 
-  
-
   setUsername(evt) {
     this.setState({
       username: evt.target.value
@@ -127,6 +125,13 @@ export default class Register extends React.Component {
     })
   }
 
+  postCustomer(){
+    var csrftoken = Cookies.get('csrftoken');
+    axios.post(`${axios_config["baseURL"]}api/customer/`, {
+
+    })
+
+  }
 
   postUser(){
     var that = this;
