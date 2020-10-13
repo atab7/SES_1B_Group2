@@ -10,11 +10,14 @@ router = routers.DefaultRouter()
 router.register('manageRewards', manager_reward_viewset, 'manageRewards')
 router.register('bookings', booking_viewset, 'bookings')
 router.register('restaurants', restaurant_viewset, 'restaurants')
-router.register('users', user_viewset, 'users')
+router.register('user', user_viewset, 'user')
 router.register('edit-user', edit_user_viewset, 'edit-user')
 router.register('edit-staff', edit_staff_viewset, 'edit-staff')
 router.register('edit-customer', edit_staff_viewset, 'edit-customer')
 router.register('staff', staff_viewset, 'staff')
+router.register('customer', customer_viewset, 'customer')
+router.register('validation', confirm_email_viewset, 'validation')
+
 urlpatterns = router.urls
 
 

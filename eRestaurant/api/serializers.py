@@ -2,6 +2,7 @@ from rest_framework import serializers
 #For whichever model you wish to serialize, import in the following format
 # from .models import model
 from . models import *
+from django.contrib.auth.models import User
 
 class reward_serializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +12,7 @@ class reward_serializer(serializers.ModelSerializer):
 class user_serializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ['username', 'first_name', 'last_name', 'email']
 
 class staff_serializer(serializers.ModelSerializer):
     class Meta:

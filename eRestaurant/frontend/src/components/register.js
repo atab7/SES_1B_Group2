@@ -13,6 +13,7 @@ import Background from './images/defaultBackground.jpg';
 import {Link } from "react-router-dom";
 import { Redirect } from 'react-router'
 import Cookies from 'js-cookie';
+import emailjs from 'emailjs-com';
 
 
 import {axios_config} from '../config.js';
@@ -50,8 +51,8 @@ export default class Register extends React.Component {
       username:'',
       password:'',
       repeat_password:'',
-      firstname:'',
-      lastname:'',
+      first_name:'',
+      last_name:'',
       alertPass:false,
       alertEmail:false,
       alertMatch:false,
@@ -73,8 +74,6 @@ export default class Register extends React.Component {
     this.closeEmailExist = this.closeEmailExist.bind(this);
   }
 
-  
-
   setUsername(evt) {
     this.setState({
       username: evt.target.value
@@ -95,13 +94,13 @@ export default class Register extends React.Component {
 
   setFirstName(evt){
     this.setState({
-      firstname: evt.target.value
+      first_name: evt.target.value
     })
   }
   
   setLastName(evt){
     this.setState({
-      lastname: evt.target.value
+      last_name: evt.target.value
     })
   }
 
@@ -127,10 +126,20 @@ export default class Register extends React.Component {
     })
   }
 
+  postCustomer(){
+    var csrftoken = Cookies.get('csrftoken');
+    axios.post(`${axios_config["baseURL"]}api/customer/`, {
+
+    })
+
+  }
 
   postUser(){
     var that = this;
     var csrftoken = Cookies.get('csrftoken');
+    const curr_username = this.state.username;
+    const curr_password = this.state.password;
+    
     axios.post(`${axios_config["baseURL"]}auth/users/`,
     {
       email: this.state.username,
@@ -144,9 +153,11 @@ export default class Register extends React.Component {
     )
     .then(function (response) {
       if (response.status === 201) {
+        console.log(response);
+        that.initUser(curr_username, curr_password);
         that.setState({ isSignedUp: true });
       }
-      console.log(response);
+      //console.log(response);
     })
     .catch(function (error) {
       if(error.response.data.username){
@@ -174,9 +185,18 @@ export default class Register extends React.Component {
     var isValidPass = this.checkPassword(this.state.password);
     var isValidEmail = this.checkEmail(this.state.username);
     var isSamePass = this.state.repeat_password === this.state.password;
+    var service_id = "service_onar6eb";
+    var template_id = "template_9x1hlr9";
+    var user_id =  "user_y37OxRmCicn4obS3k4lV0";
 
     if(isValidEmail && isValidPass && isSamePass){
       this.postUser();
+      emailjs.send(service_id, template_id, this.state, user_id )
+      .then((result) => {
+        //console.log('success',result.text);
+    }, (error) => {
+       //console.log('error:', error);
+    });
     }else if(!isValidEmail){
       this.setAlertEmail(true);
     }else if(!isValidPass){
@@ -185,6 +205,61 @@ export default class Register extends React.Component {
       this.setAlertMatch(true);
     }
 
+  }
+
+  initUser(i_username, i_password){
+    axios.post(`${axios_config["baseURL"]}auth/token/login/`,
+    {
+      username: i_username,
+      password: i_password
+    },
+    )
+    .then((response) => {
+      //console.log("initUser response: ", response);
+      var token = response.data.auth_token;
+      this.saveNames(token);
+      this.createCustomerAccount(token);
+    })
+    .catch((error) => {
+    })
+  }
+
+  saveNames(token){
+    var csrftoken = Cookies.get('csrftoken');
+    axios.post(`${axios_config["baseURL"]}api/edit-user/`, 
+    {
+      "first_name": this.state.first_name,
+      "last_name": this.state.last_name
+    },
+    {
+        headers:{ 
+            'Authorization': `Token ${token}`,
+            'X-CSRFToken': csrftoken
+        }
+    })
+    .then((response) => {
+      //console.log("save name response: ", response);
+    })
+    .catch((error) => {
+      //console.log("initUser error: ", error);
+    })
+  }
+
+  createCustomerAccount(token){
+    var csrftoken = Cookies.get('csrftoken');
+    axios.post(`${axios_config["baseURL"]}api/customer/`,{},
+    {
+        headers:{ 
+            'Authorization': `Token ${token}`,
+            'X-CSRFToken': csrftoken
+        }
+    })
+    .then((response) => {
+      //console.log("create customer account response: ", response);
+    })
+    .catch((error) => {
+      //console.log("create customer account error: ", error);
+    })
   }
 
   closeAlertPass(evt){
