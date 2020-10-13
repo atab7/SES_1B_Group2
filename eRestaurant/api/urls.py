@@ -8,7 +8,8 @@ from .api import *
 
 router = routers.DefaultRouter()
 router.register('manageRewards', manager_reward_viewset, 'manageRewards')
-router.register('bookings', booking_viewset, 'bookings')
+router.register('bookings', manager_booking_viewset, 'bookings')
+router.register('customer-bookings', customer_booking_viewset, 'customer-bookings')
 router.register('restaurants', restaurant_viewset, 'restaurants')
 router.register('user', user_viewset, 'user')
 router.register('edit-user', edit_user_viewset, 'edit-user')
