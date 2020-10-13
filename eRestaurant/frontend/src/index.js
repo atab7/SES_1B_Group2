@@ -10,6 +10,7 @@ import Home from "./components/HomePage";
 import Register from "./components/register";
 import Login from "./components/login";
 import Profile from "./components/profiles/ProfilePage";
+import ManageResturant from "./components/manageresturant/ManageResturant.js";
 import About from './components/About.js';
 import emailForm from './components/emailForm.js';
 import {EmailConfirmed, EmailNotExists} from './components/EmailConfirmed.js';
@@ -48,6 +49,7 @@ ReactDOM.render(
           )
           }
         />
+        <Route path="/manageresturant" component={ManageResturant}/>
         <Route path="/menu2" component={Menu2} />
         <Route path="/register" component={Register} />
         <Route path="/about" component={About} />

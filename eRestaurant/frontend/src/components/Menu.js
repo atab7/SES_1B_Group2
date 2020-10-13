@@ -22,10 +22,6 @@ import Slider from '@material-ui/core/Slider';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import clsx from 'clsx';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -168,12 +164,12 @@ const branches = [
       <TableHead>
         <TableRow>
           <TableCell padding="checkbox">
-            <Checkbox
+            {/* <Checkbox
               indeterminate={numSelected > 0 && numSelected < rowCount}
               checked={rowCount > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
               inputProps={{ 'aria-label': 'select all desserts' }}
-            />
+            /> */}
           </TableCell>
           {headCells.map((headCell) => (
             <TableCell
@@ -314,8 +310,6 @@ export default function BasicTable() {
     setOpenMenu(false);
   };
   const classes = useStyles();
-
-  const [quantity, setQuanity] = React.useState(0);
   
   const handleChange = (event, number) => {
     rows[number].quantity = event.target.value;
@@ -336,14 +330,14 @@ export default function BasicTable() {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
+  // const handleSelectAllClick = (event) => {
+  //   if (event.target.checked) {
+  //     const newSelecteds = rows.map((n) => n.name);
+  //     setSelected(newSelecteds);
+  //     return;
+  //   }
+  //   setSelected([]);
+  // };
 
   const handleClick = (event, name, ingredients, price, quantity) => {
     const selectedIndex = selected.indexOf(name);
@@ -518,7 +512,7 @@ export default function BasicTable() {
                           numSelected={selected.length}
                           order={order}
                           orderBy={orderBy}
-                          onSelectAllClick={handleSelectAllClick}
+
                           onRequestSort={handleRequestSort}
                           rowCount={rows.length}
                         />
