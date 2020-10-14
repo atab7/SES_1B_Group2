@@ -10,7 +10,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 //import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import CustomerNavBar from '../CustomerNavBar';
+import ManagerNavBar from '../ManagerNavBar.js';
 import { withRouter } from 'react-router';
 import {BrowserRouter as Router, Switch, Route, Link, BrowserRouter} from "react-router-dom";
 //import About from './About';
@@ -58,7 +58,7 @@ export default function ManageResturant() {
       <h1>test</h1>
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
-      <CustomerNavBar/>
+      <ManagerNavBar/>
       </AppBar>
       <Drawer
         className={classes.drawer}
