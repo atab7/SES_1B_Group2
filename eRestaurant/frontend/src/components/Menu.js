@@ -25,6 +25,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import clsx from 'clsx';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormHelperText from '@material-ui/core/FormHelperText';
 
 
     
@@ -83,6 +85,7 @@ const numOfPeople = [
   
   ];
 
+//This const is for selecting the restaurant location
 const branches = [
     {
       value: 'branch1',
@@ -98,6 +101,39 @@ const branches = [
     },
   
   ];
+
+//This const is for selecting the restaurant location
+const branchesMenu = [
+  {
+    value: 'menu1',
+    label: 'Breakfast',
+  },
+  {
+    value: 'menu2',
+    label: 'Lunch',
+  },
+  {
+    value: 'menu3',
+    label: 'Dinner',
+  },
+
+];
+
+const branchesTime = [
+  {
+    value: 'time1',
+    label: '10:00am',
+  },
+  {
+    value: 'time2',
+    label: '11:00am',
+  },
+  {
+    value: 'time3',
+    label: '12:00pm',
+  },
+]
+  
 
   /* Menu */
 
@@ -120,7 +156,7 @@ const branches = [
     createData('Nougat', 'nougat to give us a HD Tej', 19.0, 1),
     createData('Oreo', 'thats racist', 18.0, 1),
   ];
-  console.log(rows);
+
 
   function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -284,10 +320,23 @@ const branches = [
   }));
 
 export default function BasicTable() {
-    /*Branch select on booking form */
-  const [bookingBranch, setBookingBranch] = React.useState('branch1');
+  /*Const for enabling and disbaling menu selector*/
+  const [menuDisable, setMenuDisable] = React.useState(true);
+  /*Branch select on booking form */
+  const [bookingBranch, setBookingBranch] = React.useState('');
   const handleChangeBB = (event) => {
     setBookingBranch(event.target.value);
+    setMenuDisable(false);
+  };
+  /* Menu select on booking form (breakfast, lunch, dinner) */
+  const [menuBranch, setMenuBranch] = React.useState('branch1');
+  const handleChangeMenu = (event) => {
+    setMenuBranch(event.target.value);
+  };
+  /* Time select on booking form */
+  const [timeBranch, setTimeBranch] = React.useState('time0');
+  const handleChangeTime = (event) => {
+    setTimeBranch(event.target.value);
   };
   /*Number of people select slider on branch*/
   const [numpeople, setNumPeople] = React.useState(30);
@@ -316,14 +365,21 @@ export default function BasicTable() {
   };
 
   const [isChecked, setIsChecked] = React.useState(false);
-  
-  /* For Menu */
+
+  //Event handler for branches
+ 
+  console.log(bookingBranch);
+  /* ------------------------------------For Menu----------------------------- */
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  /* This const stores the values of all the selected menu 
+  items in the form of name, ingredients, price, quantity */
   const [menuSelected, setMenuSelected] = React.useState([]);
+
+  //This event handler will sort the columns into ascending and descending order
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -339,6 +395,7 @@ export default function BasicTable() {
   //   setSelected([]);
   // };
 
+  //This event handler will add selected items into an array
   const handleClick = (event, name, ingredients, price, quantity) => {
     const selectedIndex = selected.indexOf(name);
     const selectedRows = [createData(name, ingredients, price*quantity, quantity)];
@@ -369,29 +426,30 @@ export default function BasicTable() {
     setMenuSelected(newMenuSelected);
     // setPriceArray(menuTotal);
   };
-  console.log(menuSelected);
- 
 
+ 
+  // This will allow for the menu to go to the next page
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
+  // This will allow for more more rows to be shown on the menu e.g 10 rows instead of 5
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
+  // This is used to help in identifying which rows quantity needs to be changes in rows (used with quantity select)
   const fullMenu = rows.map((n) => n.name);
   const rowIndex = (name) => {
     return fullMenu.indexOf(name);
   }
-  console.log(rowIndex);
 
   const isSelected = (name) => selected.indexOf(name) !== -1;
 
   
   const menuOrderTotal = menuSelected.reduce((totalPrice, price) => totalPrice + parseInt(price.price, 10), 0);
-  console.log(menuOrderTotal);
+
 
   
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -406,18 +464,41 @@ export default function BasicTable() {
               id="outlined-select-branch"
               select
               label="Select"
-              value={branches}
+              value={bookingBranch}
               onChange={handleChangeBB}
               fullWidth 
               helperText="Please select your branch"
               variant="outlined"
             >
+              <MenuItem value="" disabled>
+                Select
+              </MenuItem>
               {branches.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
               ))}
             </TextField>
+      
+            <TextField 
+              disabled={menuDisable}
+              id="outlined-select-branch"
+              select
+              label="Select"
+              value={menuBranch}
+              onChange={handleChangeMenu}
+              fullWidth 
+              helperText="Please select your branch"
+              variant="outlined"
+            >
+              
+              {branchesMenu.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+
             </Grid>
             <Grid item xs={12}>
               <Slider 
@@ -437,7 +518,7 @@ export default function BasicTable() {
               </Button>
             </Grid>
             <Grid item xs={6}>
-            <TextField
+              <TextField
                 id="date"
                 label="Booking Date"
                 type="date"
@@ -447,6 +528,25 @@ export default function BasicTable() {
                   shrink: true,
                 }}
               />
+              <br></br>
+              <br></br>
+              <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-helper-label">Time</InputLabel>
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={timeBranch}
+                  onChange={handleChangeTime}
+                >
+                  {branchesTime.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>Only available times will show</FormHelperText>
+              </FormControl>
+
             </Grid>
             <TableContainer component={Paper}>
               <Table  size="small" aria-label="a dense table">
@@ -589,10 +689,8 @@ export default function BasicTable() {
                       onChangePage={handleChangePage}
                       onChangeRowsPerPage={handleChangeRowsPerPage}
                     />
-                  
                   </Paper>
                 </div>
-            
             </Grid>
           </Grid>
           </form>
@@ -605,9 +703,7 @@ export default function BasicTable() {
             Add Items
           </Button>
         </DialogActions>
-
         </Dialog>
     </div>
   );
 }
-console.log(rows);
