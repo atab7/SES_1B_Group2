@@ -19,6 +19,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Header from './images/frenchpic.jpeg';
 import Background from './images/defaultBackground.jpg';
 import Menu from './Menu';
+import ManagerNavBar from './ManagerNavBar.js';
 //import EditAccount from './EditAccount';
 import axios from 'axios';
 import { set } from 'js-cookie';
@@ -162,7 +163,13 @@ export default class HomePage extends React.Component {
   
   setNavBar = (is_auth) => {
     if(this.isAuth()){
-      return <CustomerNavBar/>;
+      const user_type = localStorage.getItem('user_type');
+      if(user_type === 'manager'){
+        return <ManagerNavBar/>;
+      }
+      else{
+        return <CustomerNavBar/>;
+      }
     }else{
       return <NavBar/>;
     }
