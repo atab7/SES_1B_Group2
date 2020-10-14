@@ -72,7 +72,7 @@ export default class ManagerBooking extends React.Component {
                 <TableCell align="center">{booking.number_of_people}</TableCell>
                 <TableCell align="center">{this.toReadableDateString(booking.date)}</TableCell>
                 <TableCell align="center">{booking.time.substring(0, booking.time.length -3)}</TableCell>
-                <TableCell align="center">$200</TableCell>
+                <TableCell align="center">${booking.cost}</TableCell>
                 <TableCell align="center">
                     <Button 
                     variant="outlined" 

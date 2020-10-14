@@ -1,5 +1,5 @@
 import React from 'react';
-import NavBar from './Navbar.js';
+import NavBar from './NavBar.js';
 import { Container } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';

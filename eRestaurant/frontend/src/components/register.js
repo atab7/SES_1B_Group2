@@ -153,8 +153,9 @@ export default class Register extends React.Component {
     )
     .then(function (response) {
       if (response.status === 201) {
-        console.log(response);
+        //console.log(response);
         that.initUser(curr_username, curr_password);
+        that.sendConfirmEmail();
         that.setState({ isSignedUp: true });
       }
       //console.log(response);
@@ -167,6 +168,20 @@ export default class Register extends React.Component {
           }
         }
       }
+    });
+
+  }
+
+  sendConfirmEmail(){
+    var service_id = "service_onar6eb";
+    var template_id = "template_9x1hlr9";
+    var user_id =  "user_y37OxRmCicn4obS3k4lV0";
+    
+    emailjs.send(service_id, template_id, this.state, user_id )
+    .then((result) => {
+    //console.log('success',result.text);
+    }, (error) => {
+    //console.log('error:', error);
     });
 
   }
@@ -185,18 +200,9 @@ export default class Register extends React.Component {
     var isValidPass = this.checkPassword(this.state.password);
     var isValidEmail = this.checkEmail(this.state.username);
     var isSamePass = this.state.repeat_password === this.state.password;
-    var service_id = "service_onar6eb";
-    var template_id = "template_9x1hlr9";
-    var user_id =  "user_y37OxRmCicn4obS3k4lV0";
 
     if(isValidEmail && isValidPass && isSamePass){
       this.postUser();
-      emailjs.send(service_id, template_id, this.state, user_id )
-      .then((result) => {
-        //console.log('success',result.text);
-    }, (error) => {
-       //console.log('error:', error);
-    });
     }else if(!isValidEmail){
       this.setAlertEmail(true);
     }else if(!isValidPass){

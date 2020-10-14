@@ -142,7 +142,7 @@ class user_viewset(viewsets.ModelViewSet):
         return Response(serializer.data)
  
 
-class booking_viewset(viewsets.ModelViewSet):
+class manager_booking_viewset(viewsets.ModelViewSet):
     serializer_class = booking_serializer
     
     permission_classes = [
@@ -152,10 +152,10 @@ class booking_viewset(viewsets.ModelViewSet):
     def get_queryset(self):
         date = self.request.query_params.get('date', None)
         try:
-            return Booking.objects.filter(date=date)
+            manager = Staff.objects.filter(user=self.request.user)[0]
+            return Booking.objects.filter(date=date, restaurant=manager.restaurant)
         except:
             return Response(status=status.HTTP_204_NO_CONTENT)
-
 
 class customer_booking_viewset(viewsets.ModelViewSet):
     serializer_class = booking_serializer
@@ -165,10 +165,24 @@ class customer_booking_viewset(viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
-        return self.request.user.bookings.all()
+        date = self.request.query_params.get('date', None)
+        try:
+            return Booking.objects.filter(date=date, customer=self.request.user, is_active=True)
+        except:
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=['patch'], permission_classes=[permissions.IsAuthenticated],
+            url_path='cancel-booking', url_name='cancel_booking')
+    def set_inactive(self, request, pk=None):
+        instance = Booking.objects.filter(pk=pk)[0]
+        if not instance:
+              return Response(status=status.HTTP_400_BAD_REQUEST)
+        instance.is_active = False
+        instance.save()
+        return Response(status=status.HTTP_200_OK)
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        serializer.save(customer=self.request.user)
 
 class restaurant_viewset(viewsets.ModelViewSet):
     queryset = Restaurant.objects.all()
