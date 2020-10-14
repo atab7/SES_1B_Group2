@@ -14,6 +14,7 @@ import ManageResturant from "./components/manageresturant/ManageResturant.js";
 import About from './components/About.js';
 import emailForm from './components/emailForm.js';
 import {EmailConfirmed, EmailNotExists} from './components/EmailConfirmed.js';
+import MakeBooking from './components/MakeBooking.js';
 // component={Home} 
 
 const isManager = () => {
@@ -59,6 +60,9 @@ ReactDOM.render(
           )}/>
         <Route path="/emailconfirmed" component={EmailConfirmed}/>
         <Route path="/bademail" component={EmailNotExists}/>
+        
+        <Route path="/test" component={MakeBooking}/>
+
         <ProtectRoute>
           <Route path="/profile" component={Profile}/>
         </ProtectRoute>
