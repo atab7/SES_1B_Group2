@@ -210,6 +210,7 @@ class customer_viewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.user.customer.all()
+       
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

@@ -51,7 +51,6 @@ export default class Login extends React.Component {
     this.closeValidLogin = this.closeValidLogin.bind(this);
     //this.setLogin = this.setLogin.bind(this);
     this.closeIllegal = this.closeIllegal.bind(this);
-
   }
 
   checkLegal(){
@@ -140,10 +139,9 @@ export default class Login extends React.Component {
       localStorage.setItem('username', this.state.username);
       localStorage.setItem('auth_token', response.data.auth_token);
       localStorage.setItem('is_auth', true);
-      this.setUserType(localStorage.getItem('auth_token'));
-      console.log(localStorage.getItem('user_type'));
+      this.setUserType(response.data.auth_token);
+      //console.log(localStorage.getItem('user_type'));
       this.setLogin();
-
     })
     .catch((error) => {
       if(error.response.data.non_field_errors){
@@ -157,8 +155,10 @@ export default class Login extends React.Component {
   }
 
   render(){
-    if (this.state.login) {
-      return <Redirect to = {{ pathname: "/" }} />;
+    if (this.state.login) {      
+      return <Redirect to = {{ 
+        pathname: "/"
+      }} />;
     }
     return (
       <div style={ backgroundImg }>

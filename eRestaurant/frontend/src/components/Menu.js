@@ -558,7 +558,7 @@ export default function BasicTable() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {menuSelected.map((row) => (
+                  { menuSelected.map((row) => (
                     <TableRow key={row.name}>
                       <TableCell component="th" scope="row">
                       <React.Fragment>

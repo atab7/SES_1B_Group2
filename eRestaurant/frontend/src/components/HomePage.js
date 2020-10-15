@@ -24,6 +24,7 @@ import Menu from './Menu';
 import ManagerNavBar from './ManagerNavBar.js';
 //import EditAccount from './EditAccount';
 import axios from 'axios';
+import {axios_config} from '../config.js';
 import { set } from 'js-cookie';
 
 const useStyles = makeStyles((theme) => ({
@@ -117,7 +118,7 @@ export default class HomePage extends React.Component {
     this.state = {
       branch:'',
       booking:false,
-      emailConfirmed:'false',
+      emailConfirmed:true,
     }
 
     //Binds
@@ -147,44 +148,54 @@ export default class HomePage extends React.Component {
   )
   }
 
-
-  /*const classes = useStyles();
-  //Tab Change on homepage   
-  const [value, setValue] = React.useState(0);
-  const handleChangetab = (event, newValue) => {
-    setValue(newValue);
-  };
-  // Booking 
-  const [open, setOpenBooking] = React.useState(false);
-  const handleOpenBooking = () => {
-    setOpenBooking(true);
-  };
-  const handleCloseBooking = () => {
-    setOpenBooking(false);
-  };
-  //Booking 
-  /*Branch select on booking form */
-
-  /*Number of people select slider on branch*/
+  isConfirmed(){
+    axios.get(`${axios_config["baseURL"]}api/customer/` , {
+      headers:{
+          'Authorization': `Token ${localStorage.getItem('auth_token')}`
+      }
+  })
+    .then((response) => {
+      if(response.data.length){
+        var is_confirmed = response.data[0].is_confirmed
+        this.setState({
+          emailConfirmed: is_confirmed
+        });
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 
   isAuth = (token) => { 
     return localStorage.getItem('auth_token') !== null;
   }
+
+  isManager = () => {
+    return localStorage.getItem('user_type') === 'manager';
+  }
   
-  setNavBar = (is_auth) => {
+  setNavBar = () => {
+    
     if(this.isAuth()){
-      const user_type = localStorage.getItem('user_type');
-      if(user_type === 'manager'){
-        console.log("manager");
+      if(this.isManager()){
+        //console.log("manager");
         return <ManagerNavBar/>;
       }
       else{
-        console.log("cust");
+        //console.log("cust");
         return <CustomerNavBar/>;
       }
     }else{
-      console.log("reg");
+      //console.log("reg");
       return <NavBar/>;
+    }
+  }
+
+  componentDidMount(){
+    const user_type = localStorage.getItem('user_type');
+    if(user_type === 'customer'){
+      this.isConfirmed();
     }
   }
 
@@ -193,7 +204,7 @@ export default class HomePage extends React.Component {
       
       return(
           <div>
-              {this.setNavBar(this.isAuth())}
+              {this.setNavBar()}
               <Box style={ headerImg }>
               </Box>
               <Box style={ backgroundImg }>
@@ -235,7 +246,7 @@ export default class HomePage extends React.Component {
 
                       
                   </Box>
-                  <Snackbar open={this.state.emailConfirmed} autoHideDuration={3000} >
+                  <Snackbar open={!(this.state.emailConfirmed)} autoHideDuration={3000} >
                     <Alert severity="error"> 
                       Please Confirm Your Email Before Making A Booking.
                     </Alert>
