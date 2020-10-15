@@ -68,9 +68,9 @@ class MakeBooking extends React.Component{
         });
     }
 
-    selectDayTime(evt){
+    selectDayTime(daytime){
         this.setState({
-            booking_daytime: evt.target.value
+            booking_daytime: daytime
         });
     }
 
@@ -95,23 +95,8 @@ class MakeBooking extends React.Component{
     render(){
         return (
         <div>
-            <RestaurantList updateParentState={this.selectRestaurant}/>
-            
-            <FormControl variant="outlined">
-            <InputLabel id="demo-simple-select-outlined-label">Select a Restaurant</InputLabel>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              value={this.state.booking_daytime}
-              onChange={this.selectDayTime}
-              label="Day Time"
-            >
-            <MenuItem value={1}>Breakfast</MenuItem>
-            <MenuItem value={2}>Lunch</MenuItem>
-            <MenuItem value={3}>Dinner</MenuItem>
-
-            </Select>
-          </FormControl>
+        <RestaurantList updateParentState={this.selectRestaurant}/>
+        <DayTime updateParentState={this.selectDayTime}/>
         <ContinuousSlider updateParentState={this.selectNumOfPeople}/>
         <DateSelecter updateParentState={this.selectDate}/>
         <TimeSelecter daytime={this.state.booking_daytime} updateParentState={this.selectTime}/>
@@ -121,6 +106,46 @@ class MakeBooking extends React.Component{
                 
         </div>);
     }
+}
+
+class DayTime extends React.Component{
+  constructor(props){
+    super();
+    this.state = {
+      daytime:''
+    }
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(evt){
+    var day_time = evt.target.value;
+    this.props.updateParentState(day_time);
+    this.setState({
+      daytime: day_time
+    });
+  }
+
+  render(){
+    return(
+      <FormControl variant="outlined">
+            <InputLabel id="demo-simple-select-outlined-label">Breakfast, Lunch or Dinner?</InputLabel>
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              value={this.state.daytime}
+              onChange={this.handleChange}
+              label="Day Time"
+            >
+            <MenuItem value={1}>Breakfast</MenuItem>
+            <MenuItem value={2}>Lunch</MenuItem>
+            <MenuItem value={3}>Dinner</MenuItem>
+
+            </Select>
+      </FormControl>
+    );
+  }
+
 }
 
 class RestaurantList extends React.Component {
@@ -250,8 +275,11 @@ class TimeSelecter extends React.Component{
     }
 
     handleChange(evt){
-        var time = evt.target.value;
-        this.props.updateParentState(time);
+        var i_time = evt.target.value;
+        this.props.updateParentState(i_time);
+        this.setState({
+          time:i_time
+        });
     }
 
     render(){
@@ -341,7 +369,32 @@ const ContinuousSlider = (props) => {
     }
   }));
 
+  function createData(name, ingredients, price, quantity) {
+    return { name, ingredients, price, quantity};
+  }
+  
+
+  
   const Menu = (props) => {
+
+    const dummy_rows = [
+      createData('Cupcake', 'cake but cup size', 5.0, 1),
+      createData('Donut', 'heart attack food', 10.0, 1),
+      createData('Eclair', 'idek what this is', 16.0, 1),
+      createData('Frozen yoghurt', 'frozen yoga hurt', 6.0, 1),
+      createData('Gingerbread', 'better than inbred', 16.0, 1),
+      createData('Honeycomb', 'not for your hair', 3.2, 1),
+      createData('Ice cream sandwich', 'brain freeze sandwich', 9.0, 1),
+      createData('Jelly Bean', 'expensive ass jelly bean', 1000.0, 1),
+      createData('KitKat', 'fresh from woolworths', 26.0, 1),
+      createData('Lollipop', 'they suck tho', 5, 1),
+      createData('Marshmallow', 'also very expensive', 2000, 1),
+      createData('Nougat', 'nougat to give us a HD Tej', 19.0, 1),
+      createData('Oreo', 'thats racist', 18.0, 1),
+    ];
+
+    const [rows, setRows] = React.useState(dummy_rows);
+  
     
     const BootstrapInput = withStyles((theme) => ({
       root: {
@@ -380,25 +433,8 @@ const ContinuousSlider = (props) => {
   
     /* Menu */
   
-    function createData(name, ingredients, price, quantity) {
-      return { name, ingredients, price, quantity};
-    }
     
-    const rows = [
-      createData('Cupcake', 'cake but cup size', 5.0, 1),
-      createData('Donut', 'heart attack food', 10.0, 1),
-      createData('Eclair', 'idek what this is', 16.0, 1),
-      createData('Frozen yoghurt', 'frozen yoga hurt', 6.0, 1),
-      createData('Gingerbread', 'better than inbred', 16.0, 1),
-      createData('Honeycomb', 'not for your hair', 3.2, 1),
-      createData('Ice cream sandwich', 'brain freeze sandwich', 9.0, 1),
-      createData('Jelly Bean', 'expensive ass jelly bean', 1000.0, 1),
-      createData('KitKat', 'fresh from woolworths', 26.0, 1),
-      createData('Lollipop', 'they suck tho', 5, 1),
-      createData('Marshmallow', 'also very expensive', 2000, 1),
-      createData('Nougat', 'nougat to give us a HD Tej', 19.0, 1),
-      createData('Oreo', 'thats racist', 18.0, 1),
-    ];
+    
   
   
     function descendingComparator(a, b, orderBy) {
@@ -538,7 +574,11 @@ const ContinuousSlider = (props) => {
     const classes = useStyles();
     
     const handleChange = (event, number) => {
-        rows[number].quantity = event.target.value;
+        //console.log(number);
+        //console.log("evt: ", event.target.value);
+        var copy_rows = rows;
+        copy_rows[number].quantity = event.target.value;
+        setRows(copy_rows);
     };
 
     const [isChecked, setIsChecked] = React.useState(false);
@@ -622,11 +662,6 @@ const ContinuousSlider = (props) => {
     }
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
-
-    
-    const menuOrderTotal = menuSelected.reduce((totalPrice, price) => totalPrice + parseInt(price.price, 10), 0);
-
-
     
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
@@ -702,6 +737,7 @@ const ContinuousSlider = (props) => {
                                         <MenuItem value="">
                                             <em>None</em>
                                         </MenuItem>
+
                                         <MenuItem value={1}>1</MenuItem>
                                         <MenuItem value={2}>2</MenuItem>
                                         <MenuItem value={3}>3</MenuItem>
@@ -746,8 +782,7 @@ const ContinuousSlider = (props) => {
 
 
   const SelectedItemsTable = (props) => {
-
-    const [MenuSelected, setMenuSelected] = React.useState([]);
+    const menuOrderTotal = props.menuSelected.reduce((totalPrice, price) => totalPrice + parseInt(price.price, 10), 0);
 
     return (
     <div>
@@ -762,7 +797,7 @@ const ContinuousSlider = (props) => {
             </TableHead>
             <TableBody>
                 {
-                MenuSelected.map((row) => (
+                props.menuSelected.map((row) => (
                 <TableRow key={row.name}>
                     <TableCell component="th" scope="row">
                     <React.Fragment>
@@ -780,7 +815,7 @@ const ContinuousSlider = (props) => {
             </Table>
         </TableContainer>
         <Typography>
-                        <h1>Total: ${/*menuOrderTotal*/}</h1>
+                        <h1>Total: ${menuOrderTotal}</h1>
         </Typography>
       </div>
       );
