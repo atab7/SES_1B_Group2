@@ -17,6 +17,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Header from './images/frenchpic.jpeg';
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from '@material-ui/lab/Alert';
 import Background from './images/defaultBackground.jpg';
 import Menu from './Menu';
 import ManagerNavBar from './ManagerNavBar.js';
@@ -115,6 +117,7 @@ export default class HomePage extends React.Component {
     this.state = {
       branch:'',
       booking:false,
+      emailConfirmed:'false',
     }
 
     //Binds
@@ -137,6 +140,13 @@ export default class HomePage extends React.Component {
       booking: false
     })
   }
+  setEmailConfirmed(evt){
+    this.setState({
+      emailConfirmed:true
+    }
+  )
+  }
+
 
   /*const classes = useStyles();
   //Tab Change on homepage   
@@ -165,17 +175,21 @@ export default class HomePage extends React.Component {
     if(this.isAuth()){
       const user_type = localStorage.getItem('user_type');
       if(user_type === 'manager'){
+        console.log("manager");
         return <ManagerNavBar/>;
       }
       else{
+        console.log("cust");
         return <CustomerNavBar/>;
       }
     }else{
+      console.log("reg");
       return <NavBar/>;
     }
   }
 
-  render(){
+  render()
+  {
       
       return(
           <div>
@@ -221,7 +235,11 @@ export default class HomePage extends React.Component {
 
                       
                   </Box>
-
+                  <Snackbar open={this.state.emailConfirmed} autoHideDuration={3000} >
+                    <Alert severity="error"> 
+                      Please Confirm Your Email Before Making A Booking.
+                    </Alert>
+                </Snackbar>
               </Container>
               </Box>
           </div>

@@ -141,6 +141,7 @@ export default class Login extends React.Component {
       localStorage.setItem('auth_token', response.data.auth_token);
       localStorage.setItem('is_auth', true);
       this.setUserType(localStorage.getItem('auth_token'));
+      console.log(localStorage.getItem('user_type'));
       this.setLogin();
 
     })
