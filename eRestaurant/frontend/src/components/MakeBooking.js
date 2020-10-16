@@ -123,6 +123,13 @@ class MakeBooking extends React.Component{
     }
 
     makeBooking(){
+      if(this.state.booking_daytime === '' || 
+          this.state.date === '' ||  
+          this.state.time === 0 || 
+          this.state.menuSelected=== []){
+        alert('Please fill in all the fields');
+      }
+      else {
       this.props.updateParentState();
       const csrftoken = Cookies.get('csrftoken');
       axios.post(`${axios_config["baseURL"]}api/make-booking/`, {
@@ -141,7 +148,7 @@ class MakeBooking extends React.Component{
             'X-CSRFToken': csrftoken
         }
     })
-
+  }
     }
     
     render(){

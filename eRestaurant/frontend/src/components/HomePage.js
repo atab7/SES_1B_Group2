@@ -120,12 +120,25 @@ export default class HomePage extends React.Component {
       branch:'',
       booking:false,
       emailConfirmed:true,
+      bookingAvailable:false,
     }
 
     //Binds
     this.setBranch = this.setBranch.bind(this);
     this.setBookingOpen = this.setBookingOpen.bind(this);
     this.setBookingClose = this.setBookingClose.bind(this);
+    this.closeBookingAvailable = this.closeBookingAvailable.bind(this);
+    this.closeEmailConfirmed = this.closeEmailConfirmed.bind(this);
+  }
+  closeBookingAvailable() {
+    this.setState({
+      bookingAvailable: false
+    })
+  }
+  closeEmailConfirmed() {
+    this.setState({
+      emailConfirmed: true
+    })
   }
   setBranch(evt) {
     this.setState({
@@ -133,9 +146,19 @@ export default class HomePage extends React.Component {
     })
   }
   setBookingOpen(){
-    this.setState({
-      booking: true
-    })
+    if (this.isAuth() || this.emailConfirmed==='true')
+    {
+      this.setState({
+        booking: true
+      })
+    }
+    else {
+      {
+        this.setState({
+          bookingAvailable:true
+        })
+      }
+  }
   }
   setBookingClose(){
     this.setState({
@@ -159,7 +182,7 @@ export default class HomePage extends React.Component {
       if(response.data.length){
         var is_confirmed = response.data[0].is_confirmed
         this.setState({
-          emailConfirmed: is_confirmed
+          emailConfirmed: is_confirmed,
         });
       }
     })
@@ -175,7 +198,6 @@ export default class HomePage extends React.Component {
   isManager = () => {
     return localStorage.getItem('user_type') === 'manager';
   }
-  
   setNavBar = () => {
     
     if(this.isAuth()){
@@ -184,7 +206,7 @@ export default class HomePage extends React.Component {
         return <ManagerNavBar/>;
       }
       else{
-        //console.log("cust");
+        
         return <CustomerNavBar/>;
       }
     }else{
@@ -231,12 +253,12 @@ export default class HomePage extends React.Component {
                       <HomepageTabs/>
 
                       <Box p={1}>
-                      <RegButton size="large" onClick={this.setBookingOpen}>Book Now</RegButton>
+                      <RegButton size="large" onClick={this.setBookingOpen} >Book Now</RegButton>
                       <Dialog open={this.state.booking} onClose={this.setBookingClose} aria-labelledby="form-dialog-title">
                         <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>I'd Like To Book</DialogTitle>
                         <MakeBooking updateParentState={this.setBookingClose}/>
                         <DialogActions>
-                          <Button onClick={this.setBookingClose} color="primary">
+                          <Button onClick={this.setBookingClose}  color="primary">
                             Cancel
                           </Button>
                             
@@ -247,9 +269,14 @@ export default class HomePage extends React.Component {
 
                       
                   </Box>
-                  <Snackbar open={!(this.state.emailConfirmed)} autoHideDuration={3000} >
-                    <Alert severity="error"> 
-                      Please Confirm Your Email Before Making A Booking. Please check your inbox for a confirmation mail.
+                  <Snackbar open={!(this.state.emailConfirmed)} autoHideDuration={10000} onClose={this.closeEmailConfirmed}>
+                    <Alert severity="error" onClose={this.closeEmailConfirmed}> 
+                      Please confirm your email before making a booking. Please check your inbox for a confirmation mail.
+                    </Alert>
+                </Snackbar>
+                <Snackbar open={this.state.bookingAvailable} autoHideDuration={10000} onClose={this.closeBookingAvailable}>
+                    <Alert severity="error" onClose={this.closeBookingAvailable}> 
+                      Please login and confirm your email to make a booking.
                     </Alert>
                 </Snackbar>
               </Container>
