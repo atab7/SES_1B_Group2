@@ -123,6 +123,7 @@ class MakeBooking extends React.Component{
     }
 
     makeBooking(){
+      this.props.updateParentState();
       const csrftoken = Cookies.get('csrftoken');
       axios.post(`${axios_config["baseURL"]}api/make-booking/`, {
         restaurant: this.state.selected_restaurant,
@@ -248,13 +249,24 @@ class ApplyReward extends React.Component {
   }
 
   handleClick(evt){
+    if(this.state.reward_code === ''){
+      alert('Please enter a reward code before applying reward.');
+      return null;
+    }
     var reward;
+    var found = false;
     for(reward of this.state.rewards){
       if(reward.code === this.state.reward_code){
         this.props.updateParentState(reward.points_percent/100);
+        found = true;
         break;
       }
     }
+
+    if(!found){
+      alert('No matching reward code is found!');
+    }
+    
   }
 
   setButtonField(){

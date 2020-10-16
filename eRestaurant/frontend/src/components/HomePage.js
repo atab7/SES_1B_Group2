@@ -132,17 +132,17 @@ export default class HomePage extends React.Component {
       branch: evt.target.value
     })
   }
-  setBookingOpen(evt){
+  setBookingOpen(){
     this.setState({
       booking: true
     })
   }
-  setBookingClose(evt){
+  setBookingClose(){
     this.setState({
       booking: false
     })
   }
-  setEmailConfirmed(evt){
+  setEmailConfirmed(){
     this.setState({
       emailConfirmed:true
     }
@@ -234,7 +234,7 @@ export default class HomePage extends React.Component {
                       <RegButton size="large" onClick={this.setBookingOpen}>Book Now</RegButton>
                       <Dialog open={this.state.booking} onClose={this.setBookingClose} aria-labelledby="form-dialog-title">
                         <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>I'd Like To Book</DialogTitle>
-                        <MakeBooking/>
+                        <MakeBooking updateParentState={this.setBookingClose}/>
                         <DialogActions>
                           <Button onClick={this.setBookingClose} color="primary">
                             Cancel
