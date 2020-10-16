@@ -26,6 +26,7 @@ import ManagerNavBar from './ManagerNavBar.js';
 import axios from 'axios';
 import {axios_config} from '../config.js';
 import { set } from 'js-cookie';
+import MakeBooking from './MakeBooking';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -233,7 +234,7 @@ export default class HomePage extends React.Component {
                       <RegButton size="large" onClick={this.setBookingOpen}>Book Now</RegButton>
                       <Dialog open={this.state.booking} onClose={this.setBookingClose} aria-labelledby="form-dialog-title">
                         <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>I'd Like To Book</DialogTitle>
-                        <Menu/>
+                        <MakeBooking/>
                         <DialogActions>
                           <Button onClick={this.setBookingClose} color="primary">
                             Cancel

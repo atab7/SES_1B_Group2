@@ -17,7 +17,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 import InputBase from '@material-ui/core/InputBase';
-import { TextField, Typography } from '@material-ui/core';
+import { Container, TextField, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -47,7 +47,8 @@ class MakeBooking extends React.Component{
             time: 0,
             menuSelected: [],
             menurows: [],
-            discount_percentage: 0.0
+            discount_percentage: 0.0,
+            menuOpen:false
         };
         this.selectRestaurant = this.selectRestaurant.bind(this);
         this.selectDayTime = this.selectDayTime.bind(this);
@@ -58,6 +59,8 @@ class MakeBooking extends React.Component{
         this.setMenuRows = this.setMenuRows.bind(this);
         this.makeBooking = this.makeBooking.bind(this);
         this.setDiscountPercentage = this.setDiscountPercentage.bind(this);
+        this.setMenuOpen = this.setMenuOpen.bind(this);
+        this.setMenuClose = this.setMenuClose.bind(this);
     }
 
     setDiscountPercentage(discountPercentage){
@@ -108,6 +111,16 @@ class MakeBooking extends React.Component{
         menurows: menu_rows
       });
     }
+    setMenuOpen(){
+      this.setState({
+        menuOpen: true
+      });
+    }
+    setMenuClose(){
+      this.setState({
+        menuOpen: false
+      });
+    }
 
     makeBooking(){
       const csrftoken = Cookies.get('csrftoken');
@@ -133,15 +146,47 @@ class MakeBooking extends React.Component{
     render(){
         return (
         <div>
-        <RestaurantList updateParentState={this.selectRestaurant}/>
-        <SetMenu updateParentDayTime={this.selectDayTime} updateParentMenu={this.setMenuRows}/>
-        <ContinuousSlider updateParentState={this.selectNumOfPeople}/>
-        <DateSelecter updateParentState={this.selectDate}/>
-        <TimeSelecter daytime={this.state.booking_daytime} updateParentState={this.selectTime}/>
-        <Menu updateParentState={this.selectMenu} rows={this.state.menurows}/>
-        <SelectedItemsTable menuSelected={this.state.menuSelected} discount_percentage={this.state.discount_percentage}/>
-        <ApplyReward updateParentState={this.setDiscountPercentage}/>
-        <Button color="primary" onClick={this.makeBooking}>Book</Button>
+          <Container>
+        <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
+              <RestaurantList updateParentState={this.selectRestaurant}/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <SetMenu updateParentDayTime={this.selectDayTime} updateParentMenu={this.setMenuRows}/>
+            </Grid>
+            <Grid item xs={12}>
+              <ContinuousSlider updateParentState={this.selectNumOfPeople}/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <DateSelecter updateParentState={this.selectDate}/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TimeSelecter daytime={this.state.booking_daytime} updateParentState={this.selectTime}/>
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="outlined" fullWidth onClick={this.setMenuOpen}>Add Menu Items</Button>
+            </Grid>
+            <Grid item xs={12}>
+              <SelectedItemsTable menuSelected={this.state.menuSelected} discount_percentage={this.state.discount_percentage}/>
+            </Grid>
+              <ApplyReward updateParentState={this.setDiscountPercentage}/>
+            <Grid item xs={12}>
+              <Button variant="outlined" fullWidth onClick={this.makeBooking}>Create Booking</Button>
+            </Grid>
+        </Grid>
+        </Container>
+        <Dialog open={this.state.menuOpen} onClose={this.setMenuClose} aria-labelledby="form-dialog-title" maxWidth>
+          <Container>
+            <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>Menu</DialogTitle>
+              <Menu updateParentState={this.selectMenu} rows={this.state.menurows}/>
+                <DialogActions>
+                  <Button onClick={this.setMenuClose} color="primary">
+                    Cancel
+                  </Button>  
+                </DialogActions>
+                </Container>
+        </Dialog> 
+        
         </div>);
     }
 }
@@ -205,16 +250,21 @@ class ApplyReward extends React.Component {
 
   render(){
     return( 
-      <div>
-      <TextField
-        placeholder="Enter Reward Code Here"
-        fullWidth
-        id="Reward" 
-        label="Reward" 
-        onChange = {this.setRewardCode}
-        variant="outlined" />
-        <Button color="primary" onClick={this.handleClick} >Apply Reward</Button>
-      </div>
+        [
+          <Grid item xs={12} sm={7}>
+          <TextField
+          placeholder="Enter Reward Code Here"
+          fullWidth
+          id="Reward" 
+          label="Reward" 
+          onChange = {this.setRewardCode}
+          variant="outlined" />
+          </Grid>,
+          <Grid item xs={12} sm={5}>
+          <Button variant="outlined" style={{marginTop:'8px'}}fullWidth onClick={this.handleClick} >Apply Reward</Button>
+          </Grid>
+        ]
+
       );
   }
 
@@ -264,13 +314,15 @@ class SetMenu extends React.Component{
   render(){
     return(
       <FormControl variant="outlined">
-            <InputLabel id="demo-simple-select-outlined-label">Breakfast, Lunch or Dinner?</InputLabel>
+            <InputLabel id="demo-simple-select-outlined-label">Menu</InputLabel>
             <Select
+              style={{width:'265px'}}
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={this.state.daytime}
               onChange={this.handleChange}
               label="Day Time"
+              fullWidth
             >
             <MenuItem value={"Breakfast"}>Breakfast</MenuItem>
             <MenuItem value={"Lunch"}>Lunch</MenuItem>
@@ -320,13 +372,14 @@ class RestaurantList extends React.Component {
     render(){
         return (
             <FormControl variant="outlined">
-            <InputLabel id="demo-simple-select-outlined-label">Select a Restaurant</InputLabel>
-            <Select
+            <InputLabel id="demo-simple-select-outlined-label">Restaurant</InputLabel>
+            <Select style={{width:'265px'}}
               labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
               value={this.state.selected_restaurant}
               onChange={this.handleChange}
               label="Restaurant"
+              fullWidth
             >
             {this.state.restaurants.map(this.setRestaurants, this)}
 
@@ -350,11 +403,15 @@ class DateSelecter extends React.Component {
     render(){
         return (
             <TextField
+                fullWidth
                 id="date"
                 label="Booking Date"
                 type="date"
                 defaultValue="values.someDate"
                 onChange={this.handleChange}
+                InputLabelProps={{
+                  shrink: true,
+                }}
             />);
         }
 }
@@ -422,8 +479,9 @@ class TimeSelecter extends React.Component{
     render(){
         return (
             <FormControl variant="outlined">
-                <InputLabel id="demo-simple-select-outlined-label">Select a Time</InputLabel>
+                <InputLabel id="demo-simple-select-outlined-label">Time</InputLabel>
                 <Select
+                style={{width:'265px'}}
                 labelId="demo-simple-select-outlined-label"
                 id="demo-simple-select-outlined"
                 value={this.state.time}
@@ -698,7 +756,6 @@ const ContinuousSlider = (props) => {
             </Typography>
           ) : (
             <Typography className={classes.title} variant="h6" id="tableTitle" component="div">
-              Dessert
             </Typography>
           )}
     
@@ -912,14 +969,14 @@ const ContinuousSlider = (props) => {
             </Grid>
           </Grid>
           </form>
-          <Button onClick={handleCloseMenu} color="primary">
+          <Button variant="outlined" fullWidth onClick={handleCloseMenu}>
           Add Items
           </Button>
       </div>
 
     )
   }
-
+  
 
   const SelectedItemsTable = (props) => {
     var menuOrderTotal = props.menuSelected.reduce((totalPrice, price) => totalPrice + parseInt(price.price, 10), 0);
@@ -928,7 +985,7 @@ const ContinuousSlider = (props) => {
       if(props.discount_percentage){
         return (
           <div>
-            <h1>Total: ${menuOrderTotal}</h1>
+            {<h1>Total: $<strike>{menuOrderTotal}</strike></h1>}
             <h1>After Reward: ${menuOrderTotal - (menuOrderTotal*props.discount_percentage)} </h1>
           </div>
         );
