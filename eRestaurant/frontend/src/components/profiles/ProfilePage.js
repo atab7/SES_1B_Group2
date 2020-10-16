@@ -25,6 +25,7 @@ import AddStaff from './AddStaff';
 import { isManager } from '../../actions/AuthCheck.js';
 import CustomerBooking from './CustomerBooking';
 import EditMenu from './EditMenu.js';
+import ManagerNavBar from '../ManagerNavBar.js';
 
 const drawerWidth = 240;
 
@@ -133,6 +134,17 @@ const setEditMenu = (classes) => {
   }
 }
 
+const setNavBar = () => {
+  const user_type = localStorage.getItem('user_type');
+  if(user_type === 'manager'){
+    return (<ManagerNavBar/>);
+  }else if (user_type === 'customer'){
+    return (<CustomerNavBar/>);
+  }else if(user_type === 'staff'){
+    return 0;
+  }
+}
+
 function ClippedDrawer() {
 
   const classes = useStyles();
@@ -143,7 +155,7 @@ function ClippedDrawer() {
       
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
-      <CustomerNavBar/>
+      {setNavBar()}
       </AppBar>
       <Drawer
         className={classes.drawer}
@@ -155,11 +167,6 @@ function ClippedDrawer() {
         <div className={classes.drawerContainer}>
          
           <List>
-            {setBookings(classes)}
-            {setRewards(classes)}
-            {setStaffManagement(classes)}
-            {setCustomerBookings(classes)}
-            {setEditMenu(classes)}
             <Link to="/profile/EditAccount" className={classes.link}>
             <ListItem button>
               <ListItemIcon>
