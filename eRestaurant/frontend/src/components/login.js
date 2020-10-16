@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
 import Alert from '@material-ui/lab/Alert';
 import { Redirect } from 'react-router'
+import { trackPromise } from 'react-promise-tracker';
 
 import axios from 'axios';
 import {axios_config} from '../config.js';
@@ -43,6 +44,7 @@ export default class Login extends React.Component {
       auth_token:'',
       validLogin:false,
       login:false,
+      loaded: false
     }
     this.setUsername = this.setUserName.bind(this);
     this.setPassword = this.setPassword.bind(this);
@@ -99,32 +101,33 @@ export default class Login extends React.Component {
   }
 
   setUserType(token){
-    var that = this;
-    axios.get(`${axios_config["baseURL"]}api/staff/`,
-    {
-      headers:{
-        'Authorization': `Token ${token}`
-      }
-    }
-    )
-    .then((response) => {
-      try{
-        const is_manager = response.data[0].is_manager;
-        if(!is_manager){
-          localStorage.setItem('user_type', 'staff');
-        }else{
-          localStorage.setItem('user_type', 'manager');
+      axios.get(`${axios_config["baseURL"]}api/staff/`,
+      {
+        headers:{
+          'Authorization': `Token ${token}`
         }
       }
-      catch {
-        localStorage.setItem('user_type', 'customer');
-      }
+      )
+      .then((response) => {
+        try{
+          const is_manager = response.data[0].is_manager;
+          if(!is_manager){
+            localStorage.setItem('user_type', 'staff');
+          }else{
+            localStorage.setItem('user_type', 'manager');
+          }
+        }
+        catch {
+          localStorage.setItem('user_type', 'customer');
+        }
+        this.setState({
+          loaded: true
+        });
 
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   setToken(){
@@ -136,10 +139,11 @@ export default class Login extends React.Component {
     },
     )
     .then((response) => {
+      this.setUserType(response.data.auth_token);
       localStorage.setItem('username', this.state.username);
       localStorage.setItem('auth_token', response.data.auth_token);
       localStorage.setItem('is_auth', true);
-      this.setUserType(response.data.auth_token);
+      
       //console.log(localStorage.getItem('user_type'));
       this.setLogin();
     })
@@ -155,7 +159,7 @@ export default class Login extends React.Component {
   }
 
   render(){
-    if (this.state.login) {      
+    if (this.state.login && this.state.loaded) {      
       return <Redirect to = {{ 
         pathname: "/"
       }} />;
