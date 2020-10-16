@@ -8,6 +8,21 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from datetime import datetime
 
+class customer_reward_viewset(viewsets.ModelViewSet):
+    serializer_class = reward_serializer
+
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+
+    def get_queryset(self):
+        restaurant_id = self.request.query_params.get('restaurant', None)
+        try:
+            restaurant = Restaurant.objects.get(pk=restaurant_id)
+            return Reward.objects.filter(is_valid=True, restaurant=restaurant)
+        except Exception as e:
+            print(e)
+            return Reward.objects.none()
 
 class manager_reward_viewset(viewsets.ModelViewSet):
     serializer_class = reward_serializer

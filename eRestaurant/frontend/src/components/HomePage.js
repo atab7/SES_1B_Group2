@@ -249,7 +249,7 @@ export default class HomePage extends React.Component {
                   </Box>
                   <Snackbar open={!(this.state.emailConfirmed)} autoHideDuration={3000} >
                     <Alert severity="error"> 
-                      Please Confirm Your Email Before Making A Booking.
+                      Please Confirm Your Email Before Making A Booking. Please check your inbox for a confirmation mail.
                     </Alert>
                 </Snackbar>
               </Container>

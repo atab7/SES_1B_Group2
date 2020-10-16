@@ -169,7 +169,7 @@ class MakeBooking extends React.Component{
             <Grid item xs={12}>
               <SelectedItemsTable menuSelected={this.state.menuSelected} discount_percentage={this.state.discount_percentage}/>
             </Grid>
-              <ApplyReward updateParentState={this.setDiscountPercentage}/>
+              <ApplyReward restaurant={this.state.selected_restaurant} updateParentState={this.setDiscountPercentage}/>
             <Grid item xs={12}>
               <Button variant="outlined" fullWidth onClick={this.makeBooking}>Create Booking</Button>
             </Grid>
@@ -197,6 +197,7 @@ class ApplyReward extends React.Component {
 
     this.setRewardCode = this.setRewardCode.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.setButtonField = this.setButtonField.bind(this);
 
     this.state = {
       rewards:[],
@@ -205,31 +206,39 @@ class ApplyReward extends React.Component {
   }
 
   setRewards(){
-    axios.get(`${axios_config["baseURL"]}api/manageRewards/`, 
-        {
-            headers:{
-                'Authorization': `Token ${localStorage.getItem('auth_token')}`
-            }
-        })
-        .then((response) => {
-            try{
-                var response_rewards = response.data;
-                this.setState({
-                    rewards: response_rewards,
-                })    
-            }catch (e) {
-                this.setState({
-                    rewards: [],
-                }) 
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    if(this.props.restaurant !== 0) {
+      axios.get(`${axios_config["baseURL"]}api/rewards/?restaurant=${this.props.restaurant}`, 
+          {
+              headers:{
+                  'Authorization': `Token ${localStorage.getItem('auth_token')}`
+              }
+          })
+          .then((response) => {
+              try{
+                  var response_rewards = response.data;
+                  this.setState({
+                      rewards: response_rewards,
+                  })    
+              }catch (e) {
+                  this.setState({
+                      rewards: [],
+                  }) 
+              }
+          })
+          .catch((error) => {
+              console.log(error);
+          });
+    }
   }
 
   componentDidMount(){
     this.setRewards();
+  }
+
+  componentDidUpdate(prevProps){
+    if(prevProps.restaurant !== this.props.restaurant){
+      this.setRewards();
+    }
   }
   
   setRewardCode(evt){
@@ -248,24 +257,37 @@ class ApplyReward extends React.Component {
     }
   }
 
-  render(){
-    return( 
-        [
-          <Grid item xs={12} sm={7}>
-          <TextField
-          placeholder="Enter Reward Code Here"
-          fullWidth
-          id="Reward" 
-          label="Reward" 
-          onChange = {this.setRewardCode}
-          variant="outlined" />
-          </Grid>,
-          <Grid item xs={12} sm={5}>
+  setButtonField(){
+    if(this.props.restaurant === 0){
+      return(
+        <Grid item xs={12} sm={5}>
+          <Button disabled='true' variant="outlined" style={{marginTop:'8px'}}fullWidt>Apply Reward</Button>
+        </Grid>
+      )
+    }else{
+      return(
+        <Grid item xs={12} sm={5}>
           <Button variant="outlined" style={{marginTop:'8px'}}fullWidth onClick={this.handleClick} >Apply Reward</Button>
-          </Grid>
-        ]
+        </Grid>
+      )
+    }
+  }
 
-      );
+  render(){
+    return (
+        [
+        <Grid item xs={12} sm={7}>
+        <TextField
+        placeholder="Enter Reward Code Here"
+        fullWidth
+        id="Reward" 
+        label="Reward" 
+        onChange = {this.setRewardCode}
+        variant="outlined" />
+        </Grid>,
+        this.setButtonField()
+        ]
+      )
   }
 
 }
@@ -394,13 +416,15 @@ class DateSelecter extends React.Component {
         super();
         this.handleChange = this.handleChange.bind(this);
     }
-    
+
     handleChange(evt){
         var date = evt.target.value;
         this.props.updateParentState(date);
     }
 
     render(){
+      const todayDate = new Date().toISOString().slice(0,10);
+      console.log(todayDate);
         return (
             <TextField
                 fullWidth
@@ -412,6 +436,7 @@ class DateSelecter extends React.Component {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                inputProps={{ min: todayDate }} 
             />);
         }
 }
@@ -985,7 +1010,7 @@ const ContinuousSlider = (props) => {
       if(props.discount_percentage){
         return (
           <div>
-            {<h1>Total: $<strike>{menuOrderTotal}</strike></h1>}
+            <h1><strike>Total: ${menuOrderTotal}</strike></h1>
             <h1>After Reward: ${menuOrderTotal - (menuOrderTotal*props.discount_percentage)} </h1>
           </div>
         );
