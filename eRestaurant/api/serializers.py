@@ -33,3 +33,8 @@ class restaurant_serializer(serializers.ModelSerializer):
     class Meta:
         model = Restaurant
         fields = '__all__'
+
+class menu_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Meal
+        fields = '__all__'

@@ -10,6 +10,7 @@ router = routers.DefaultRouter()
 router.register('manageRewards', manager_reward_viewset, 'manageRewards')
 router.register('bookings', manager_booking_viewset, 'bookings')
 router.register('customer-bookings', customer_booking_viewset, 'customer-bookings')
+router.register('make-booking', booking_viewset, 'make-booking')
 router.register('restaurants', restaurant_viewset, 'restaurants')
 router.register('user', user_viewset, 'user')
 router.register('edit-user', edit_user_viewset, 'edit-user')
@@ -18,6 +19,7 @@ router.register('edit-customer', edit_staff_viewset, 'edit-customer')
 router.register('staff', staff_viewset, 'staff')
 router.register('customer', customer_viewset, 'customer')
 router.register('validation', confirm_email_viewset, 'validation')
+router.register('menu', menu_viewset, 'menu')
 
 urlpatterns = router.urls
 

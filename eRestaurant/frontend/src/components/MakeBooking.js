@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import {axios_config} from '../config.js';
 import Cookies from 'js-cookie';
@@ -40,12 +40,13 @@ class MakeBooking extends React.Component{
         super();
 
         this.state = {
-            selected_restaurant: '',
-            booking_daytime: 0,
+            selected_restaurant: 0,
+            booking_daytime: '',
             numpeople: 1,
             date: '',
             time: 0,
-            menuSelected: []
+            menuSelected: [],
+            menurows: []
         };
         this.selectRestaurant = this.selectRestaurant.bind(this);
         this.selectDayTime = this.selectDayTime.bind(this);
@@ -53,6 +54,8 @@ class MakeBooking extends React.Component{
         this.selectDate = this.selectDate.bind(this);
         this.selectTime = this.selectTime.bind(this);
         this.selectMenu = this.selectMenu.bind(this);
+        this.setMenuRows = this.setMenuRows.bind(this);
+        this.makeBooking = this.makeBooking.bind(this);
     }
 
     selectRestaurant(restaurant_id){
@@ -91,39 +94,87 @@ class MakeBooking extends React.Component{
         menuSelected: menu_selected
       });
     }
+
+    setMenuRows(menu_rows){
+      this.setState({
+        menurows: menu_rows
+      });
+    }
+
+    makeBooking(){
+      const csrftoken = Cookies.get('csrftoken');
+      axios.post(`${axios_config["baseURL"]}api/make-booking/`, {
+        restaurant: this.state.selected_restaurant,
+        date: this.state.date,
+        time: this.state.time.toString().concat(':00'),
+        number_of_people: this.state.numpeople,
+        day_time: this.state.booking_daytime,
+        orders: this.state.menuSelected,
+        customer: 'def_customer'
+      },
+      {
+        headers:{ 
+            'Authorization': `Token ${localStorage.getItem('auth_token')}`,
+            'X-CSRFToken': csrftoken
+        }
+    })
+
+    }
     
     render(){
         return (
         <div>
         <RestaurantList updateParentState={this.selectRestaurant}/>
-        <DayTime updateParentState={this.selectDayTime}/>
+        <SetMenu updateParentDayTime={this.selectDayTime} updateParentMenu={this.setMenuRows}/>
         <ContinuousSlider updateParentState={this.selectNumOfPeople}/>
         <DateSelecter updateParentState={this.selectDate}/>
         <TimeSelecter daytime={this.state.booking_daytime} updateParentState={this.selectTime}/>
-        <Menu updateParentState={this.selectMenu}/>
+        <Menu updateParentState={this.selectMenu} rows={this.state.menurows}/>
         <SelectedItemsTable menuSelected={this.state.menuSelected} />
-        <p>{this.state.time}</p>
-                
+        <Button color="primary" onClick={this.makeBooking}>Book</Button>
         </div>);
     }
 }
 
-class DayTime extends React.Component{
+class SetMenu extends React.Component{
   constructor(props){
     super();
     this.state = {
-      daytime:''
+      daytime:'',
+      menu_rows:[]
     }
 
     this.handleChange = this.handleChange.bind(this);
   }
 
+  setMenuRows(daytime){
+    axios.get(`${axios_config["baseURL"]}api/menu/?menutype=${daytime}`)
+      .then((response) => {
+        if(response.data.length){
+          let temp_rows = []
+          response.data.map((menu_item) => {
+            temp_rows.push({id: menu_item.id, name: menu_item.name, ingredients: menu_item.description, price: menu_item.price , quantity: 1});       
+          });
+
+          this.setState({
+            menu_rows: temp_rows
+          });
+          this.props.updateParentMenu(this.state.menu_rows);
+        }
+      })
+      .catch((error) => {
+        console.log("Error in setMenu: ", error);
+      });
+  }
+  
+
   handleChange(evt){
     var day_time = evt.target.value;
-    this.props.updateParentState(day_time);
+    this.props.updateParentDayTime(day_time);
     this.setState({
       daytime: day_time
     });
+    this.setMenuRows(day_time);
   }
 
   render(){
@@ -137,9 +188,9 @@ class DayTime extends React.Component{
               onChange={this.handleChange}
               label="Day Time"
             >
-            <MenuItem value={1}>Breakfast</MenuItem>
-            <MenuItem value={2}>Lunch</MenuItem>
-            <MenuItem value={3}>Dinner</MenuItem>
+            <MenuItem value={"Breakfast"}>Breakfast</MenuItem>
+            <MenuItem value={"Lunch"}>Lunch</MenuItem>
+            <MenuItem value={"Dinner"}>Dinner</MenuItem>
 
             </Select>
       </FormControl>
@@ -234,12 +285,8 @@ class TimeSelecter extends React.Component{
         this.setListItems = this.setListItems.bind(this);
     }
 
-    setItem(){
-
-    }
-
     setListItems(){
-        if(this.props.daytime === 1){
+        if(this.props.daytime === 'Breakfast'){
             return(
                 [
                 <MenuItem value={8}>8 AM</MenuItem>,
@@ -249,7 +296,7 @@ class TimeSelecter extends React.Component{
                 ]
             )
 
-        }else if(this.props.daytime === 2){
+        }else if(this.props.daytime === 'Lunch'){
             return(
                 [
                     <MenuItem value={12}>12 PM</MenuItem>,
@@ -259,7 +306,7 @@ class TimeSelecter extends React.Component{
                 ]
             )
 
-        }else if(this.props.daytime === 3){
+        }else if(this.props.daytime === 'Dinner'){
             return(
                 [
                     <MenuItem value={17}>5 PM</MenuItem>,
@@ -272,6 +319,12 @@ class TimeSelecter extends React.Component{
             )
 
         }
+    }
+
+    componentDidUpdate(prevProps){
+      if(this.props.daytime !== prevProps.daytime){
+        this.forceUpdate();
+      }
     }
 
     handleChange(evt){
@@ -369,14 +422,14 @@ const ContinuousSlider = (props) => {
     }
   }));
 
-  function createData(name, ingredients, price, quantity) {
-    return { name, ingredients, price, quantity};
+  
+  function createData(id, name, ingredients, price, quantity) {
+    return {id, name, ingredients, price, quantity};
   }
-  
 
-  
   const Menu = (props) => {
 
+    /*
     const dummy_rows = [
       createData('Cupcake', 'cake but cup size', 5.0, 1),
       createData('Donut', 'heart attack food', 10.0, 1),
@@ -392,9 +445,12 @@ const ContinuousSlider = (props) => {
       createData('Nougat', 'nougat to give us a HD Tej', 19.0, 1),
       createData('Oreo', 'thats racist', 18.0, 1),
     ];
+    */
+    const [rows, setRows] = React.useState(props.rows);
 
-    const [rows, setRows] = React.useState(dummy_rows);
-  
+    useEffect(() => {
+      setRows(props.rows);
+    }, [props.rows]);
     
     const BootstrapInput = withStyles((theme) => ({
       root: {
@@ -612,9 +668,9 @@ const ContinuousSlider = (props) => {
     // };
 
     //This event handler will add selected items into an array
-    const handleClick = (event, name, ingredients, price, quantity) => {
+    const handleClick = (event, id, name, ingredients, price, quantity) => {
         const selectedIndex = selected.indexOf(name);
-        const selectedRows = [createData(name, ingredients, price*quantity, quantity)];
+        const selectedRows = [createData(id, name, ingredients, price*quantity, quantity)];
 
         let newSelected = [];
         let newMenuSelected = [];
@@ -703,7 +759,7 @@ const ContinuousSlider = (props) => {
                               return (
                                 <TableRow
                                   hover
-                                  onClick={(event) => handleClick(event, row.name, row.ingredients, row.price, row.quantity)}
+                                  onClick={(event) => handleClick(event, row.id, row.name, row.ingredients, row.price, row.quantity)}
                                   role="checkbox"
                                   aria-checked={isItemSelected}
                                   tabIndex={-1}

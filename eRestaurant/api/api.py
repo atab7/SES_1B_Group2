@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
+from datetime import datetime
 
 
 class manager_reward_viewset(viewsets.ModelViewSet):
@@ -181,8 +182,47 @@ class customer_booking_viewset(viewsets.ModelViewSet):
         instance.save()
         return Response(status=status.HTTP_200_OK)
 
-    def perform_create(self, serializer):
-        serializer.save(customer=self.request.user)
+
+class booking_viewset(viewsets.ModelViewSet):
+    serializer_class = booking_serializer
+    
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+    queryset = Booking.objects.all()
+
+    def create(self, request):
+        try:
+            booking_info = self.request.data
+            restaurant = Restaurant.objects.get(pk=booking_info['restaurant'])
+            
+            is_breakfast = False
+            is_lunch = False
+            is_dinner = False
+            if booking_info['day_time'] == 'Breakfast':
+                is_breakfast = True
+            elif booking_info['day_time'] == 'Lunch':
+                is_lunch = True
+            elif booking_info['day_time'] == 'Dinner':
+                is_lunch = True
+
+            total_price = 0 
+            for order in booking_info['orders']:
+                total_price = total_price + order['price']
+
+            new_booking = Booking(price=total_price, is_breakfast=is_breakfast, is_lunch=is_lunch, is_dinner=is_dinner, number_of_people=booking_info['number_of_people'], time=datetime.strptime(booking_info['time'], '%H:%M'), customer=self.request.user, restaurant=restaurant, date=datetime.strptime(booking_info['date'], '%Y-%m-%d'))
+            new_booking.save()
+            
+            for order in booking_info['orders']:
+                meal = Meal.objects.get(pk=order['id'])
+                order = Order(booking=new_booking, meal=meal)
+                order.save()
+            
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        #serializer.save(customer=self.request.user)
 
 class restaurant_viewset(viewsets.ModelViewSet):
     queryset = Restaurant.objects.all()
@@ -233,3 +273,21 @@ class confirm_email_viewset(viewsets.ViewSet):
             return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/emailconfirmed')
         except:
             return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/bademail')
+
+
+class menu_viewset(viewsets.ModelViewSet):
+    serializer_class = menu_serializer
+    
+    permission_classes = [
+        permissions.AllowAny,
+    ]
+
+    def get_queryset(self):
+        menutype = self.request.query_params.get('menutype', None)
+        try:
+            menu = Menu.objects.get(menu_type=menutype)
+            meals = menu.meals.all()
+            return meals
+        except:
+            return Meal.objects.none()
+        

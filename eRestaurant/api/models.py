@@ -8,7 +8,7 @@ import datetime
 
 
 class Menu(models.Model):
-    menu_type    = models.CharField(max_length=60, null=True)
+    menu_type    = models.CharField(max_length=60, null=True, unique=True)
     date_created = models.DateField(null=True)
     last_edited  = models.DateField(null=True)
     def __str__(self):
@@ -22,10 +22,10 @@ class Restaurant(models.Model):
         return self.name
 
 class Meal(models.Model):
-    menu        = models.ForeignKey(Menu, related_name='menu', on_delete=models.CASCADE, null=True, unique=True)
+    menu        = models.ForeignKey(Menu, related_name='meals', on_delete=models.CASCADE, null=True, unique=False)
     name        = models.CharField(max_length=100, null=False)
     description = models.CharField(max_length=300, null=True)      
-    cost        = models.FloatField(null=True)
+    price       = models.FloatField(null=True)
     def __str__(self):
         return self.name
 
@@ -61,12 +61,12 @@ class Reward(models.Model):
 
 class Booking(models.Model):
     ID               = models.AutoField(primary_key=True)
-    customer         = models.ForeignKey(User, related_name='bookings', null=False, on_delete=models.PROTECT, unique=True)
+    customer         = models.ForeignKey(User, related_name='bookings', null=False, on_delete=models.PROTECT, unique=False)
     restaurant       = models.ForeignKey(Restaurant, related_name='bookings', null=False, on_delete=models.PROTECT)
     date             = models.DateField()
     time             = models.TimeField()
     number_of_people = models.IntegerField(null=True)
-    cost             = models.DecimalField(null=True, decimal_places=2, max_digits=7)
+    price            = models.DecimalField(null=True, decimal_places=2, max_digits=7)
     is_active        = models.BooleanField(default=True)
     is_breakfast     = models.BooleanField(default=False)
     is_lunch         = models.BooleanField(default=False)
