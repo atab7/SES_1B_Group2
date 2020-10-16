@@ -38,12 +38,13 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 class MakeBooking extends React.Component{
     constructor(props){
         super();
-
+        
+        const today = new Date();
         this.state = {
             selected_restaurant: 0,
             booking_daytime: '',
             numpeople: 1,
-            date: '',
+            date: today.toISOString().split('T')[0],
             time: 0,
             menuSelected: [],
             menurows: [],
@@ -169,7 +170,7 @@ class MakeBooking extends React.Component{
               <DateSelecter updateParentState={this.selectDate}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TimeSelecter daytime={this.state.booking_daytime} updateParentState={this.selectTime}/>
+              <TimeSelecter date={this.state.date} daytime={this.state.booking_daytime} updateParentState={this.selectTime}/>
             </Grid>
             <Grid item xs={12}>
               <Button variant="outlined" fullWidth onClick={this.setMenuOpen}>Add Menu Items</Button>
@@ -470,29 +471,68 @@ class TimeSelecter extends React.Component{
         this.setListItems = this.setListItems.bind(this);
     }
 
+    toTwelveHourFormat(hour){
+      if(hour === 0){
+        return '12 AM';
+      }
+      if(hour === 12){
+        return '12 PM';
+      }
+      if(hour > 12){
+        return (hour - 12).toString().concat(' PM')
+      }else{
+        return hour.toString().concat(' AM');
+      }
+    }
+
+    listHours(starthour, endhour){
+      let date = new Date();
+      var today = date.toISOString().split('T')[0];
+      var now = date.getHours();
+      var hour = starthour;
+      if(today === this.props.date){
+        hour = date.getHours()+1;
+        if(hour < 8){
+          hour = 8;
+        }else if(hour === 8){
+          hour = 9;
+        }
+      }
+
+      var JSXs = [];
+      for(let i = hour; i <= endhour; i++){
+        JSXs.push(<MenuItem value={i}>{this.toTwelveHourFormat(i)}</MenuItem>);
+      }
+      return JSXs;
+    }
+
     setListItems(){
+      this.listHours();
         if(this.props.daytime === 'Breakfast'){
-            return(
+            return this.listHours(8, 11);
+            /*(
                 [
                 <MenuItem value={8}>8 AM</MenuItem>,
                 <MenuItem value={9}>9 AM</MenuItem>,
                 <MenuItem value={10}>10 AM</MenuItem>,
                 <MenuItem value={11}>11 AM</MenuItem>,
                 ]
-            )
+            )*/
 
         }else if(this.props.daytime === 'Lunch'){
-            return(
+            return this.listHours(12, 15);
+            /*(
                 [
                     <MenuItem value={12}>12 PM</MenuItem>,
                     <MenuItem value={13}>1 PM</MenuItem>,
                     <MenuItem value={14}>2 PM</MenuItem>,
                     <MenuItem value={15}>3 PM</MenuItem>,
                 ]
-            )
+            )*/
 
         }else if(this.props.daytime === 'Dinner'){
-            return(
+            return this.listHours(17, 22);
+            /*(
                 [
                     <MenuItem value={17}>5 PM</MenuItem>,
                     <MenuItem value={18}>6 PM</MenuItem>,
@@ -501,7 +541,7 @@ class TimeSelecter extends React.Component{
                     <MenuItem value={21}>9 PM</MenuItem>,
                     <MenuItem value={22}>10 PM</MenuItem>,
                 ]
-            )
+            )*/
 
         }
     }
