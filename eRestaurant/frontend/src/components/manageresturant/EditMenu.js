@@ -13,27 +13,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import {Box} from '@material-ui/core';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 export default class EditMenu extends React.Component {
     constructor(props){
         super();
 
         this.state= {
-            menuItems:false,
         }
-    
-        this.setMenuOpen = this.setMenuOpen.bind(this);
-        this.setMenuClose = this.setMenuClose.bind(this);
-    }
-    setMenuOpen(evt){
-        this.setState({
-        menuItems: true
-        })
-    }
-    setMenuClose(evt){
-        this.setState({
-        menuItems: false
-        })
     }
 
     render(){
@@ -42,29 +30,83 @@ export default class EditMenu extends React.Component {
             <Container maxWidth="lg">
                 <Paper>
                 <b><p   style={{textAlign: 'center', fontSize:'24px', paddingTop:'12px'}}>Active Menus</p></b>
+                <Select
+                style={{width:'265px'}}
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                //value={}
+                //onChange={}
+                label="Select Menu"
+                fullWidth
+                >
+                <MenuItem value={"Breakfast"}>Breakfast</MenuItem>
+                <MenuItem value={"Lunch"}>Lunch</MenuItem>
+                <MenuItem value={"Dinner"}>Dinner</MenuItem>
+                </Select>
                 <TableContainer >
                     <Table aria-label="simple table">
                         <TableHead>
                         <TableRow>
-                            <TableCell align="center">Menu ID</TableCell>
-                            <TableCell align="center">Menu Name</TableCell>
-                            <TableCell align="center">Menu Items</TableCell>
-                            <TableCell align="center">Delete Menu</TableCell>
+                            <TableCell align="center">Menu Item Name</TableCell>
+                            <TableCell align="center">Menu Price</TableCell>
+                            <TableCell align="center">Menu Description</TableCell>
+                            <TableCell align="center">Menu Item</TableCell>
                         </TableRow>
                         </TableHead>
 
                         <TableBody>
                         <TableRow>
-                            <TableCell align="center">1</TableCell>
-                            <TableCell align="center">Breakfast</TableCell>
+                            <TableCell align="center">Burger</TableCell>
+                            <TableCell align="center">description</TableCell>
+                            <TableCell align="center">100</TableCell>
                             <TableCell align="center">
                                 <Button 
                                 variant="outlined" 
                                 style ={{color:'#424242'}}
                                 fullWidth
-                                onClick={this.setMenuOpen}
                                 >
-                                View</Button>
+                                Delete</Button>
+                            </TableCell>
+                            <TableCell align="center">
+                                <Button 
+                                variant="outlined" 
+                                style ={{color:'#424242'}}
+                                fullWidth>
+                                Confirm</Button>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell align="center">
+                                <TextField 
+                                id="MealName" 
+                                label="Menu Item Name" 
+                                variant="outlined" 
+                                fullWidth
+                                 />
+                            </TableCell>
+                            <TableCell align="center">
+                            <TextField 
+                                id="MealPrice" 
+                                label="Menu Item Price" 
+                                variant="outlined" 
+                                fullWidth
+                                 />
+                            </TableCell>
+                            <TableCell align="center">
+                                <TextField 
+                                id="MealDescription" 
+                                label="Menu Item Description" 
+                                variant="outlined" 
+                                fullWidth
+                                />
+                            </TableCell>
+                            <TableCell align="center">
+                                <Button 
+                                variant="outlined" 
+                                style ={{color:'#424242'}}
+                                fullWidth
+                                >
+                                Add</Button>
                             </TableCell>
                             <TableCell align="center">
                                 <Button 
