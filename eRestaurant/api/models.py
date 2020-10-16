@@ -7,19 +7,19 @@ import datetime
 #discord API integration
 
 
-class Menu(models.Model):
-    menu_type    = models.CharField(max_length=60, null=True, unique=True)
-    date_created = models.DateField(null=True)
-    last_edited  = models.DateField(null=True)
-    def __str__(self):
-        return self.menu_type
-
 class Restaurant(models.Model):
     name       = models.CharField(max_length=100, null=True)
     address    = models.CharField(max_length=200, null = True)
     open_hours = models.CharField(max_length=100, null=True)
     def __str__(self):
         return self.name
+
+class Menu(models.Model):
+    menu_type    = models.CharField(max_length=60, null=True, unique=True)
+    date_created = models.DateField(null=True)
+    last_edited  = models.DateField(null=True)
+    def __str__(self):
+        return self.menu_type
 
 class Meal(models.Model):
     menu        = models.ForeignKey(Menu, related_name='meals', on_delete=models.CASCADE, null=True, unique=False)
@@ -56,6 +56,7 @@ class Reward(models.Model):
     valid_until    = models.DateField(null=True) 
     points_percent = models.IntegerField(null=True)
     is_valid       = models.BooleanField(default=True)
+    restaurant     = models.ForeignKey(Restaurant, related_name='rewards', on_delete=models.CASCADE, null=True, unique=False)
     def __str__(self):
         return self.code
 

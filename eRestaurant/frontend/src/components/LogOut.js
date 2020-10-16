@@ -15,6 +15,9 @@ export default class LogOut extends Component {
     
     logout(){
         localStorage.clear('auth_token');
+        localStorage.clear('user_type');
+        localStorage.clear('username');
+        localStorage.clear('is_auth');
         this.setState({navigate:true});
     }
 

@@ -18,7 +18,12 @@ class manager_reward_viewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         #print(self.reverse_action(self.set_inactive.url_name, args=['1']))
-        return Reward.objects.filter(is_valid=True)
+        try:
+            manager = Staff.objects.get(user=self.request.user)
+            return Reward.objects.filter(is_valid=True, restaurant=manager.restaurant)
+        except Exception as e:
+            print(e)
+            return Staff.objects.none()
 
     @action(detail=True, methods=['patch'], permission_classes=[permissions.IsAuthenticated],
             url_path='remove-reward', url_name='remove_reward')
@@ -30,9 +35,16 @@ class manager_reward_viewset(viewsets.ModelViewSet):
         instance.save()
         return Response(status=status.HTTP_200_OK)
 
-    def perform_create(self, serializer):
-        serializer.save()
-
+    def create(self, request):
+        try:
+            reward_info = self.request.data
+            manager = Staff.objects.get(user=self.request.user)
+            new_reward = Reward(code=reward_info["code"], points_percent=reward_info['points_percent'], restaurant=manager.restaurant)
+            new_reward.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class edit_user_viewset(viewsets.ModelViewSet):
     serializer_class = user_serializer
@@ -66,7 +78,8 @@ class edit_user_viewset(viewsets.ModelViewSet):
                 else:
                     pass
             return Response(status=status.HTTP_200_OK)
-        except:
+        except Exception as e:
+            print(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class edit_staff_viewset(viewsets.ModelViewSet):
@@ -110,7 +123,7 @@ class edit_customer_viewset(viewsets.ModelViewSet):
         account = None
         try:
             account = Customer.objects.filter(user=self.request.user)[0]
-        except:
+        except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         try:
