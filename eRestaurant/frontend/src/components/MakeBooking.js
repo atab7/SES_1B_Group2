@@ -46,7 +46,8 @@ class MakeBooking extends React.Component{
             date: '',
             time: 0,
             menuSelected: [],
-            menurows: []
+            menurows: [],
+            discount_percentage: 0.0
         };
         this.selectRestaurant = this.selectRestaurant.bind(this);
         this.selectDayTime = this.selectDayTime.bind(this);
@@ -56,6 +57,13 @@ class MakeBooking extends React.Component{
         this.selectMenu = this.selectMenu.bind(this);
         this.setMenuRows = this.setMenuRows.bind(this);
         this.makeBooking = this.makeBooking.bind(this);
+        this.setDiscountPercentage = this.setDiscountPercentage.bind(this);
+    }
+
+    setDiscountPercentage(discountPercentage){
+      this.setState({
+        discount_percentage: discountPercentage
+      });
     }
 
     selectRestaurant(restaurant_id){
@@ -110,7 +118,8 @@ class MakeBooking extends React.Component{
         number_of_people: this.state.numpeople,
         day_time: this.state.booking_daytime,
         orders: this.state.menuSelected,
-        customer: 'def_customer'
+        customer: 'def_customer',
+        discount_percentage: this.state.discount_percentage
       },
       {
         headers:{ 
@@ -130,10 +139,85 @@ class MakeBooking extends React.Component{
         <DateSelecter updateParentState={this.selectDate}/>
         <TimeSelecter daytime={this.state.booking_daytime} updateParentState={this.selectTime}/>
         <Menu updateParentState={this.selectMenu} rows={this.state.menurows}/>
-        <SelectedItemsTable menuSelected={this.state.menuSelected} />
+        <SelectedItemsTable menuSelected={this.state.menuSelected} discount_percentage={this.state.discount_percentage}/>
+        <ApplyReward updateParentState={this.setDiscountPercentage}/>
         <Button color="primary" onClick={this.makeBooking}>Book</Button>
         </div>);
     }
+}
+
+class ApplyReward extends React.Component {
+  constructor(props){
+    super();
+
+    this.setRewardCode = this.setRewardCode.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+
+    this.state = {
+      rewards:[],
+      reward_code: ''
+    }
+  }
+
+  setRewards(){
+    axios.get(`${axios_config["baseURL"]}api/manageRewards/`, 
+        {
+            headers:{
+                'Authorization': `Token ${localStorage.getItem('auth_token')}`
+            }
+        })
+        .then((response) => {
+            try{
+                var response_rewards = response.data;
+                this.setState({
+                    rewards: response_rewards,
+                })    
+            }catch (e) {
+                this.setState({
+                    rewards: [],
+                }) 
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+  }
+
+  componentDidMount(){
+    this.setRewards();
+  }
+  
+  setRewardCode(evt){
+    this.setState({
+      reward_code: evt.target.value
+    });
+  }
+
+  handleClick(evt){
+    var reward;
+    for(reward of this.state.rewards){
+      if(reward.code === this.state.reward_code){
+        this.props.updateParentState(reward.points_percent/100);
+        break;
+      }
+    }
+  }
+
+  render(){
+    return( 
+      <div>
+      <TextField
+        placeholder="Enter Reward Code Here"
+        fullWidth
+        id="Reward" 
+        label="Reward" 
+        onChange = {this.setRewardCode}
+        variant="outlined" />
+        <Button color="primary" onClick={this.handleClick} >Apply Reward</Button>
+      </div>
+      );
+  }
+
 }
 
 class SetMenu extends React.Component{
@@ -838,7 +922,22 @@ const ContinuousSlider = (props) => {
 
 
   const SelectedItemsTable = (props) => {
-    const menuOrderTotal = props.menuSelected.reduce((totalPrice, price) => totalPrice + parseInt(price.price, 10), 0);
+    var menuOrderTotal = props.menuSelected.reduce((totalPrice, price) => totalPrice + parseInt(price.price, 10), 0);
+
+    const setTotalDisplayPrice = (menuOrderTotal) => {
+      if(props.discount_percentage){
+        return (
+          <div>
+            <h1>Total: ${menuOrderTotal}</h1>
+            <h1>After Reward: ${menuOrderTotal - (menuOrderTotal*props.discount_percentage)} </h1>
+          </div>
+        );
+      }else{
+        return (
+          <h1>Total: ${menuOrderTotal}</h1>
+        );
+      }
+    }
 
     return (
     <div>
@@ -871,7 +970,7 @@ const ContinuousSlider = (props) => {
             </Table>
         </TableContainer>
         <Typography>
-                        <h1>Total: ${menuOrderTotal}</h1>
+            {setTotalDisplayPrice(menuOrderTotal)}
         </Typography>
       </div>
       );
