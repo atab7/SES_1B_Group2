@@ -130,6 +130,9 @@ export default class HomePage extends React.Component {
     this.setBookingClose = this.setBookingClose.bind(this);
     this.closeBookingAvailable = this.closeBookingAvailable.bind(this);
     this.closeEmailConfirmed = this.closeEmailConfirmed.bind(this);
+    this.setBookNowButton = this.setBookNowButton.bind(this);
+    this.confirmedCheck = this.confirmedCheck.bind(this);
+    this.isAuth = this.isAuth.bind(this);
   }
   closeBookingAvailable() {
     this.setState({
@@ -177,7 +180,8 @@ export default class HomePage extends React.Component {
   })
     .then((response) => {
       if(response.data.length){
-        var is_confirmed = response.data[0].is_confirmed
+        var is_confirmed = response.data[0].is_confirmed;
+        localStorage.setItem('is_confirmed', is_confirmed);
         this.setState({
           emailConfirmed: is_confirmed,
         });
@@ -219,6 +223,22 @@ export default class HomePage extends React.Component {
     }
   }
 
+  setBookNowButton(){
+    if(this.isAuth() && localStorage.getItem('is_confirmed') === false){
+      return (<RegButton size="large">Book Now</RegButton>);
+    }else{
+      return (<RegButton size="large" onClick={this.setBookingOpen} >Book Now</RegButton>);
+    }
+  }
+
+  confirmedCheck(){
+    if(this.isAuth() && localStorage.getItem('is_confirmed') === false){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
   render()
   {
       
@@ -235,7 +255,7 @@ export default class HomePage extends React.Component {
                       <HomepageTabs/>
 
                       <Box p={1}>
-                      <RegButton size="large" onClick={this.setBookingOpen} >Book Now</RegButton>
+                      {this.setBookNowButton()}
                       <Dialog open={this.state.booking} onClose={this.setBookingClose} aria-labelledby="form-dialog-title">
                         <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>I'd Like To Book</DialogTitle>
                         <MakeBooking updateParentState={this.setBookingClose}/>
@@ -251,14 +271,14 @@ export default class HomePage extends React.Component {
 
                       
                   </Box>
-                  <Snackbar open={!(this.state.emailConfirmed)} autoHideDuration={10000} onClose={this.closeEmailConfirmed}>
+                  <Snackbar open={this.confirmedCheck()} autoHideDuration={10000} onClose={this.closeEmailConfirmed}>
                     <Alert severity="error" > 
                       Please confirm your email before making a booking. Please check your inbox for a confirmation mail.
                     </Alert>
                 </Snackbar>
                 <Snackbar open={this.state.bookingAvailable} autoHideDuration={10000} onClose={this.closeBookingAvailable}>
                     <Alert severity="error" onClose={this.closeBookingAvailable}> 
-                      Please login and confirm your email to make a booking.
+                      {this.isAuth() ? 'Please confirm your email before making a booking. Please check your inbox for a confirmation mail.' :'Please login to make a booking.'}
                     </Alert>
                 </Snackbar>
               </Container>

@@ -68,25 +68,12 @@ export default class ManagerBooking extends React.Component {
         return(
         <TableBody>
             <TableRow>
-            <TableCell>{booking.ID}</TableCell>
+                <TableCell>{booking.ID}</TableCell>
                 <TableCell align="center">{booking.number_of_people}</TableCell>
                 <TableCell align="center">{this.toReadableDateString(booking.date)}</TableCell>
                 <TableCell align="center">{booking.time.substring(0, booking.time.length -3)}</TableCell>
-                <TableCell align="center">$200</TableCell>
-                <TableCell align="center">
-                    <Button 
-                    variant="outlined" 
-                    style ={{color:'#424242'}}
-                    fullWidth>
-                    View</Button></TableCell>
-                    <TableCell align="center">
-                    <Button 
-                    variant="outlined" 
-                    style ={{color:'#424242'}}
-                    fullWidth>
-                    Send </Button></TableCell>
             </TableRow>
-            </TableBody>);
+        </TableBody>);
 
     }
 
@@ -115,9 +102,6 @@ export default class ManagerBooking extends React.Component {
                             <TableCell align="center">Number of People</TableCell>
                             <TableCell align="center">Date</TableCell>
                             <TableCell align="center">Time</TableCell>
-                            <TableCell align="center">Total Cost</TableCell>
-                            <TableCell align="center">Menu Items</TableCell>
-                            <TableCell algin="center">Invoice</TableCell>
                         </TableRow>
                         </TableHead>
 

@@ -134,12 +134,14 @@ export default class Login extends React.Component {
           const is_manager = response.data[0].is_manager;
           if(!is_manager){
             localStorage.setItem('user_type', 'staff');
+            localStorage.setItem('is_confirmed', true);
             this.setState({
               email_check: true
             });
             
           }else{
             localStorage.setItem('user_type', 'manager');
+            localStorage.setItem('is_confirmed', true);
             this.setState({
               email_check: true
             });
