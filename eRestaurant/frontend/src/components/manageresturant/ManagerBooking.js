@@ -79,6 +79,12 @@ export default class ManagerBooking extends React.Component {
                     style ={{color:'#424242'}}
                     fullWidth>
                     View</Button></TableCell>
+                    <TableCell align="center">
+                    <Button 
+                    variant="outlined" 
+                    style ={{color:'#424242'}}
+                    fullWidth>
+                    Send </Button></TableCell>
             </TableRow>
             </TableBody>);
 
@@ -111,6 +117,7 @@ export default class ManagerBooking extends React.Component {
                             <TableCell align="center">Time</TableCell>
                             <TableCell align="center">Total Cost</TableCell>
                             <TableCell align="center">Menu Items</TableCell>
+                            <TableCell algin="center">Invoice</TableCell>
                         </TableRow>
                         </TableHead>
 
