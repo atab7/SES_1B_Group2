@@ -70,6 +70,7 @@ class Booking(models.Model):
     time             = models.TimeField()
     number_of_people = models.IntegerField(null=True)
     price            = models.DecimalField(null=True, decimal_places=2, max_digits=7)
+    reward           = models.CharField(null=True, max_length=60)
     is_active        = models.BooleanField(default=True)
     is_breakfast     = models.BooleanField(default=False)
     is_lunch         = models.BooleanField(default=False)

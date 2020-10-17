@@ -115,9 +115,10 @@ export default class CustomerBooking extends React.Component {
                     fullWidth
                     onClick={this.setMenuOpen}
                     >
-                    View
+                    View Invoice
                     </Button>
-                    <BookingDetails booking_id={booking.ID} setMenuClose={this.setMenuClose} menuItems={this.state.menuItems}/>
+                    
+                    <BookingDetails booking={booking} setMenuClose={this.setMenuClose} menuItems={this.state.menuItems}/>
                 </TableCell>
                 <TableCell align="center">
                     <CancelBooking date={this.state.date} booking_id={booking.ID} updateParentState={this.updateState}/>
@@ -143,7 +144,7 @@ export default class CustomerBooking extends React.Component {
                             <TableCell align="center">Date</TableCell>
                             <TableCell align="center">Time</TableCell>
                             <TableCell align="center">Restaurant</TableCell>
-                            <TableCell align="center">Selected Menu Items</TableCell>
+                            <TableCell align="center">Invoice</TableCell>
                             <TableCell align="center">Cancel Booking</TableCell>
                         </TableRow>
                         </TableHead>
@@ -243,7 +244,7 @@ class BookingDetails extends React.Component {
     }
 
     getOrders(){
-        axios.get(`${axios_config["baseURL"]}api/orders/?booking=${this.props.booking_id}`, 
+        axios.get(`${axios_config["baseURL"]}api/orders/?booking=${this.props.booking.ID}`, 
         {
             headers: { 'Authorization': `Token ${localStorage.getItem('auth_token')}`}
         })
@@ -258,11 +259,10 @@ class BookingDetails extends React.Component {
         this.getOrders();
     }
     
-
     render(){
         return(
             <Dialog open={this.props.menuItems} onClose={this.props.setMenuClose} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>Selected Menu Items</DialogTitle>
+                    <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>Invoice For Booking</DialogTitle>
                     <TableContainer >
                     <Table aria-label="simple table">
                         <TableHead>
@@ -277,7 +277,10 @@ class BookingDetails extends React.Component {
                         </TableBody>
                     </Table>
                     </TableContainer>
+                    <h3>Total Price: {this.props.booking.price} </h3>
+                    <h3>Reward Applied: {this.props.booking.reward} </h3>
                     <DialogActions>
+                        <Button onClick={() => window.print()}>PRINT</Button>
                         <Button onClick={this.props.setMenuClose} color="primary">
                             Close
                         </Button>

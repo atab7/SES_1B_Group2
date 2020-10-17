@@ -49,8 +49,9 @@ class MakeBooking extends React.Component{
             time: 0,
             menuSelected: [],
             menurows: [],
-            discount_percentage: 0.0,
-            menuOpen:false
+            discount_percentage: 0,
+            discount_code: '',
+            menuOpen: false
         };
         this.selectRestaurant = this.selectRestaurant.bind(this);
         this.selectDayTime = this.selectDayTime.bind(this);
@@ -63,11 +64,18 @@ class MakeBooking extends React.Component{
         this.setDiscountPercentage = this.setDiscountPercentage.bind(this);
         this.setMenuOpen = this.setMenuOpen.bind(this);
         this.setMenuClose = this.setMenuClose.bind(this);
+        this.setDiscountCode = this.setDiscountCode.bind(this);
     }
 
     setDiscountPercentage(discountPercentage){
       this.setState({
         discount_percentage: discountPercentage
+      });
+    }
+
+    setDiscountCode(discountCode){
+      this.setState({
+        discount_code: discountCode
       });
     }
 
@@ -142,7 +150,8 @@ class MakeBooking extends React.Component{
         day_time: this.state.booking_daytime,
         orders: this.state.menuSelected,
         customer: 'def_customer',
-        discount_percentage: this.state.discount_percentage
+        discount_percentage: this.state.discount_percentage,
+        discount_code: this.state.discount_code
       },
       {
         headers:{ 
@@ -190,7 +199,7 @@ class MakeBooking extends React.Component{
             <Grid item xs={12}>
               <SelectedItemsTable menuSelected={this.state.menuSelected} discount_percentage={this.state.discount_percentage}/>
             </Grid>
-              <ApplyReward restaurant={this.state.selected_restaurant} updateParentState={this.setDiscountPercentage}/>
+              <ApplyReward restaurant={this.state.selected_restaurant} updateDiscountPercentage={this.setDiscountPercentage} updateDiscountCode={this.setDiscountCode}/>
             <Grid item xs={12}>
               <Button variant="outlined" fullWidth onClick={this.makeBooking}>Create Booking</Button>
             </Grid>
@@ -277,7 +286,8 @@ class ApplyReward extends React.Component {
     var found = false;
     for(reward of this.state.rewards){
       if(reward.code === this.state.reward_code){
-        this.props.updateParentState(reward.points_percent/100);
+        this.props.updateDiscountPercentage(reward.points_percent/100);
+        this.props.updateDiscountCode(this.state.reward_code);
         found = true;
         break;
       }

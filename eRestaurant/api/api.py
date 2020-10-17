@@ -249,8 +249,16 @@ class booking_viewset(viewsets.ModelViewSet):
             total_price = 0 
             for order in booking_info['orders']:
                 total_price = total_price + order['price']
+            
+            if booking_info['discount_percentage'] != 0:
+                total_price = total_price - (total_price*booking_info['discount_percentage'])
+            
+            discount_code = 'No Reward'
+            if booking_info['discount_code'] != '':
+                discount_code = booking_info['discount_code']
 
-            new_booking = Booking(restaurant_name=restaurant.name, price=total_price, is_breakfast=is_breakfast, is_lunch=is_lunch, is_dinner=is_dinner, number_of_people=booking_info['number_of_people'], time=datetime.strptime(booking_info['time'], '%H:%M'), customer=self.request.user, restaurant=restaurant, date=datetime.strptime(booking_info['date'], '%Y-%m-%d'))
+
+            new_booking = Booking(reward=discount_code, restaurant_name=restaurant.name, price=total_price, is_breakfast=is_breakfast, is_lunch=is_lunch, is_dinner=is_dinner, number_of_people=booking_info['number_of_people'], time=datetime.strptime(booking_info['time'], '%H:%M'), customer=self.request.user, restaurant=restaurant, date=datetime.strptime(booking_info['date'], '%Y-%m-%d'))
             new_booking.save()
             
             for order in booking_info['orders']:
