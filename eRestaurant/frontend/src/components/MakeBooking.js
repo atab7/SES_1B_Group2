@@ -39,12 +39,13 @@ class MakeBooking extends React.Component{
     constructor(props){
         super();
         
-        const today = new Date();
+        const date = new Date();
+        const today = new Date(date.toLocaleDateString("en-US", {timeZone: "Australia/Sydney"}));
         this.state = {
             selected_restaurant: 0,
             booking_daytime: '',
             numpeople: 1,
-            date: today.toISOString().split('T')[0],
+            date: today.toLocaleDateString('fr-CA'),
             time: 0,
             menuSelected: [],
             menurows: [],
@@ -149,6 +150,17 @@ class MakeBooking extends React.Component{
             'X-CSRFToken': csrftoken
         }
     })
+    .then((response) => {
+      alert("Booking Made! Bon Appétit!");
+    })
+    .catch((error) => {
+      if(error.response.status === 406){
+        alert("You already have a booking for the service time (breakfast, dinner or lunch) of the date you have selected in this restaurant.");
+      }
+      if(error.response.status === 451){
+        alert("The restaurant is full capacity during selected date and time.");
+      }
+    })
   }
     }
     
@@ -173,7 +185,7 @@ class MakeBooking extends React.Component{
               <TimeSelecter date={this.state.date} daytime={this.state.booking_daytime} updateParentState={this.selectTime}/>
             </Grid>
             <Grid item xs={12}>
-              <Button variant="outlined" fullWidth onClick={this.setMenuOpen}>Add Menu Items</Button>
+              <Button variant="outlined" fullWidth onClick={this.setMenuOpen}>Select Orders Now</Button>
             </Grid>
             <Grid item xs={12}>
               <SelectedItemsTable menuSelected={this.state.menuSelected} discount_percentage={this.state.discount_percentage}/>
@@ -190,7 +202,7 @@ class MakeBooking extends React.Component{
               <Menu updateParentState={this.selectMenu} rows={this.state.menurows}/>
                 <DialogActions>
                   <Button onClick={this.setMenuClose} color="primary">
-                    Cancel
+                    COMPLETE
                   </Button>  
                 </DialogActions>
                 </Container>
@@ -442,9 +454,17 @@ class DateSelecter extends React.Component {
         this.props.updateParentState(date);
     }
 
+    getAussieISODateString(){
+      const date = new Date();
+      const today = new Date(date.toLocaleDateString("en-US", {timeZone: "Australia/Sydney"}));
+      return today.toLocaleDateString('fr-CA');
+    }
+
     render(){
-      const todayDate = new Date().toISOString().slice(0,10);
-      console.log(todayDate);
+      const todayDate = this.getAussieISODateString();
+      
+      //console.log(todayDate);
+      //console.log(today.toLocaleDateString("en-US", {timeZone: "Australia/Sydney"}));
         return (
             <TextField
                 fullWidth
@@ -485,17 +505,24 @@ class TimeSelecter extends React.Component{
       }
     }
 
+    getAussieISODateString(){
+      const date = new Date();
+      const today = new Date(date.toLocaleDateString("en-US", {timeZone: "Australia/Sydney"}));
+      return today.toLocaleDateString('fr-CA');
+    }
+
     listHours(starthour, endhour){
       let date = new Date();
-      var today = date.toISOString().split('T')[0];
+      var today = this.getAussieISODateString();
       var now = date.getHours();
+      
       var hour = starthour;
       if(today === this.props.date){
         hour = date.getHours()+1;
-        if(hour < 8){
-          hour = 8;
-        }else if(hour === 8){
-          hour = 9;
+        if(hour < starthour){
+          hour = starthour;
+        }else if(hour === starthour){
+          hour = starthour+1;
         }
       }
 
@@ -509,39 +536,13 @@ class TimeSelecter extends React.Component{
     setListItems(){
       this.listHours();
         if(this.props.daytime === 'Breakfast'){
-            return this.listHours(8, 11);
-            /*(
-                [
-                <MenuItem value={8}>8 AM</MenuItem>,
-                <MenuItem value={9}>9 AM</MenuItem>,
-                <MenuItem value={10}>10 AM</MenuItem>,
-                <MenuItem value={11}>11 AM</MenuItem>,
-                ]
-            )*/
+          return this.listHours(8, 11);
 
         }else if(this.props.daytime === 'Lunch'){
-            return this.listHours(12, 15);
-            /*(
-                [
-                    <MenuItem value={12}>12 PM</MenuItem>,
-                    <MenuItem value={13}>1 PM</MenuItem>,
-                    <MenuItem value={14}>2 PM</MenuItem>,
-                    <MenuItem value={15}>3 PM</MenuItem>,
-                ]
-            )*/
+          return this.listHours(12, 15);
 
         }else if(this.props.daytime === 'Dinner'){
-            return this.listHours(17, 22);
-            /*(
-                [
-                    <MenuItem value={17}>5 PM</MenuItem>,
-                    <MenuItem value={18}>6 PM</MenuItem>,
-                    <MenuItem value={19}>7 PM</MenuItem>,
-                    <MenuItem value={20}>8 PM</MenuItem>,
-                    <MenuItem value={21}>9 PM</MenuItem>,
-                    <MenuItem value={22}>10 PM</MenuItem>,
-                ]
-            )*/
+          return this.listHours(17, 22);
 
         }
     }

@@ -121,6 +121,7 @@ export default class HomePage extends React.Component {
       booking:false,
       emailConfirmed:true,
       bookingAvailable:false,
+      emailConfirmed2:false,
     }
 
     //Binds
@@ -146,17 +147,19 @@ export default class HomePage extends React.Component {
     })
   }
   setBookingOpen(){
-    if (this.isAuth() || this.emailConfirmed==='true')
+    console.log(this.isAuth());
+    console.log(this.state.emailConfirmed);
+    if (this.isAuth()==true && this.state.emailConfirmed==true)
     {
       this.setState({
         booking: true
-      })
+      });
     }
     else {
       {
         this.setState({
           bookingAvailable:true
-        })
+        });
       }
   }
   }
@@ -164,12 +167,6 @@ export default class HomePage extends React.Component {
     this.setState({
       booking: false
     })
-  }
-  setEmailConfirmed(){
-    this.setState({
-      emailConfirmed:true
-    }
-  )
   }
 
   isConfirmed(){
@@ -270,7 +267,7 @@ export default class HomePage extends React.Component {
                       
                   </Box>
                   <Snackbar open={!(this.state.emailConfirmed)} autoHideDuration={10000} onClose={this.closeEmailConfirmed}>
-                    <Alert severity="error" onClose={this.closeEmailConfirmed}> 
+                    <Alert severity="error" > 
                       Please confirm your email before making a booking. Please check your inbox for a confirmation mail.
                     </Alert>
                 </Snackbar>

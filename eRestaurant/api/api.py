@@ -198,7 +198,7 @@ class customer_booking_viewset(viewsets.ModelViewSet):
         try:
             return Booking.objects.filter(date=date, customer=self.request.user, is_active=True)
         except:
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Booking.objects.none()
 
     @action(detail=True, methods=['patch'], permission_classes=[permissions.IsAuthenticated],
             url_path='cancel-booking', url_name='cancel_booking')
@@ -234,11 +234,23 @@ class booking_viewset(viewsets.ModelViewSet):
             elif booking_info['day_time'] == 'Dinner':
                 is_lunch = True
 
+            past_user_bookings = Booking.objects.filter(customer=self.request.user, restaurant=restaurant, date=datetime.strptime(booking_info['date'], '%Y-%m-%d'), is_breakfast=is_breakfast, is_lunch=is_lunch, is_dinner=is_dinner)
+            if past_user_bookings.count() > 0:
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+            
+            current_bookings = Booking.objects.filter(restaurant=restaurant, date=datetime.strptime(booking_info['date'], '%Y-%m-%d'), time=datetime.strptime(booking_info['time'], '%H:%M'))
+            capacity = restaurant.capacity
+            total_people = 0
+            for booking in current_bookings:
+                total_people = total_people + booking.number_of_people
+                if total_people >= capacity:
+                    return Response(status=status.HTTP_451_UNAVAILABLE_FOR_LEGAL_REASONS)
+
             total_price = 0 
             for order in booking_info['orders']:
                 total_price = total_price + order['price']
 
-            new_booking = Booking(price=total_price, is_breakfast=is_breakfast, is_lunch=is_lunch, is_dinner=is_dinner, number_of_people=booking_info['number_of_people'], time=datetime.strptime(booking_info['time'], '%H:%M'), customer=self.request.user, restaurant=restaurant, date=datetime.strptime(booking_info['date'], '%Y-%m-%d'))
+            new_booking = Booking(restaurant_name=restaurant.name, price=total_price, is_breakfast=is_breakfast, is_lunch=is_lunch, is_dinner=is_dinner, number_of_people=booking_info['number_of_people'], time=datetime.strptime(booking_info['time'], '%H:%M'), customer=self.request.user, restaurant=restaurant, date=datetime.strptime(booking_info['date'], '%Y-%m-%d'))
             new_booking.save()
             
             for order in booking_info['orders']:
@@ -318,4 +330,30 @@ class menu_viewset(viewsets.ModelViewSet):
             return meals
         except:
             return Meal.objects.none()
+
+class order_viewset(viewsets.ModelViewSet):
+    serializer_class = order_serializer
+
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+    
+
+    def get_queryset(self):
+        booking_id = self.request.query_params.get('booking', None)
+        try:
+            booking = Booking.objects.get(pk=booking_id)
+            orders = Order.objects.filter(booking=booking)
+            meals = []
+            for order in orders:
+                meals.append(Meal.objects.filter(pk=order.meal.id))
+            
+            order_meals = Meal.objects.filter(pk=-1)
+            for meal in meals:
+                order_meals = order_meals | meal
+            
+            return order_meals
+        except Exception as e:
+            print(e)
+            return Order.objects.none()
         

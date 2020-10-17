@@ -32,10 +32,14 @@ export default class CustomerBooking extends React.Component {
         this.setMenuClose = this.setMenuClose.bind(this);
         this.getBookings = this.getBookings.bind(this);
         this.updateState = this.updateState.bind(this);
+        
+        const date = new Date();
+        const today = new Date(date.toLocaleDateString("en-US", {timeZone: "Australia/Sydney"}));
         this.state= {
             menuItems:false,
             bookings: [],
-            date: new Date()
+            date: today,
+            booking_viewed: {}
         }
     }
     setMenuOpen(evt){
@@ -73,8 +77,7 @@ export default class CustomerBooking extends React.Component {
     }
 
     dateToString(date){
-        var ISOdate = date.toISOString();
-        return ISOdate.substring(0, ISOdate.indexOf("T"));
+        return date.toLocaleDateString('fr-CA');
     }
 
     toReadableDateString(dateString){
@@ -104,6 +107,7 @@ export default class CustomerBooking extends React.Component {
                 <TableCell align="center">{booking.number_of_people}</TableCell>
                 <TableCell align="center">{this.toReadableDateString(booking.date)}</TableCell>
                 <TableCell align="center">{booking.time.substring(0, booking.time.length -3)}</TableCell>
+                <TableCell align="center">{booking.restaurant_name}</TableCell>
                 <TableCell align="center">
                     <Button 
                     variant="outlined" 
@@ -111,16 +115,17 @@ export default class CustomerBooking extends React.Component {
                     fullWidth
                     onClick={this.setMenuOpen}
                     >
-                    View</Button>
+                    View
+                    </Button>
+                    <BookingDetails booking_id={booking.ID} setMenuClose={this.setMenuClose} menuItems={this.state.menuItems}/>
                 </TableCell>
                 <TableCell align="center">
-                    <CancelBooking booking_id={booking.ID} updateParentState={this.updateState}/>
+                    <CancelBooking date={this.state.date} booking_id={booking.ID} updateParentState={this.updateState}/>
                 </TableCell>
+                
             </TableRow>
             </TableBody>);
     }
-
-
 
     render(){
         return (
@@ -137,6 +142,7 @@ export default class CustomerBooking extends React.Component {
                             <TableCell align="center">People</TableCell>
                             <TableCell align="center">Date</TableCell>
                             <TableCell align="center">Time</TableCell>
+                            <TableCell align="center">Restaurant</TableCell>
                             <TableCell align="center">Selected Menu Items</TableCell>
                             <TableCell align="center">Cancel Booking</TableCell>
                         </TableRow>
@@ -148,32 +154,7 @@ export default class CustomerBooking extends React.Component {
                 </TableContainer>
                 </Paper>
                 </Container>    
-                <Dialog open={this.state.menuItems} onClose={this.setMenuClose} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>Selected Menu Items</DialogTitle>
-                    <TableContainer >
-                    <Table aria-label="simple table">
-                        <TableHead>
-                        <TableRow>
-                            <TableCell align="center">Menu Item(s)</TableCell>
-                            <TableCell align="center">Cost</TableCell>
-                            <TableCell align="center">Quantity</TableCell>
-                        </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        <TableRow>
-                            <TableCell align="center">Cake</TableCell>
-                            <TableCell align="center">$12</TableCell>
-                            <TableCell align="center">1</TableCell>
-                        </TableRow>
-                        </TableBody>
-                    </Table>
-                    </TableContainer>
-                    <DialogActions>
-                        <Button onClick={this.setMenuClose} color="primary">
-                            Close
-                        </Button>
-                    </DialogActions>
-                </Dialog>
+                
             </div>
         )}
     
@@ -184,9 +165,29 @@ class CancelBooking extends React.Component {
     constructor(props){
         super();
         this.cancelBooking = this.cancelBooking.bind(this);
+
+        this.state = {
+            prev_date: new Date(props.date.getTime() - (1000 * 60 * 60 * 24))
+        };
+    }
+
+    componentDidUpdate(prevProps){
+        if(this.props.date !== prevProps.date){
+            this.setState({
+                prev_date: new Date(this.props.date.getTime() - (1000 * 60 * 60 * 24))
+            });
+        }
     }
 
     cancelBooking(){
+        
+        const date = new Date();
+        const today = new Date(date.toLocaleDateString("en-US", {timeZone: "Australia/Sydney"}));
+        if(this.state.prev_date.valueOf() <= today.valueOf()){
+            alert("There is 1 day or less to this booking. Our company policy prevents us from cancelling it. Sorry.");
+            return 0;
+        }
+
         const csrftoken = Cookies.get('csrftoken');
         axios.patch(`${axios_config["baseURL"]}api/customer-bookings/${this.props.booking_id}/cancel-booking/`, 
         {},
@@ -214,5 +215,74 @@ class CancelBooking extends React.Component {
         onClick={this.cancelBooking}
         >
         Cancel</Button>);
+    }
+}
+
+class BookingDetails extends React.Component {
+    constructor(props){
+        super();
+
+        this.state = {
+            orders: []
+        }
+    }
+
+    setDetailsJSX(){
+       var JSXs = [];
+       var order;
+       for(order of this.state.orders){
+       JSXs.push(
+        <TableRow>
+            <TableCell align="center">{order.name}</TableCell>
+            <TableCell align="center">{order.description}</TableCell>
+            <TableCell align="center">${order.price}</TableCell>
+        </TableRow>
+       );
+       }
+       return JSXs;
+    }
+
+    getOrders(){
+        axios.get(`${axios_config["baseURL"]}api/orders/?booking=${this.props.booking_id}`, 
+        {
+            headers: { 'Authorization': `Token ${localStorage.getItem('auth_token')}`}
+        })
+        .then((response) => {
+            this.setState({
+                orders: response.data
+            })
+        })
+    }
+
+    componentDidMount(){
+        this.getOrders();
+    }
+    
+
+    render(){
+        return(
+            <Dialog open={this.props.menuItems} onClose={this.props.setMenuClose} aria-labelledby="form-dialog-title">
+                    <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>Selected Menu Items</DialogTitle>
+                    <TableContainer >
+                    <Table aria-label="simple table">
+                        <TableHead>
+                        <TableRow>
+                            <TableCell align="center">Order</TableCell>
+                            <TableCell align="center">Description</TableCell>
+                            <TableCell align="center">Price</TableCell>
+                        </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {this.setDetailsJSX()}
+                        </TableBody>
+                    </Table>
+                    </TableContainer>
+                    <DialogActions>
+                        <Button onClick={this.props.setMenuClose} color="primary">
+                            Close
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+        );
     }
 }

@@ -20,9 +20,12 @@ router.register('edit-customer', edit_customer_viewset, 'edit-customer')
 router.register('staff', staff_viewset, 'staff')
 router.register('customer', customer_viewset, 'customer')
 router.register('validation', confirm_email_viewset, 'validation')
+router.register('orders', order_viewset, 'orders')
 router.register('menu', menu_viewset, 'menu')
 
 urlpatterns = router.urls
+
+
 
 
 #urlpatterns = [

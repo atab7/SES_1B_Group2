@@ -24,9 +24,12 @@ export default class ManagerBooking extends React.Component {
       this.setDate = this.setDate.bind(this);
       this.getBookings = this.getBookings.bind(this);
       this.toReadableDateString = this.toReadableDateString.bind(this);
+
+      const date = new Date();
+      const today = new Date(date.toLocaleDateString("en-US", {timeZone: "Australia/Sydney"}));
       this.state = {
           bookings: [],
-          date: new Date()
+          date: today
       };
     }
 
@@ -54,8 +57,7 @@ export default class ManagerBooking extends React.Component {
     }
 
     dateToString(date){
-        var ISOdate = date.toISOString();
-        return ISOdate.substring(0, ISOdate.indexOf("T"));
+        return date.toLocaleDateString('fr-CA');
     }
 
     toReadableDateString(dateString){

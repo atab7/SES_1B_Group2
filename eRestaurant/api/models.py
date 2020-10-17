@@ -11,6 +11,7 @@ class Restaurant(models.Model):
     name       = models.CharField(max_length=100, null=True)
     address    = models.CharField(max_length=200, null = True)
     open_hours = models.CharField(max_length=100, null=True)
+    capacity   = models.IntegerField(null=False, default=150)
     def __str__(self):
         return self.name
 
@@ -64,6 +65,7 @@ class Booking(models.Model):
     ID               = models.AutoField(primary_key=True)
     customer         = models.ForeignKey(User, related_name='bookings', null=False, on_delete=models.PROTECT, unique=False)
     restaurant       = models.ForeignKey(Restaurant, related_name='bookings', null=False, on_delete=models.PROTECT)
+    restaurant_name  = models.CharField(null=True, max_length=60)
     date             = models.DateField()
     time             = models.TimeField()
     number_of_people = models.IntegerField(null=True)

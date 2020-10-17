@@ -18,6 +18,7 @@ export default class LogOut extends Component {
         localStorage.clear('user_type');
         localStorage.clear('username');
         localStorage.clear('is_auth');
+        localStorage.clear('is_confirmed');
         this.setState({navigate:true});
     }
 

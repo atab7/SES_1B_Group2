@@ -183,7 +183,7 @@ function ClippedDrawer() {
               <ListItemText primary={"Change Password"}/>
             </ListItem>  
             </Link>
-            
+            {setCustomerBookings(classes)}
           </List>
 
         </div>

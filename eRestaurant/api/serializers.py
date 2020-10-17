@@ -38,3 +38,8 @@ class menu_serializer(serializers.ModelSerializer):
     class Meta:
         model = Meal
         fields = '__all__'
+
+class order_serializer(serializers.ModelSerializer):
+    class Meta:
+        model = Meal
+        fields = '__all__'

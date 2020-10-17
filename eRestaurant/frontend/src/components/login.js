@@ -44,7 +44,8 @@ export default class Login extends React.Component {
       auth_token:'',
       validLogin:false,
       login:false,
-      loaded: false
+      loaded: false,
+      email_check: false
     }
     this.setUsername = this.setUserName.bind(this);
     this.setPassword = this.setPassword.bind(this);
@@ -100,6 +101,26 @@ export default class Login extends React.Component {
 
   }
 
+  isEmailConfirmed(token){
+    axios.get(`${axios_config["baseURL"]}api/customer/` , {
+      headers:{
+          'Authorization': `Token ${token}`
+      }
+    })
+    .then((response) => {
+      if(response.data.length){
+        var is_confirmed = response.data[0].is_confirmed
+        localStorage.setItem('is_confirmed', is_confirmed);
+      }
+      this.setState({
+        email_check: true
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
   setUserType(token){
       axios.get(`${axios_config["baseURL"]}api/staff/`,
       {
@@ -113,11 +134,19 @@ export default class Login extends React.Component {
           const is_manager = response.data[0].is_manager;
           if(!is_manager){
             localStorage.setItem('user_type', 'staff');
+            this.setState({
+              email_check: true
+            });
+            
           }else{
             localStorage.setItem('user_type', 'manager');
+            this.setState({
+              email_check: true
+            });
           }
         }
         catch {
+          this.isEmailConfirmed(token);
           localStorage.setItem('user_type', 'customer');
         }
         this.setState({
@@ -159,7 +188,7 @@ export default class Login extends React.Component {
   }
 
   render(){
-    if (this.state.login && this.state.loaded) {      
+    if (this.state.login && this.state.loaded && this.state.email_check) {      
       return <Redirect to = {{ 
         pathname: "/"
       }} />;
