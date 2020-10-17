@@ -334,10 +334,43 @@ class menu_viewset(viewsets.ModelViewSet):
         menutype = self.request.query_params.get('menutype', None)
         try:
             menu = Menu.objects.get(menu_type=menutype)
-            meals = menu.meals.all()
+            meals = menu.meals.filter(is_active=True)
             return meals
         except:
             return Meal.objects.none()
+
+class manage_menu_viewset(viewsets.ModelViewSet):
+    serializer_class = menu_serializer
+    
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+    queryset = Meal.objects.all()
+
+    @action(detail=True, methods=['patch'], permission_classes=[permissions.IsAuthenticated],
+            url_path='delete-meal', url_name='delete_meal')
+    def set_inactive(self, request, pk=None):
+        try:
+            instance = Meal.objects.get(pk=pk)
+            instance.is_active = False
+            instance.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def create(self, request):
+        meal_info = self.request.data
+        try:
+            menu = Menu.objects.get(menu_type=meal_info['menu'])
+            meal = Meal(menu=menu, name=meal_info['name'], description=meal_info['description'], price=meal_info['price'])
+            meal.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+
 
 class order_viewset(viewsets.ModelViewSet):
     serializer_class = order_serializer

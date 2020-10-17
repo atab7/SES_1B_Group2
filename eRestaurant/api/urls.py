@@ -22,6 +22,7 @@ router.register('customer', customer_viewset, 'customer')
 router.register('validation', confirm_email_viewset, 'validation')
 router.register('orders', order_viewset, 'orders')
 router.register('menu', menu_viewset, 'menu')
+router.register('manage-menu', manage_menu_viewset, 'manage-menu')
 
 urlpatterns = router.urls
 

@@ -36,6 +36,10 @@ export default class EditMenu extends React.Component {
         })
     }
 
+    getMenus(){
+
+    }
+
     render(){
         return (
         <div>
@@ -135,3 +139,4 @@ export default class EditMenu extends React.Component {
         )}
     
 }
+

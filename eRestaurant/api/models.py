@@ -27,6 +27,7 @@ class Meal(models.Model):
     name        = models.CharField(max_length=100, null=False)
     description = models.CharField(max_length=300, null=True)      
     price       = models.FloatField(null=True)
+    is_active   = models.BooleanField(null=False, default=True)
     def __str__(self):
         return self.name
 

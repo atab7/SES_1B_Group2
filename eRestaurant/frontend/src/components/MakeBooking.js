@@ -666,23 +666,6 @@ const ContinuousSlider = (props) => {
 
   const Menu = (props) => {
 
-    /*
-    const dummy_rows = [
-      createData('Cupcake', 'cake but cup size', 5.0, 1),
-      createData('Donut', 'heart attack food', 10.0, 1),
-      createData('Eclair', 'idek what this is', 16.0, 1),
-      createData('Frozen yoghurt', 'frozen yoga hurt', 6.0, 1),
-      createData('Gingerbread', 'better than inbred', 16.0, 1),
-      createData('Honeycomb', 'not for your hair', 3.2, 1),
-      createData('Ice cream sandwich', 'brain freeze sandwich', 9.0, 1),
-      createData('Jelly Bean', 'expensive ass jelly bean', 1000.0, 1),
-      createData('KitKat', 'fresh from woolworths', 26.0, 1),
-      createData('Lollipop', 'they suck tho', 5, 1),
-      createData('Marshmallow', 'also very expensive', 2000, 1),
-      createData('Nougat', 'nougat to give us a HD Tej', 19.0, 1),
-      createData('Oreo', 'thats racist', 18.0, 1),
-    ];
-    */
     const [rows, setRows] = React.useState(props.rows);
 
     useEffect(() => {
