@@ -7,7 +7,7 @@ export default function ContactUs() {
   function sendEmail(e) {
     e.preventDefault();
 
-    emailjs.sendForm('service_onar6eb', 'template_9x1hlr9', e.target, 'user_y37OxRmCicn4obS3k4lV0')
+    emailjs.sendForm('service_onar6eb', 'template_aldnmku', e.target, 'user_y37OxRmCicn4obS3k4lV0')
       .then((result) => {
           console.log(result.text);
       }, (error) => {
@@ -18,14 +18,17 @@ export default function ContactUs() {
 
   return (
     <form className="contact-form" onSubmit={sendEmail}>
-      <label>Name</label>
-      <input type="text" name="user_name" />
+      <label>First Name</label>
+      <input type="text" name="first_name"/>
+      <label>Last Name</label>
+      <input type="text" name="last_name" />
       <label>Email</label>
-      <input type="email" name="user_email" />
+      <input type="email" name="email" />
+      <label>Message</label>
+      <input type="text" name="message" />
 
       <input type="submit" value="Send" />
     </form>
   );
 }
 
-//To be integrated with register.js for email confirmation upon signing up --Aryan
