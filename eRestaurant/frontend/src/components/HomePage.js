@@ -231,21 +231,6 @@ export default class HomePage extends React.Component {
               <Container maxWidth="lg">
                   <Box display="flex" p={1}>
                       <Box p={1}>
-                      <FormControl>
-                          <InputLabel id="demo-simple-select-autowidth-label">Branch</InputLabel>
-                          <Select
-                          labelId="demo-simple-select-autowidth-label"
-                          id="demo-simple-select-autowidth"
-                          value={this.state.branch}
-                          onChange = {e => this.setBranch(e)}
-                          autoWidth
-                          >
-                          <MenuItem value={10}>Branch</MenuItem>
-                          <MenuItem value={20}>Branch 2</MenuItem>
-                          <MenuItem value={30}>Branch 3</MenuItem>
-                          </Select>
-                          <FormHelperText>Select Branch</FormHelperText>
-                      </FormControl>
                       </Box> 
                       <HomepageTabs/>
 
