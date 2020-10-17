@@ -12,7 +12,6 @@ import Login from "./components/login";
 import Profile from "./components/profiles/ProfilePage";
 import ManageResturant from "./components/manageresturant/ManageResturant.js";
 import About from './components/About.js';
-import emailForm from './components/emailForm.js';
 import {EmailConfirmed, EmailNotExists} from './components/EmailConfirmed.js';
 import MakeBooking from './components/MakeBooking.js';
 import StaffLookup from './components/StaffLookup.js';
@@ -55,7 +54,6 @@ ReactDOM.render(
         <Route path="/menu2" component={Menu2} />
         <Route path="/register" component={Register} />
         <Route path="/about" component={About} />
-        <Route path="/emailForm" component={emailForm} />
         <Route path="/login" render={(props) => (
             <Login {...props} illegal={false} />
           )}/>

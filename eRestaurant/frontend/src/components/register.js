@@ -323,7 +323,7 @@ export default class Register extends React.Component {
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
                     <TextField
                     id="username"
-                    label="Email Adress"
+                    label="Email Address"
                     placeholder="Please enter you email address."
                     onChange = {e => this.setUsername(e)}
                     fullWidth

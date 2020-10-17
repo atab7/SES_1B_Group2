@@ -12,6 +12,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import ContactUs from './ContactUs.js';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -86,9 +87,8 @@ const HomepageTabs = () => {
                         Locations
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                        Contact Us
+                        <ContactUs/>
                     </TabPanel>
-
                     </Box>
   )
 }
