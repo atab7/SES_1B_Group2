@@ -18,6 +18,7 @@ import Rewards from './Rewards';
 import ManagerBooking from './ManagerBooking';
 import AddStaff from './AddStaff';
 import EditMenu from './EditMenu.js';
+import TodaysOrder from './TodaysOrder.js';
 
 const drawerWidth = 240;
 
@@ -70,6 +71,14 @@ export default function ManageResturant() {
         <div className={classes.drawerContainer}>
          
           <List>
+          <Link to="/manageresturant/TodaysOrder" className={classes.link}>
+              <ListItem button>
+                <ListItemIcon>
+                  <MailIcon/>
+                </ListItemIcon>
+                <ListItemText primary={"Today's Orders"}/>
+              </ListItem>  
+            </Link>
           <Link to="/manageresturant/Rewards" className={classes.link}>
               <ListItem button>
                 <ListItemIcon>
@@ -108,6 +117,12 @@ export default function ManageResturant() {
       </Drawer>
       
       <Switch>
+        <Route exact path="/manageresturant/TodaysOrder">
+        <main className={classes.content}>
+          <Toolbar/>
+                <TodaysOrder/>
+        </main>
+        </Route>
         <Route exact path="/manageresturant/EditMenu">
         <main className={classes.content}>
           <Toolbar/>
