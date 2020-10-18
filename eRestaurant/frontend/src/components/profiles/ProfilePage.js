@@ -173,14 +173,7 @@ function ClippedDrawer() {
               <ListItemText primary={"Edit Account"}/>
             </ListItem>  
             </Link>
-            <Link to="/profile/ChangePassword" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <MailIcon/>
-              </ListItemIcon>
-              <ListItemText primary={"Change Password"}/>
-            </ListItem>  
-            </Link>
+            
             <Link to="/profile/Rewards" className={classes.link}>
             <ListItem button>
               <ListItemIcon>

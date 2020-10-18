@@ -231,6 +231,7 @@ export default class Login extends React.Component {
                 <Grid item xs={12} style={{marginLeft: '15px', marginRight:'15px'}}>
                 <Button variant="outlined" style ={{color:'#424242'}} onClick={this.setToken} fullWidth>Sign in</Button>
                 <p>Dont Have an Account? <Link to="/register">Register Here</Link></p>
+                <p>Forgot Password? <a href='http://127.0.0.1:8000/reset-password/'>Reset Here</a></p>
                 </Grid>
                 <Snackbar open={this.state.validLogin} autoHideDuration={3000} onClose={this.closeValidLogin}>
                   <Alert severity="error" onClose={this.closeValidLogin}> 

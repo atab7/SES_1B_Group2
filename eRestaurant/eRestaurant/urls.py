@@ -17,12 +17,17 @@ from django.contrib import admin
 from django.conf.urls import url
 from django.urls import path,  re_path, include
 from django.views.generic import TemplateView
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('reset-password/', auth_views.PasswordResetView.as_view(), name='reset_password'),
+    path('reset-password-sent/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
+    path('reset/<uidb64>/<token>', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
+    path('reset-password-complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('api/', include('api.urls')),
     path('', TemplateView.as_view(template_name="index.html")),
-    path('', TemplateView.as_view(template_name="register.html")),
+    #path('', TemplateView.as_view(template_name="register.html")),
     #re_path('.*', TemplateView.as_view(template_name='index.html')),
     url(r'^auth/', include('djoser.urls')),
     url(r'^auth/', include('djoser.urls.authtoken')),
