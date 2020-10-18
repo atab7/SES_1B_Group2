@@ -17,12 +17,15 @@ class customer_reward_viewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         restaurant_id = self.request.query_params.get('restaurant', None)
-        try:
-            restaurant = Restaurant.objects.get(pk=restaurant_id)
-            return Reward.objects.filter(is_valid=True, restaurant=restaurant)
-        except Exception as e:
-            print(e)
-            return Reward.objects.none()
+        if restaurant_id != None:
+            try:
+                restaurant = Restaurant.objects.get(pk=restaurant_id)
+                return Reward.objects.filter(is_valid=True, restaurant=restaurant)
+            except Exception as e:
+                print(e)
+                return Reward.objects.none()
+        else:
+            return Reward.objects.filter(is_valid=True)
 
 class manager_reward_viewset(viewsets.ModelViewSet):
     serializer_class = reward_serializer
@@ -54,7 +57,7 @@ class manager_reward_viewset(viewsets.ModelViewSet):
         try:
             reward_info = self.request.data
             manager = Staff.objects.get(user=self.request.user)
-            new_reward = Reward(code=reward_info["code"], points_percent=reward_info['points_percent'], restaurant=manager.restaurant)
+            new_reward = Reward(code=reward_info["code"], points_percent=reward_info['points_percent'], restaurant=manager.restaurant, restaurant_name=manager.restaurant.name)
             new_reward.save()
             return Response(status=status.HTTP_200_OK)
         except Exception as e:

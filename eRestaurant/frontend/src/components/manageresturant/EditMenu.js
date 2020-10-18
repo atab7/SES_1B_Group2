@@ -22,78 +22,6 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 
 
-/*
-<Select
-                style={{width:'265px'}}
-                labelId="demo-simple-select-outlined-label"
-                id="demo-simple-select-outlined"
-                //value={}
-                //onChange={}
-                label="Select Menu"
-                fullWidth
-                >
-                <MenuItem value={"Breakfast"}>Breakfast</MenuItem>
-                <MenuItem value={"Lunch"}>Lunch</MenuItem>
-                <MenuItem value={"Dinner"}>Dinner</MenuItem>
-                </Select>
-
-
-
-                <Dialog open={this.state.menuItems} onClose={this.setMenuClose} aria-labelledby="form-dialog-title">
-                    <DialogTitle id="form-dialog-title" style={{textAlign: 'center'}}>Le Bistrot D'Andre<br/>Selected Menu Items</DialogTitle>
-                    <TableContainer >
-                    <Table aria-label="simple table">
-                        <TableHead>
-                        <TableRow>
-                            <TableCell align="center">Menu Item(s)</TableCell>
-                            <TableCell align="center">Cost</TableCell>
-                            <TableCell align="center">Remove Item</TableCell>
-                        </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        <TableRow>
-                            <TableCell align="center">Cake</TableCell>
-                            <TableCell align="center">$12</TableCell>
-                            <TableCell align="center">
-                            <Button 
-                                variant="outlined" 
-                                style ={{color:'#424242'}}
-                                fullWidth>
-                                Confirm</Button>
-                            </TableCell>
-                        </TableRow>
-                        </TableBody>
-                    </Table>
-                    </TableContainer>
-                    <p>Add A Menu Item</p>
-                    <Box>
-                        <TextField
-                        id="outlined-full-width"
-                        label="Menu Name"
-                        placeholder="Cake"
-                        margin="normal"
-                        variant="outlined"
-                        />
-                        <TextField
-                        id="outlined-full-width"
-                        label="Cost"
-                        placeholder="12"
-                        margin="normal"
-                        variant="outlined"
-                        />
-                        <Button variant="contained"
-                        margin="normal"
-                        >Confirm</Button>
-                    </Box>
-                    <DialogActions>
-                        <Button onClick={this.setMenuClose} color="primary">
-                            Close
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-
-*/
-
 export default class EditMenu extends React.Component {
     constructor(props){
         super();
@@ -269,7 +197,7 @@ class SetMenuRows extends React.Component {
       }
 
       menuItemsToJSX(row){
-        console.log("exe");
+        
         return (
             <TableRow>
                 <TableCell align="center">{row.name}</TableCell>

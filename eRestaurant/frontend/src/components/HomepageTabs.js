@@ -13,6 +13,10 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ContactUs from './ContactUs.js';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import axios from 'axios';
+import {axios_config} from '../config.js';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -64,24 +68,7 @@ const HomepageTabs = () => {
                     </Paper>
 
                     <TabPanel value={value} index={0}>
-                        <TableContainer >
-                        <Table aria-label="simple table">
-                            <TableHead>
-                            <TableRow>
-                                <TableCell align="center">Menu Item Name</TableCell>
-                                <TableCell align="center">Menu Price</TableCell>
-                                <TableCell align="center">Menu Description</TableCell>
-                            </TableRow>
-                            </TableHead>
-                            <TableBody>
-                            <TableRow>
-                                <TableCell align="center">Burger</TableCell>
-                                <TableCell align="center">description</TableCell>
-                                <TableCell align="center">100</TableCell>
-                            </TableRow>
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                        <MenuItems/>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         Locations
@@ -92,5 +79,106 @@ const HomepageTabs = () => {
                     </Box>
   )
 }
+
+
+class MenuItems extends React.Component {
+
+  constructor(props){
+    super();
+
+    this.menuItemsToJSX = this.menuItemsToJSX.bind(this);
+    this.getMenuItems = this.getMenuItems.bind(this);
+    this.setDayTime = this.setDayTime.bind(this);
+
+    this.state = {
+      menu_rows: [],
+      daytime: 'Breakfast'
+    };
+  }
+
+  setDayTime(evt){
+    this.setState({
+      daytime:evt.target.value
+    });
+
+  }
+
+  getMenuItems(){
+    axios.get(`${axios_config["baseURL"]}api/menu/?menutype=${this.state.daytime}`)
+      .then((response) => {
+        if(response.data.length){
+          let temp_rows = []
+          response.data.map((menu_item) => {
+            temp_rows.push({id: menu_item.id, name: menu_item.name, description: menu_item.description, price: menu_item.price});       
+          });
+
+          this.setState({
+            menu_rows: temp_rows
+          });
+        }
+      })
+      .catch((error) => {
+        console.log("Error in setMenu: ", error);
+      });
+  }
+
+  menuItemsToJSX(row){
+    return (
+      <TableRow>
+          <TableCell align="left">{row.name}</TableCell>
+          <TableCell align="left">{row.description}</TableCell>
+          <TableCell align="center">{row.price}</TableCell>
+      </TableRow>  
+          );
+  }
+
+  componentDidMount(){
+    this.getMenuItems();
+  }
+
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.daytime !== this.state.daytime){
+        this.getMenuItems();
+    }
+  }
+
+  render(){
+    return (
+      [
+      <Select
+                style={{width:'265px'}}
+                labelId="demo-simple-select-outlined-label"
+                id="demo-simple-select-outlined"
+                value={this.state.daytime}
+                onChange={this.setDayTime}
+                label="Menu"
+                fullWidth
+              >
+              <MenuItem value={"Breakfast"}>Breakfast</MenuItem>
+              <MenuItem value={"Lunch"}>Lunch</MenuItem>
+              <MenuItem value={"Dinner"}>Dinner</MenuItem>
+  
+        </Select>,
+      <TableContainer >
+                        <Table aria-label="simple table">
+                            <TableHead>
+                            <TableRow>
+                                <TableCell align="left">Name</TableCell>
+                                <TableCell align="left">Description</TableCell>
+                                <TableCell align="center">Price</TableCell>
+                            </TableRow>
+                            </TableHead>
+                            <TableBody>
+                           {this.state.menu_rows.map(this.menuItemsToJSX, this)}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    ]
+
+    );
+  }
+}
+
+
 export default HomepageTabs;
 
