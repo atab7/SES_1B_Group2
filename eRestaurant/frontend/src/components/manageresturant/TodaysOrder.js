@@ -28,6 +28,7 @@ export default class TodaysOrder extends React.Component {
                 <TableRow>
                     <TableCell align="left">Order</TableCell>
                     <TableCell align="center">Booking Time</TableCell>
+                    <TableCell align="center">Customer</TableCell>
                     <TableCell align="center">Close</TableCell>
                 </TableRow>
             </TableHead>
@@ -58,6 +59,7 @@ class ListOrders extends React.Component {
             <TableRow>
                     <TableCell align="left">{order.name}</TableCell>
                     <TableCell align="center">{order.time}</TableCell>
+                    <TableCell align="center">{order.customer}</TableCell>
                     <TableCell align="center">
                         <CloseOrder updateParentState={this.getOrders} id={order.id}/>
                     </TableCell>

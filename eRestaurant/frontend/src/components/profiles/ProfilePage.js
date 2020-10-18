@@ -136,12 +136,10 @@ const setEditMenu = (classes) => {
 
 const setNavBar = () => {
   const user_type = localStorage.getItem('user_type');
-  if(user_type === 'manager'){
+  if(user_type === 'manager' || user_type === 'staff'){
     return (<ManagerNavBar/>);
-  }else if (user_type === 'customer'){
+  }else{
     return (<CustomerNavBar/>);
-  }else if(user_type === 'staff'){
-    return 0;
   }
 }
 

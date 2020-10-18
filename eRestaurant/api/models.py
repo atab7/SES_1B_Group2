@@ -35,12 +35,11 @@ class Staff(models.Model):
     user            = models.ForeignKey(User, related_name='staff', on_delete=models.CASCADE, unique=True, default=0) 
     address         = models.CharField(max_length=200, null=True)
     phone_number    = models.CharField(null=True, max_length=12)
-    tax_file_number = models.CharField(null=False, max_length=9)
     restaurant      = models.ForeignKey(Restaurant, related_name='staff', null=False, on_delete=models.PROTECT)
     date_hired      = models.DateField(null=True)
     is_manager      = models.BooleanField(null=False)
     def __str__(self):
-        return self.tax_file_number
+        return self.phone_number
 
 class Customer(models.Model):
     ID              = models.AutoField(primary_key=True)

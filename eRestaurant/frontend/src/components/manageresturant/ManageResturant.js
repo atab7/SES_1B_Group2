@@ -52,8 +52,10 @@ const useStyles = makeStyles((theme) => ({
 export default function ManageResturant() {
 
   const classes = useStyles();
+  var user_type = localStorage.getItem('user_type');
   
-
+if(user_type === 'manager')
+{
   return (
     <div className={classes.root}>
       <h1>test</h1>
@@ -152,4 +154,60 @@ export default function ManageResturant() {
       
     </div>
   );
+
+}else if(user_type === 'staff'){
+  return (
+    <div className={classes.root}>
+      <h1>test</h1>
+      <CssBaseline />
+      <AppBar position="fixed" className={classes.appBar}>
+      <ManagerNavBar/>
+      </AppBar>
+      <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        classes={{
+          paper: classes.drawerPaper,
+        }}>
+        <Toolbar />
+        <div className={classes.drawerContainer}>
+         
+          <List>
+          <Link to="/manageresturant/TodaysOrder" className={classes.link}>
+              <ListItem button>
+                <ListItemIcon>
+                  <MailIcon/>
+                </ListItemIcon>
+                <ListItemText primary={"Today's Orders"}/>
+              </ListItem>  
+            </Link>
+
+            </List>
+
+        </div>
+    </Drawer>
+
+    <Switch>
+        <Route exact path="/manageresturant/TodaysOrder">
+        <main className={classes.content}>
+          <Toolbar/>
+                <TodaysOrder/>
+        </main>
+        </Route>
+    
+    </Switch>
+        
+     </div>
+
+  );
+}else{
+  return(
+    [
+    <h1>ILLEGAL ACCESS ATTEMPT DETECTED! </h1>,
+    <p>You don't have the right user privileges to 
+      access this page. Please leave.
+    </p>
+    ]
+  )
+}
 };

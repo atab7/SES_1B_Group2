@@ -22,6 +22,7 @@ import Alert from '@material-ui/lab/Alert';
 import Background from './images/defaultBackground.jpg';
 import Menu from './Menu';
 import ManagerNavBar from './ManagerNavBar.js';
+import StaffNavBar from './StaffNavBar.js';
 //import EditAccount from './EditAccount';
 import axios from 'axios';
 import {axios_config} from '../config.js';
@@ -202,12 +203,11 @@ export default class HomePage extends React.Component {
   setNavBar = () => {
     
     if(this.isAuth()){
-      if(this.isManager()){
+      var user_type = localStorage.getItem('user_type');
+      if(user_type === 'manager' || user_type === 'staff' ){
         //console.log("manager");
         return <ManagerNavBar/>;
-      }
-      else{
-        
+      }else{
         return <CustomerNavBar/>;
       }
     }else{

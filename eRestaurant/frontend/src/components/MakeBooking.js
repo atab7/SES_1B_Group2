@@ -620,13 +620,16 @@ const ContinuousSlider = (props) => {
   
     return (
       <div>
+        <Typography id="continuous-slider" gutterBottom>
+            Select Number of People
+        </Typography>
         <Slider
         min={1}
         max={10}
         step={1}
         marks={numOfPeople}
         value={value} 
-        onChange={handleChange} 
+        onChange={handleChange}
         aria-labelledby="continuous-slider" />
       </div>
     );

@@ -50,8 +50,8 @@ ReactDOM.render(
           )
           }
         />
-        <Route path="/manageresturant" component={ManageResturant}/>
-        <Route path="/menu2" component={Menu2} />
+        
+        
         <Route path="/register" component={Register} />
         <Route path="/about" component={About} />
         <Route path="/login" render={(props) => (
@@ -60,10 +60,11 @@ ReactDOM.render(
         <Route path="/emailconfirmed" component={EmailConfirmed}/>
         <Route path="/bademail" component={EmailNotExists}/>
         
-        <Route path="/test" component={MakeBooking}/>
-        <Route path="/stafflookup" component={StaffLookup}/>
+        
         <ProtectRoute>
           <Route path="/profile" component={Profile}/>
+          <Route path="/manageresturant" component={ManageResturant}/>
+          
         </ProtectRoute>
 
       </Switch>

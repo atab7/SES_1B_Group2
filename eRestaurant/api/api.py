@@ -185,7 +185,7 @@ class manager_booking_viewset(viewsets.ModelViewSet):
         date = self.request.query_params.get('date', None)
         try:
             manager = Staff.objects.filter(user=self.request.user)[0]
-            return Booking.objects.filter(date=date, restaurant=manager.restaurant)
+            return Booking.objects.filter(date=date, restaurant=manager.restaurant, is_active=True)
         except:
             return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -292,6 +292,25 @@ class staff_viewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.user.staff.all()
+
+    def create(self, request):
+        try:
+            info = self.request.data
+            user = User.objects.get(username=info['username'])
+            user.first_name = info['first_name']
+            user.last_name = info['last_name']
+            user.save()
+            manager    = Staff.objects.get(user=self.request.user)   
+            restaurant = manager.restaurant
+
+            staff = Staff(user=user, address=info['address'], phone_number=['number'], restaurant=restaurant, is_manager=True)
+            staff.save()
+            return Response(status=status.HTTP_200_OK)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
 
 class customer_viewset(viewsets.ModelViewSet):
     serializer_class = customer_serializer
@@ -405,8 +424,10 @@ class order_viewset(viewsets.ModelViewSet):
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if date != None:
-            try:    
-                bookings = Booking.objects.filter(date=date)
+            try:
+                staff = Staff.objects.get(user=self.request.user)   
+                restaurant = staff.restaurant
+                bookings = Booking.objects.filter(date=date, restaurant=restaurant)
                 meals = []
                 for booking in bookings:
                     orders = Order.objects.filter(booking=booking, is_active=True)
