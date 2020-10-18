@@ -266,8 +266,9 @@ class booking_viewset(viewsets.ModelViewSet):
             
             for order in booking_info['orders']:
                 meal = Meal.objects.get(pk=order['id'])
-                order = Order(booking=new_booking, meal=meal)
-                order.save()
+                for i in range(0, order['quantity']):
+                    order = Order(booking=new_booking, meal=meal)
+                    order.save()
             
             return Response(status=status.HTTP_200_OK)
         except Exception as e:
@@ -381,23 +382,54 @@ class order_viewset(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
+
+    queryset = Meal.objects.all()
     
 
-    def get_queryset(self):
+    def list(self, request):
         booking_id = self.request.query_params.get('booking', None)
+        date = self.request.query_params.get('date', None)
+        if booking_id != None:
+            try:
+                booking = Booking.objects.get(pk=booking_id)
+                orders = Order.objects.filter(booking=booking, is_active=True)
+                meals = []
+                for order in orders:
+                    meal = Meal.objects.get(pk=order.meal.id)
+                    meals.append({'name':meal.name, 'description':meal.description, 'price':meal.price})
+
+                return Response(status=status.HTTP_200_OK, data=meals)
+                
+            except Exception as e:
+                print(e)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if date != None:
+            try:    
+                bookings = Booking.objects.filter(date=date)
+                meals = []
+                for booking in bookings:
+                    orders = Order.objects.filter(booking=booking, is_active=True)
+                    customer = booking.customer
+                    customer_name = f'{customer.first_name} {customer.last_name}' 
+                    for order in orders:
+                        meal = Meal.objects.get(pk=order.meal.id)
+                        meals.append({'id':order.pk, 'name':meal.name, 'description':meal.description, 'price':meal.price, 'customer':customer_name, 'time': booking.time})
+                return Response(status=status.HTTP_200_OK, data=meals)
+            except Exception as e:
+                print(e)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=True, methods=['patch'], permission_classes=[permissions.IsAuthenticated],
+            url_path='close-order', url_name='close_order')
+    def set_inactive(self, request, pk=None):
         try:
-            booking = Booking.objects.get(pk=booking_id)
-            orders = Order.objects.filter(booking=booking)
-            meals = []
-            for order in orders:
-                meals.append(Meal.objects.filter(pk=order.meal.id))
-            
-            order_meals = Meal.objects.filter(pk=-1)
-            for meal in meals:
-                order_meals = order_meals | meal
-            
-            return order_meals
+            instance = Order.objects.get(pk=pk)
+            instance.is_active = False
+            instance.save()
+            return Response(status=status.HTTP_200_OK)
         except Exception as e:
             print(e)
-            return Order.objects.none()
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
         

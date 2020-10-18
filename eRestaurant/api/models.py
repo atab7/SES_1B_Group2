@@ -82,8 +82,9 @@ class Booking(models.Model):
 
 class Order(models.Model):
     ID       = models.AutoField(primary_key=True)
-    booking  = models.ForeignKey(Booking, related_name='orders', null=True, on_delete=models.PROTECT) #Whenever a user is deleted, the order remains with a null value , maybe we can remove this?!?
+    booking  = models.ForeignKey(Booking, related_name='orders', null=True, on_delete=models.PROTECT, unique=False) #Whenever a user is deleted, the order remains with a null value , maybe we can remove this?!?
     meal     = models.ForeignKey(Meal, related_name='orders',  null=False, on_delete=models.PROTECT)
+    is_active = models.BooleanField(default=True, null=False)
     def __str__(self):
         return str(self.ID)
     # Foreign key convention: name = models.ForeignKey(parentModel/ForeignKey, null=True, optional(on_delete=models.SET_NULL))

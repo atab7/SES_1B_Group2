@@ -249,14 +249,21 @@ class BookingDetails extends React.Component {
             headers: { 'Authorization': `Token ${localStorage.getItem('auth_token')}`}
         })
         .then((response) => {
+            console.log(response.data)
             this.setState({
                 orders: response.data
             })
-        })
+        });
     }
 
     componentDidMount(){
         this.getOrders();
+    }
+
+    componentDidUpdate(prevProps){
+        if(this.props.booking !== prevProps.booking){
+            this.getOrders();
+        }
     }
     
     render(){
