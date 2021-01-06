@@ -10,7 +10,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "add": "^2.0.6",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "emailjs-com": "^2.6.3",
     "js-cookie": "^2.2.1",
     "react": "^16.13.1",
